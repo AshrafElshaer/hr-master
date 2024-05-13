@@ -1,7 +1,13 @@
 {
-  "eslint.workingDirectories": [
-    {
-      "mode": "auto"
-    }
-  ]
+	"eslint.workingDirectories": [
+		{
+			"mode": "auto"
+		}
+	],
+	"deno.enablePaths": ["packages/supabase/functions"],
+	"deno.lint": true,
+	"deno.unstable": true,
+	"[typescript]": {
+		"editor.defaultFormatter": "denoland.vscode-deno"
+	}
 }

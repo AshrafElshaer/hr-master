@@ -1,0 +1,10 @@
+{
+	"name": "@hr-toolkit/env",
+	"version": "1.0.0",
+	"private": true,
+	"main": "index.js",
+	"dependencies": {
+		"@t3-oss/env-nextjs": "^0.10.1",
+		"zod": "^3.23.8"
+	}
+}

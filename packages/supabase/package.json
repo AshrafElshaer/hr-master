@@ -1,0 +1,21 @@
+{
+	"name": "@hr-toolkit/supabase",
+	"version": "0.0.0",
+	"private": true,
+	"license": "MIT",
+	"dependencies": {
+		"@supabase/ssr": "^0.3.0",
+		"@supabase/supabase-js": "^2.43.1",
+		"next": "^14.1.1",
+		"supabase": "^1.165.0",
+		"@hr-toolkit/env": "workspace:*"
+	},
+	"devDependencies": {
+		"typescript": "^5.4.5"
+	},
+	"exports": {
+		"./server": "./src/client/server.ts",
+		"./client": "./src/client/client.ts",
+		"./middleware": "./src/client/middleware.ts"
+	}
+}
