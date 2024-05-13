@@ -9,7 +9,6 @@
 		"format": "biome format --write ."
 	},
 	"devDependencies": {
-		"eslint": "^8.57.0",
 		"prettier-plugin-tailwindcss": "^0.5.11",
 		"@hr-master/typescript-config": "workspace:*",
 		"turbo": "latest"

@@ -1,5 +1,4 @@
-import "./globals.css";
-import "@hr-master/ui/styles.css";
+import "@hr-master/ui/globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 

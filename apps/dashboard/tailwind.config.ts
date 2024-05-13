@@ -4,7 +4,8 @@ import type { Config } from "tailwindcss";
 import sharedConfig from "@hr-master/tailwind-config";
 
 const config: Pick<Config, "content" | "presets"> = {
-	content: ["./src/app/**/*.tsx"],
+	content: ["./src/**/*.{ts,tsx}", "../../packages/ui/src/**/*.{ts,tsx}"],
+
 	presets: [sharedConfig],
 };
 

@@ -5,6 +5,7 @@
 	"exports": {
 		".": "./tailwind.config.ts"
 	},
+	"dependencies": { "tailwindcss-animate": "^1.0.7" },
 	"devDependencies": {
 		"@hr-master/typescript-config": "workspace:*",
 		"tailwindcss": "^3.4.1"
