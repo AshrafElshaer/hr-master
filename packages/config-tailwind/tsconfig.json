@@ -1,5 +1,5 @@
 {
-	"extends": "@hr-master/typescript-config/base.json",
+	"extends": "@hr-toolkit/typescript-config/base.json",
 	"include": ["."],
 	"exclude": ["dist", "build", "node_modules"]
 }

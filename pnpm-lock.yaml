@@ -8,7 +8,7 @@ importers:
 
   .:
     devDependencies:
-      '@hr-master/typescript-config':
+      '@hr-toolkit/typescript-config':
         specifier: workspace:*
         version: link:packages/config-typescript
       prettier-plugin-tailwindcss:
@@ -20,7 +20,7 @@ importers:
 
   apps/dashboard:
     dependencies:
-      '@hr-master/ui':
+      '@hr-toolkit/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       next:
@@ -39,10 +39,10 @@ importers:
       '@biomejs/biome':
         specifier: 1.7.3
         version: 1.7.3
-      '@hr-master/tailwind-config':
+      '@hr-toolkit/tailwind-config':
         specifier: workspace:*
         version: link:../../packages/config-tailwind
-      '@hr-master/typescript-config':
+      '@hr-toolkit/typescript-config':
         specifier: workspace:*
         version: link:../../packages/config-typescript
       '@next/eslint-plugin-next':
@@ -76,7 +76,7 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.1)
     devDependencies:
-      '@hr-master/typescript-config':
+      '@hr-toolkit/typescript-config':
         specifier: workspace:*
         version: link:../config-typescript
       tailwindcss:
@@ -223,10 +223,10 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
-      '@hr-master/tailwind-config':
+      '@hr-toolkit/tailwind-config':
         specifier: workspace:*
         version: link:../config-tailwind
-      '@hr-master/typescript-config':
+      '@hr-toolkit/typescript-config':
         specifier: workspace:*
         version: link:../config-typescript
       '@types/react':

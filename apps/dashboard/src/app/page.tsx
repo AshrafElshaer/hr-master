@@ -1,6 +1,6 @@
 "use client";
-import { Button } from "@hr-master/ui/button";
-import { ThemeToggle } from "@hr-master/ui/theme-toggle";
+import { Button } from "@hr-toolkit/ui/button";
+import { ThemeToggle } from "@hr-toolkit/ui/theme-toggle";
 
 export default function Page(): JSX.Element {
 	return (

@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
 	reactStrictMode: true,
-	transpilePackages: ["@hr-master/ui"],
+	transpilePackages: ["@hr-toolkit/ui"],
 };

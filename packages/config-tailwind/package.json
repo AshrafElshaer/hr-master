@@ -1,5 +1,5 @@
 {
-	"name": "@hr-master/tailwind-config",
+	"name": "@hr-toolkit/tailwind-config",
 	"version": "0.0.0",
 	"private": true,
 	"exports": {
@@ -7,7 +7,7 @@
 	},
 	"dependencies": { "tailwindcss-animate": "^1.0.7" },
 	"devDependencies": {
-		"@hr-master/typescript-config": "workspace:*",
+		"@hr-toolkit/typescript-config": "workspace:*",
 		"tailwindcss": "^3.4.1"
 	}
 }

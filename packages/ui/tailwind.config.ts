@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-import sharedConfig from "@hr-master/tailwind-config";
+import sharedConfig from "@hr-toolkit/tailwind-config";
 
 const config: Pick<Config, "prefix" | "presets" | "content"> = {
 	content: ["./src/**/*.tsx"],
