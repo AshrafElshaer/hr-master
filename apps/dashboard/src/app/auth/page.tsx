@@ -5,6 +5,7 @@ import type { EmailOtpConfirmation } from "@/types";
 
 import LoginForm from "./components/login-form";
 import { OtpConfirmation } from "./components/otp-confirmation";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function LoginPage() {
 	const [confirmation, setConfirmation] = React.useState<EmailOtpConfirmation>({
@@ -14,14 +15,34 @@ export default function LoginPage() {
 
 	return (
 		<main className="grid place-items-center min-h-screen p-4">
-			{confirmation.properties && confirmation.user ? (
-				<OtpConfirmation
-					confirmation={confirmation}
-					setConfirmation={setConfirmation}
-				/>
-			) : (
-				<LoginForm setConfirmation={setConfirmation} />
-			)}
+			<AnimatePresence mode="wait">
+				{confirmation.properties && confirmation.user ? (
+					<motion.div
+						key={"otp-confirmation"}
+						initial={{ opacity: 0, y: 10 }}
+						animate={{ opacity: 1, y: 0 }}
+						exit={{ opacity: 0, y: -10 }}
+						transition={{ duration: 0.2 }}
+						className="w-fit"
+					>
+						<OtpConfirmation
+							confirmation={confirmation}
+							setConfirmation={setConfirmation}
+						/>
+					</motion.div>
+				) : (
+					<motion.div
+						key={"login-form"}
+						initial={{ opacity: 0, y: 10 }}
+						animate={{ opacity: 1, y: 0 }}
+						exit={{ opacity: 0, y: -10 }}
+						transition={{ duration: 0.2 }}
+						className="w-fit"
+					>
+						<LoginForm setConfirmation={setConfirmation} />
+					</motion.div>
+				)}
+			</AnimatePresence>
 		</main>
 	);
 }

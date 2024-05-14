@@ -124,8 +124,16 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 				<CardTitle>Check your email</CardTitle>
 				<CardDescription>We've sent a one time passcode to </CardDescription>
 				<CardDescription>
-					<strong>{confirmation.user?.email}</strong>
+					<strong>{confirmation.user?.email} email</strong>
 				</CardDescription>
+				<Button
+					variant="outline"
+					size="sm"
+					className="text-secondary-foreground/70"
+					onClick={() => setConfirmation({ properties: null, user: null })}
+				>
+					Wrong email -&gt; change it
+				</Button>
 			</CardHeader>
 			<CardContent>
 				<h2 className=" font-semibold text-center mb-6">
@@ -160,9 +168,9 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 						{!isLoading && resendTimer === 0 && (
 							<motion.span
 								key="resend-passcode"
-								initial={{ opacity: 0, y: -10 }}
+								initial={{ opacity: 0, y: 10 }}
 								animate={{ opacity: 1, y: 0 }}
-								exit={{ opacity: 0, y: 10 }}
+								exit={{ opacity: 0, y: -10 }}
 								transition={{ duration: 0.2 }}
 							>
 								Resend Passcode
