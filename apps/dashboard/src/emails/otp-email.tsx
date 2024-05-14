@@ -80,7 +80,7 @@ export function OtpEmail({ otpCode }: { otpCode: string }) {
 						<Text
 							className={`text-[14px] text-[${colors.lightTheme.foreground}] dark:text-[${colors.darkTheme.foreground}] `}
 						>
-							If you didn&apos;t request this magic link, no worries – your
+							If you didn&apos;t request this code, no worries – your
 							account is safe and sound. Someone might have mistyped their email
 							address.
 						</Text>

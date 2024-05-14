@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { verifyOtp } from "../actions/verify-otp";
+import { sendOtpEmail } from "../actions/send-otp-email";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { toast } from "sonner";
 
@@ -22,7 +23,6 @@ import {
 	InputOTPSlot,
 } from "@hr-toolkit/ui/input-otp";
 import { Loader } from "lucide-react";
-import { sendOtpEmail } from "../actions/send-otp-email";
 
 type Props = {
 	confirmation: EmailOtpConfirmation;
@@ -124,7 +124,7 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 				<CardTitle>Check your email</CardTitle>
 				<CardDescription>We've sent a one time passcode to </CardDescription>
 				<CardDescription>
-					<strong>{confirmation.user?.email} email</strong>
+					<strong>{confirmation.user?.email}</strong>
 				</CardDescription>
 				<Button
 					variant="outline"

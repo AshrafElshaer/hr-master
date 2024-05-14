@@ -20,6 +20,7 @@ async function generateOtpCode({
     {
       email: email,
       type: "magiclink",
+      
     },
   );
 }

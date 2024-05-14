@@ -23,7 +23,7 @@ export default function LoginPage() {
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: -10 }}
 						transition={{ duration: 0.2 }}
-						className="w-fit"
+						className="w-full max-w-sm"
 					>
 						<OtpConfirmation
 							confirmation={confirmation}
@@ -37,7 +37,7 @@ export default function LoginPage() {
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: -10 }}
 						transition={{ duration: 0.2 }}
-						className="w-fit"
+						className="w-full max-w-sm"
 					>
 						<LoginForm setConfirmation={setConfirmation} />
 					</motion.div>

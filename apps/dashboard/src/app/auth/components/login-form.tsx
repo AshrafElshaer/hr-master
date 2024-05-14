@@ -1,8 +1,9 @@
 "use client";
-
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { sendOtpEmail } from "../actions/send-otp-email";
 import { toast } from "sonner";
 
 import type { EmailOtpConfirmation, ReactSetState } from "@/types";
@@ -28,9 +29,6 @@ import { Button } from "@hr-toolkit/ui/button";
 
 import LogoSVG from "@/components/logo-svg";
 import { Loader, Mail } from "lucide-react";
-import { env } from "@hr-toolkit/env";
-import { sendOtpEmail } from "../actions/send-otp-email";
-import { useState } from "react";
 
 interface LoginFormProps {
 	setConfirmation: ReactSetState<EmailOtpConfirmation>;
