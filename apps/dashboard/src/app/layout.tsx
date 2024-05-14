@@ -1,9 +1,13 @@
 import "@hr-toolkit/ui/globals.css";
 import type { Metadata } from "next";
+import { createServerClient } from "@hr-toolkit/supabase/server";
+import { redirect } from "next/navigation";
 
-import { Providers } from "@/components/providers";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+
+import { Providers } from "@/components/providers";
+import { headers } from "next/headers";
 
 const baseUrl = "https://hr-toolkit-dashboard.vercel.app";
 
@@ -43,11 +47,23 @@ export const viewport = {
 	],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: {
 	children: React.ReactNode;
-}): JSX.Element {
+}) {
+	const supabase = createServerClient();
+	const pathname = headers().get("x-pathname");
+
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+
+	if (!user && pathname !== "/auth") {
+		redirect("/auth");
+	}
+
+
 	return (
 		<html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
 			<body>

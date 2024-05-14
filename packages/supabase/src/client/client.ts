@@ -2,8 +2,12 @@ import { createBrowserClient } from "@supabase/ssr";
 // import type { Database } from "../types";
 import { env } from "@hr-toolkit/env";
 
-export const createClient = () =>
+export const createClient = (
+  isAdmin = false,
+) =>
   createBrowserClient(
     env.NEXT_PUBLIC_SUPABASE_URL,
-    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    isAdmin
+      ? env.NEXT_PUBLIC_SUPABASR_SERVICE_ROLE_KEY
+      : env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   );

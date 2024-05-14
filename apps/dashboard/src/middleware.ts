@@ -1,9 +1,17 @@
 import { updateSession } from "@hr-toolkit/supabase/middleware";
-import type { NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
   // update user's auth session
-  return await updateSession(request);
+  const response = await updateSession(request);
+  const { pathname } = request.nextUrl;
+  return NextResponse.next({
+    ...response,
+    headers: {
+      ...response.headers,
+      "x-pathname": pathname,
+    },
+  });
 }
 
 export const config = {

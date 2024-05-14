@@ -9,5 +9,8 @@
 	"deno.unstable": true,
 	"[typescript]": {
 		"editor.defaultFormatter": "denoland.vscode-deno"
-	}
+	},
+	"tailwindCSS.experimental.classRegex": [
+		["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+	]
 }

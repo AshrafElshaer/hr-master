@@ -1,7 +1,7 @@
 "use client";
 
 import { DashIcon } from "@radix-ui/react-icons";
-import { OTPInput, type SlotProps } from "input-otp";
+import { OTPInput, OTPInputContext } from "input-otp";
 import * as React from "react";
 
 import { cn } from "../../lib/utils";
@@ -28,13 +28,15 @@ InputOTPGroup.displayName = "InputOTPGroup";
 
 const InputOTPSlot = React.forwardRef<
 	React.ElementRef<"div">,
-	SlotProps & React.ComponentPropsWithoutRef<"div">
->(({ char, hasFakeCaret, isActive, className, ...props }, ref) => {
+	React.ComponentPropsWithoutRef<"div"> & { index: number }
+>(({ index, className, ...props }, ref) => {
+	const inputOTPContext = React.useContext(OTPInputContext);
+	const { char, hasFakeCaret, isActive } = inputOTPContext.slots[index];
 	return (
 		<div
 			ref={ref}
 			className={cn(
-				"relative flex h-16 w-16 items-center justify-center border-y border-r border-input text-2xl shadow-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
+				"relative flex h-12 w-12 items-center justify-center border-y border-r border-border text-2xl shadow-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
 				isActive && "z-10 ring-1 ring-ring",
 				className,
 			)}
@@ -55,6 +57,7 @@ const InputOTPSeparator = React.forwardRef<
 	React.ElementRef<"div">,
 	React.ComponentPropsWithoutRef<"div">
 >(({ ...props }, ref) => (
+	// biome-ignore lint/a11y/useAriaPropsForRole: <explanation>
 	<div ref={ref} role="separator" {...props}>
 		<DashIcon />
 	</div>
