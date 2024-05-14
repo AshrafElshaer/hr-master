@@ -156,7 +156,7 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 					disabled={isLoading || resendTimer !== 0 || isResendingLoading}
 					onClick={resendOtp}
 				>
-					<AnimatePresence mode="wait">
+					<AnimatePresence mode="wait" initial={false}>
 						{!isLoading && resendTimer === 0 && (
 							<motion.span
 								key="resend-passcode"
@@ -171,10 +171,10 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 						{!isLoading && !isResendingLoading && resendTimer !== 0 && (
 							<motion.span
 								key="resend-timer"
-								initial={{ opacity: 0, y: -10 }}
+								initial={{ opacity: 0, y: 10 }}
 								animate={{ opacity: 1, y: 0 }}
-								exit={{ opacity: 0, y: 10 }}
-								transition={{ duration: 0.2 }}
+								exit={{ opacity: 0, y: -10 }}
+								transition={{ duration: 0.1 }}
 							>
 								{`Resend Passcode in ${resendTimer}s`}
 							</motion.span>
@@ -182,10 +182,10 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 						{isLoading && (
 							<motion.div
 								key="verifying-otp"
-								initial={{ opacity: 0, y: -10 }}
+								initial={{ opacity: 0, y: 10 }}
 								animate={{ opacity: 1, y: 0 }}
-								exit={{ opacity: 0, y: 10 }}
-								transition={{ duration: 0.2 }}
+								exit={{ opacity: 0, y: -10 }}
+								transition={{ duration: 0.1 }}
 								className="flex items-center justify-center w-full"
 							>
 								<Loader className="mr-2 h-4 w-4 animate-spin" />
@@ -195,10 +195,10 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 						{isResendingLoading && (
 							<motion.div
 								key="resending-passcode"
-								initial={{ opacity: 0, y: -10 }}
+								initial={{ opacity: 0, y: 10 }}
 								animate={{ opacity: 1, y: 0 }}
-								exit={{ opacity: 0, y: 10 }}
-								transition={{ duration: 0.2 }}
+								exit={{ opacity: 0, y: -10 }}
+								transition={{ duration: 0.1 }}
 								className="flex items-center justify-center w-full"
 							>
 								<Loader className="mr-2 h-4 w-4 animate-spin" />

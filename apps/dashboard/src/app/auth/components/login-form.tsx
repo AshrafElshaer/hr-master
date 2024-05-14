@@ -115,14 +115,14 @@ export default function LoginForm({ setConfirmation }: LoginFormProps) {
 							disabled={isLoading}
 							// onClick={() => setIsLoading((prev) => !prev)}
 						>
-							<AnimatePresence mode="wait">
+							<AnimatePresence mode="wait" initial={false}>
 								{isLoading ? (
 									<motion.div
 										key="loader"
 										initial={{ opacity: 0, y: 10 }}
 										animate={{ opacity: 1, y: 0 }}
 										exit={{ opacity: 0, y: -10 }}
-										transition={{ duration: 0.2 }}
+										transition={{ duration: 0.1 }}
 										className="flex items-center justify-center w-full"
 									>
 										<Loader className="mr-2 h-4 w-4 animate-spin" />
@@ -134,7 +134,7 @@ export default function LoginForm({ setConfirmation }: LoginFormProps) {
 										initial={{ opacity: 0, y: 10 }}
 										animate={{ opacity: 1, y: 0 }}
 										exit={{ opacity: 0, y: -10 }}
-										transition={{ duration: 0.2 }}
+										transition={{ duration: 0.1 }}
 									>
 										Continue
 									</motion.span>
