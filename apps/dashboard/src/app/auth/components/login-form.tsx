@@ -4,6 +4,8 @@ import { createClient } from "@hr-toolkit/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { resend } from "@/lib/resend";
+import { OtpEmail } from "@/emails/otp-email";
 import { toast } from "sonner";
 
 import type { EmailOtpConfirmation, ReactSetState } from "@/types";
@@ -27,7 +29,10 @@ import { Input } from "@hr-toolkit/ui/input";
 import { Button } from "@hr-toolkit/ui/button";
 
 import LogoSVG from "@/components/logo-svg";
-import { Mail } from "lucide-react";
+import { Loader, Mail } from "lucide-react";
+import { env } from "@hr-toolkit/env";
+import { sendOtpEmail } from "../actions/send-otp-email";
+import { useState } from "react";
 
 interface LoginFormProps {
 	setConfirmation: ReactSetState<EmailOtpConfirmation>;
@@ -40,7 +45,7 @@ const signinSchema = z.object({
 });
 
 export default function LoginForm({ setConfirmation }: LoginFormProps) {
-	const supabase = createClient(true);
+	const [isLoading, setIsLoading] = useState(false);
 	const form = useForm<z.infer<typeof signinSchema>>({
 		resolver: zodResolver(signinSchema),
 		defaultValues: {
@@ -48,23 +53,32 @@ export default function LoginForm({ setConfirmation }: LoginFormProps) {
 		},
 	});
 	async function onSubmit(values: z.infer<typeof signinSchema>) {
-		const { data, error } = await supabase.auth.admin.generateLink({
+		setIsLoading(true);
+		const { data, serverError, validationError } = await sendOtpEmail({
 			email: values.email,
-			type: "magiclink",
 		});
-		if (error) {
-			toast.error("Error signing in:", {
+
+		if (serverError) {
+			toast.error("Failed to send OTP email", {
+				description: serverError,
 				position: "top-center",
-				description: error.message,
 			});
+			setIsLoading(false);
 			return;
 		}
-
+		if (validationError) {
+			toast.error("Invalid email address", {
+				position: "top-center",
+			});
+			setIsLoading(false);
+			return;
+		}
 		if (data) {
-			// TODO:SEND OTP EMAIL
 			setConfirmation(data);
 		}
+		setIsLoading(false);
 	}
+
 	return (
 		<Card className="flex flex-col items-center w-full max-w-sm">
 			<CardHeader className="flex flex-col items-center w-full">
@@ -83,7 +97,7 @@ export default function LoginForm({ setConfirmation }: LoginFormProps) {
 									<FormControl>
 										<Input
 											id="email"
-											type="email"
+											inputMode="email"
 											placeholder="Email Address"
 											className="w-full"
 											startIcon={Mail}
@@ -96,8 +110,16 @@ export default function LoginForm({ setConfirmation }: LoginFormProps) {
 								</FormItem>
 							)}
 						/>
-						<Button type="submit" variant="secondary" className="w-full">
-							Sign in
+						<Button
+							type="submit"
+							variant="secondary"
+							className="w-full"
+							disabled={isLoading}
+						>
+							{isLoading ? (
+								<Loader className="mr-2 h-4 w-4 animate-spin" />
+							) : null}
+							{isLoading ? "Sending OTP Email ..." : "Continue"}
 						</Button>
 					</form>
 				</Form>
