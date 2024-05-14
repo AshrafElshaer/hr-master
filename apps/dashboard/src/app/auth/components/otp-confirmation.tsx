@@ -174,7 +174,7 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 								initial={{ opacity: 0, y: 10 }}
 								animate={{ opacity: 1, y: 0 }}
 								exit={{ opacity: 0, y: -10 }}
-								transition={{ duration: 0.1 }}
+								transition={{ duration: 0.2 }}
 							>
 								{`Resend Passcode in ${resendTimer}s`}
 							</motion.span>
@@ -185,7 +185,7 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 								initial={{ opacity: 0, y: 10 }}
 								animate={{ opacity: 1, y: 0 }}
 								exit={{ opacity: 0, y: -10 }}
-								transition={{ duration: 0.1 }}
+								transition={{ duration: 0.2 }}
 								className="flex items-center justify-center w-full"
 							>
 								<Loader className="mr-2 h-4 w-4 animate-spin" />
@@ -198,7 +198,7 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 								initial={{ opacity: 0, y: 10 }}
 								animate={{ opacity: 1, y: 0 }}
 								exit={{ opacity: 0, y: -10 }}
-								transition={{ duration: 0.1 }}
+								transition={{ duration: 0.2 }}
 								className="flex items-center justify-center w-full"
 							>
 								<Loader className="mr-2 h-4 w-4 animate-spin" />
