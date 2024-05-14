@@ -21,24 +21,31 @@ import {
 	InputOTPSlot,
 } from "@hr-toolkit/ui/input-otp";
 import { Loader } from "lucide-react";
+import { sendOtpEmail } from "../actions/send-otp-email";
 
 type Props = {
 	confirmation: EmailOtpConfirmation;
 	setConfirmation: ReactSetState<EmailOtpConfirmation>;
 };
 
-export function OtpConfirmation({ confirmation }: Props) {
+export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 	const [isLoading, setIsLoading] = useState(false);
+	const [isResended, setIsResended] = useState(false);
+	const [isResendingLoading, setIsResendingLoading] = useState(false);
 	const [resendTimer, setResendTimer] = useState(60);
 
 	useEffect(() => {
+		if (isResended) {
+			setResendTimer(60);
+			setIsResended(false);
+		}
 		const timer = setInterval(() => {
-			setResendTimer((prev) => prev - 1);
+			setResendTimer((prev) => (prev === 0 ? 0 : prev - 1));
 		}, 1000);
 		return () => {
 			clearInterval(timer);
 		};
-	}, []);
+	}, [isResended]);
 
 	async function onComplete(otp: string) {
 		setIsLoading(true);
@@ -61,6 +68,33 @@ export function OtpConfirmation({ confirmation }: Props) {
 			});
 			return;
 		}
+	}
+	async function resendOtp() {
+		setIsResendingLoading(true);
+		setIsResended(true);
+		const { data, serverError, validationError } = await sendOtpEmail({
+			email: confirmation.user?.email ?? "",
+		});
+
+		if (serverError) {
+			toast.error("Failed to send OTP email", {
+				description: serverError,
+				position: "top-center",
+			});
+			setIsResendingLoading(false);
+			return;
+		}
+		if (validationError) {
+			toast.error("Invalid email address", {
+				position: "top-center",
+			});
+			setIsResendingLoading(false);
+			return;
+		}
+		if (data) {
+			setConfirmation(data);
+		}
+		setIsResendingLoading(false);
 	}
 
 	// async function verifyOtp(otp: string) {
@@ -101,7 +135,6 @@ export function OtpConfirmation({ confirmation }: Props) {
 					pattern={REGEXP_ONLY_DIGITS}
 					onComplete={onComplete}
 					autoFocus
-
 				>
 					<InputOTPGroup>
 						<InputOTPSlot index={0} />
@@ -117,15 +150,25 @@ export function OtpConfirmation({ confirmation }: Props) {
 				</InputOTP>
 			</CardContent>
 			<CardFooter className="w-full grid ">
-				<Button variant={"secondary"} disabled={isLoading || resendTimer !== 0}>
+				<Button
+					variant={"secondary"}
+					disabled={isLoading || resendTimer !== 0 || isResendingLoading}
+					onClick={resendOtp}
+				>
 					{!isLoading && resendTimer === 0 ? "Resend Passcode" : null}
-					{!isLoading && resendTimer !== 0
+					{!isLoading && !isResendingLoading && resendTimer !== 0
 						? `Resend Passcode in ${resendTimer}s`
 						: null}
 					{isLoading ? (
 						<>
 							<Loader className="mr-2 h-4 w-4 animate-spin" />
 							Verifying Passcode ...
+						</>
+					) : null}
+					{isResendingLoading ? (
+						<>
+							<Loader className="mr-2 h-4 w-4 animate-spin" />
+							Resending Passcode ...
 						</>
 					) : null}
 				</Button>
