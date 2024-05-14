@@ -1,15 +1,13 @@
 "use client";
 
-import { createClient } from "@hr-toolkit/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { resend } from "@/lib/resend";
-import { OtpEmail } from "@/emails/otp-email";
 import { toast } from "sonner";
 
 import type { EmailOtpConfirmation, ReactSetState } from "@/types";
 
+import { motion, AnimatePresence } from "framer-motion";
 import {
 	Card,
 	CardContent,
@@ -115,11 +113,33 @@ export default function LoginForm({ setConfirmation }: LoginFormProps) {
 							variant="secondary"
 							className="w-full"
 							disabled={isLoading}
+							// onClick={() => setIsLoading((prev) => !prev)}
 						>
-							{isLoading ? (
-								<Loader className="mr-2 h-4 w-4 animate-spin" />
-							) : null}
-							{isLoading ? "Sending OTP Email ..." : "Continue"}
+							<AnimatePresence mode="wait">
+								{isLoading ? (
+									<motion.div
+										key="loader"
+										initial={{ opacity: 0, y: 10 }}
+										animate={{ opacity: 1, y: 0 }}
+										exit={{ opacity: 0, y: -10 }}
+										transition={{ duration: 0.2 }}
+										className="flex items-center justify-center w-full"
+									>
+										<Loader className="mr-2 h-4 w-4 animate-spin" />
+										Sending OTP Email ...
+									</motion.div>
+								) : (
+									<motion.span
+										key="text"
+										initial={{ opacity: 0, y: 10 }}
+										animate={{ opacity: 1, y: 0 }}
+										exit={{ opacity: 0, y: -10 }}
+										transition={{ duration: 0.2 }}
+									>
+										Continue
+									</motion.span>
+								)}
+							</AnimatePresence>
 						</Button>
 					</form>
 				</Form>

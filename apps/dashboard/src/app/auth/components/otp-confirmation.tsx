@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import type { EmailOtpConfirmation, ReactSetState } from "@/types";
 
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@hr-toolkit/ui/button";
 import {
 	Card,
@@ -155,22 +156,56 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 					disabled={isLoading || resendTimer !== 0 || isResendingLoading}
 					onClick={resendOtp}
 				>
-					{!isLoading && resendTimer === 0 ? "Resend Passcode" : null}
-					{!isLoading && !isResendingLoading && resendTimer !== 0
-						? `Resend Passcode in ${resendTimer}s`
-						: null}
-					{isLoading ? (
-						<>
-							<Loader className="mr-2 h-4 w-4 animate-spin" />
-							Verifying Passcode ...
-						</>
-					) : null}
-					{isResendingLoading ? (
-						<>
-							<Loader className="mr-2 h-4 w-4 animate-spin" />
-							Resending Passcode ...
-						</>
-					) : null}
+					<AnimatePresence mode="wait">
+						{!isLoading && resendTimer === 0 && (
+							<motion.span
+								key="resend-passcode"
+								initial={{ opacity: 0, y: -10 }}
+								animate={{ opacity: 1, y: 0 }}
+								exit={{ opacity: 0, y: 10 }}
+								transition={{ duration: 0.2 }}
+							>
+								Resend Passcode
+							</motion.span>
+						)}
+						{!isLoading && !isResendingLoading && resendTimer !== 0 && (
+							<motion.span
+								key="resend-timer"
+								initial={{ opacity: 0, y: -10 }}
+								animate={{ opacity: 1, y: 0 }}
+								exit={{ opacity: 0, y: 10 }}
+								transition={{ duration: 0.2 }}
+							>
+								{`Resend Passcode in ${resendTimer}s`}
+							</motion.span>
+						)}
+						{isLoading && (
+							<motion.div
+								key="verifying-otp"
+								initial={{ opacity: 0, y: -10 }}
+								animate={{ opacity: 1, y: 0 }}
+								exit={{ opacity: 0, y: 10 }}
+								transition={{ duration: 0.2 }}
+								className="flex items-center justify-center w-full"
+							>
+								<Loader className="mr-2 h-4 w-4 animate-spin" />
+								Verifying Passcode ...
+							</motion.div>
+						)}
+						{isResendingLoading && (
+							<motion.div
+								key="resending-passcode"
+								initial={{ opacity: 0, y: -10 }}
+								animate={{ opacity: 1, y: 0 }}
+								exit={{ opacity: 0, y: 10 }}
+								transition={{ duration: 0.2 }}
+								className="flex items-center justify-center w-full"
+							>
+								<Loader className="mr-2 h-4 w-4 animate-spin" />
+								Resending Passcode ...
+							</motion.div>
+						)}
+					</AnimatePresence>
 				</Button>
 			</CardFooter>
 		</Card>
