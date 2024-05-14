@@ -17,7 +17,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 		const EndIcon = endIcon;
 
 		return (
-			<div className="w-full relative">
+			<div
+				className="w-full relative"
+				onBlur={() => {
+					setIsFocused(false);
+				}}
+			>
 				{StartIcon && (
 					<div
 						className={cn(
