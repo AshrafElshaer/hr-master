@@ -37,6 +37,7 @@ import {
 	InputOTPSlot,
 	InputOTPSeparator,
 } from "@hr-toolkit/ui/input-otp";
+import { OtpConfirmation } from "./components/otp-confirmation";
 
 const signinSchema = z.object({
 	email: z.string().email({
@@ -52,60 +53,11 @@ export default function LoginPage() {
 
 	return (
 		<main className="grid place-items-center min-h-screen p-4">
-			<Card className="flex flex-col items-center w-full max-w-sm">
-				<CardHeader className="flex flex-col items-center w-full">
-					<CardTitle>Check your email</CardTitle>
-					<CardDescription>We've sent a one time passcode to </CardDescription>
-					<CardDescription>
-						<strong>{"confirmation.user?.email"}</strong>
-					</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<h2 className=" font-semibold text-center mb-6">
-						Enter the passcode to sign in
-					</h2>
-					<InputOTP
-						maxLength={6}
-						pattern={REGEXP_ONLY_DIGITS}
-						onComplete={(e) => console.log("otp", e, typeof e)}
-						autoFocus
-					>
-						<InputOTPGroup>
-							<InputOTPSlot index={0} />
-							<InputOTPSlot index={1} />
-							<InputOTPSlot index={2} />
-						</InputOTPGroup>
-						<InputOTPSeparator />
-						<InputOTPGroup>
-							<InputOTPSlot index={3} />
-							<InputOTPSlot index={4} />
-							<InputOTPSlot index={5} />
-						</InputOTPGroup>
-					</InputOTP>
-				</CardContent>
-				<CardFooter className="w-full grid ">
-					<Button variant={"secondary"}>Resend Passcode</Button>
-				</CardFooter>
-			</Card>
-			{/* {confirmation.properties && confirmation.user ? (
-				<Card className="flex flex-col items-center w-full max-w-sm">
-					<CardHeader>
-						<CardTitle>Check your email</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<CardDescription>
-							We've sent a sign-in link to{" "}
-							<strong>{confirmation.user.email}</strong>. Click the link in the
-							email to sign in.
-						</CardDescription>
-					</CardContent>
-					<CardFooter>
-						<Button>Open email</Button>
-					</CardFooter>
-				</Card>
+			{confirmation.properties && confirmation.user ? (
+				<OtpConfirmation confirmation={confirmation} />
 			) : (
 				<LoginForm setConfirmation={setConfirmation} />
-			)} */}
+			)}
 		</main>
 	);
 }
