@@ -22,6 +22,10 @@ export const verifyOtp = action(
     if (error) {
       throw new Error(error.message);
     }
+    const organizationId = data.user?.user_metadata.organization_id;
+    if (!organizationId) {
+      redirect("/onboarding");
+    }
     if (data.session && data.user) {
       redirect("/");
     }

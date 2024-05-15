@@ -9,7 +9,7 @@ export default function Page() {
 	const supabase = createClient();
 	const router = useRouter();
 	return (
-		<main className="flex flex-col items-center justify-center min-h-screen p-24">
+		<main className="flex flex-col items-center justify-center min-h-screen ">
 			<h1 className="text-4xl font-bold text-center">
 				Welcome to your dashboard
 			</h1>

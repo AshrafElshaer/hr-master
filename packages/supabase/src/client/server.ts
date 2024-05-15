@@ -1,6 +1,7 @@
 import { createServerClient as _createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { env } from "@hr-toolkit/env";
+import type { Database } from "../types";
 
 export function createServerClient(
   isAdmin = false,
@@ -9,7 +10,7 @@ export function createServerClient(
 
   // Create a server's supabase client with newly configured cookie,
   // which could be used to maintain user's session
-  return _createServerClient(
+  return _createServerClient<Database>(
     env.NEXT_PUBLIC_SUPABASE_URL,
     isAdmin
       ? env.NEXT_PUBLIC_SUPABASR_SERVICE_ROLE_KEY

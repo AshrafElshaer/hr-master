@@ -18,6 +18,8 @@
 		"./command": "./src/components/ui/command.tsx",
 		"./context-menu": "./src/components/ui/context-menu.tsx",
 		"./date-range-picker": "./src/components/ui/date-range-picker.tsx",
+		"./date-picker": "./src/components/ui/date-picker.tsx",
+		"./date-of-birth-picker": "./src/components/ui/date-of-birth-picker.tsx",
 		"./dialog": "./src/components/ui/dialog.tsx",
 		"./drawer": "./src/components/ui/drawer.tsx",
 		"./dropdown-menu": "./src/components/ui/dropdown-menu.tsx",
@@ -48,7 +50,7 @@
 		"./toaster": "./src/components/ui/toaster.tsx",
 		"./tooltip": "./src/components/ui/tooltip.tsx",
 		"./use-toast": "./src/components/ui/use-toast.tsx",
-		"./cn": "./src/utils/cn.ts",
+		"./utils": "./src/lib/utils.ts",
 		"./theme-toggle": "./src/components/theme-toggle.tsx",
 		"./sonner": "./src/components/ui/sonner.tsx"
 	},

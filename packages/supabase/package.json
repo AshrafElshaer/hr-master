@@ -16,6 +16,9 @@
 	"exports": {
 		"./server": "./src/client/server.ts",
 		"./client": "./src/client/client.ts",
-		"./middleware": "./src/client/middleware.ts"
+		"./middleware": "./src/client/middleware.ts",
+		"./types": "./src/types/index.ts",
+		"./user-queries": "./src/queries/user/index.ts",
+		"./user-mutaions": "./src/mutaions/user/index.ts"
 	}
 }
