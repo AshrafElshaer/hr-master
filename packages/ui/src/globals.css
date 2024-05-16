@@ -61,36 +61,46 @@
       @apply bg-background text-foreground;
     }
 
-     .scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
+   .scrollbar-hide::-webkit-scrollbar {
+       display: none;
+   }
 
- .scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.scrollbar-muted::-webkit-scrollbar {
-    width: 4px;
+  .scrollbar-hide {
+     -ms-overflow-style: none;
+     scrollbar-width: none;
+   }
+   .scrollbar-muted::-webkit-scrollbar {
+      width: 4px;
     /* width of the entire scrollbar */
-  }
+   }
 
-  .scrollbar-muted::-webkit-scrollbar-track {
-    background: transparent;
+    .scrollbar-muted::-webkit-scrollbar-track {
+      background: transparent;
     /* color of the tracking area */
-  }
+   }
 
-  .scrollbar-muted::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--muted));
+    .scrollbar-muted::-webkit-scrollbar-thumb {
+     background-color: hsl(var(--muted));
     /* color of the scroll thumb */
-    border-radius: 20px;
+     border-radius: 20px;
     /* roundness of the scroll thumb */
-  }
+    }
 
   /* Muted scrollbar for IE, Edge and Firefox */
-  .scrollbar-muted {
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--muted)) transparent;
+   .scrollbar-muted {
+      scrollbar-width: thin;
+      scrollbar-color: hsl(var(--muted)) transparent;
     /* Firefox */
-    scrollbar-gutter: thin;
-  } 
-  }
+      scrollbar-gutter: thin;
+    } 
+   input::-webkit-outer-spin-button,
+   input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+   }
+
+/* Firefox */
+    input[type=number] {
+     -moz-appearance: textfield;
+    }
+}

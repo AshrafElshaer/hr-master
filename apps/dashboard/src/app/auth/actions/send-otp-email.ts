@@ -15,12 +15,13 @@ async function generateOtpCode({
 }: {
   email: string;
 }) {
-  const supabase = createServerClient(true);
+  const supabase = createServerClient({
+    isAdmin: true,
+  });
   return await supabase.auth.admin.generateLink(
     {
       email: email,
       type: "magiclink",
-      
     },
   );
 }
@@ -32,7 +33,7 @@ export const sendOtpEmail = action(
       email,
     });
     if (otpError || !otpResponse?.properties?.email_otp) {
-      throw new Error("Failed to generate OTP code");
+      throw new Error(otpError?.message || "Failed to generate OTP code");
     }
 
     const { data: emailResponase, error: emailError } = await resend.emails
@@ -46,7 +47,7 @@ export const sendOtpEmail = action(
       });
 
     if (emailError || !emailResponase?.id) {
-      throw new Error("Failed to send OTP email");
+      throw new Error(emailError?.message || "Failed to send OTP email");
     }
 
     return otpResponse;

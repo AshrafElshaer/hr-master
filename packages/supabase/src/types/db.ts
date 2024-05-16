@@ -9,7 +9,62 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      organizations: {
+        Row: {
+          address: string
+          city: string
+          contact_email: string
+          contact_name: string
+          contact_number: string
+          country: string
+          employees_count: number
+          id: string
+          organization_name: string
+          organization_type: string
+          owner_id: string | null
+          state: string
+          zip_code: string
+        }
+        Insert: {
+          address: string
+          city: string
+          contact_email: string
+          contact_name: string
+          contact_number: string
+          country: string
+          employees_count: number
+          id?: string
+          organization_name: string
+          organization_type: string
+          owner_id?: string | null
+          state: string
+          zip_code: string
+        }
+        Update: {
+          address?: string
+          city?: string
+          contact_email?: string
+          contact_name?: string
+          contact_number?: string
+          country?: string
+          employees_count?: number
+          id?: string
+          organization_name?: string
+          organization_type?: string
+          owner_id?: string | null
+          state?: string
+          zip_code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organizations_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

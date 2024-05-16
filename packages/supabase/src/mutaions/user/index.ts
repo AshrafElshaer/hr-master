@@ -9,7 +9,9 @@ interface PersonalInfo {
   country: string;
   zipCode: string;
   phoneNumber: string;
-  dateOfBirth: string;
+  dateOfBirth: Date;
+  role?: "owner" | "manager" | "employee";
+  userId: string;
 }
 
 export async function updateUserInfo(supabase: SupabaseClient, {
@@ -22,18 +24,24 @@ export async function updateUserInfo(supabase: SupabaseClient, {
   zipCode,
   phoneNumber,
   dateOfBirth,
+  role,
+  userId,
 }: PersonalInfo) {
-  return await supabase.auth.updateUser({
-    data: {
-      firstName,
-      lastName,
-      address,
-      city,
-      state,
-      country,
-      zipCode,
-      dateOfBirth,
+  return await supabase.auth.admin.updateUserById(
+    userId,
+    {
+      user_metadata: {
+        firstName,
+        lastName,
+        address,
+        city,
+        state,
+        country,
+        zipCode,
+        phoneNumber,
+        dateOfBirth,
+      },
+      role,
     },
-    phone: phoneNumber,
-  });
+  );
 }

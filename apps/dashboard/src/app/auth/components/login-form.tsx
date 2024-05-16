@@ -41,7 +41,6 @@ const signinSchema = z.object({
 });
 
 export default function LoginForm({ setConfirmation }: LoginFormProps) {
-	const [isLoading, setIsLoading] = useState(false);
 	const form = useForm<z.infer<typeof signinSchema>>({
 		resolver: zodResolver(signinSchema),
 		defaultValues: {
@@ -49,30 +48,29 @@ export default function LoginForm({ setConfirmation }: LoginFormProps) {
 		},
 	});
 	async function onSubmit(values: z.infer<typeof signinSchema>) {
-		setIsLoading(true);
 		const { data, serverError, validationError } = await sendOtpEmail({
 			email: values.email,
 		});
 
 		if (serverError) {
+			console.error({ serverError });
 			toast.error("Failed to send OTP email", {
 				description: serverError,
 				position: "top-center",
 			});
-			setIsLoading(false);
+
 			return;
 		}
 		if (validationError) {
 			toast.error("Invalid email address", {
 				position: "top-center",
 			});
-			setIsLoading(false);
+
 			return;
 		}
 		if (data) {
 			setConfirmation(data);
 		}
-		setIsLoading(false);
 	}
 
 	return (
@@ -110,11 +108,10 @@ export default function LoginForm({ setConfirmation }: LoginFormProps) {
 							type="submit"
 							variant="secondary"
 							className="w-full"
-							disabled={isLoading}
-							// onClick={() => setIsLoading((prev) => !prev)}
+							disabled={form.formState.isSubmitting}
 						>
 							<AnimatePresence mode="wait" initial={false}>
-								{isLoading ? (
+								{form.formState.isSubmitting ? (
 									<motion.div
 										key="loader"
 										initial={{ opacity: 0, y: 10 }}

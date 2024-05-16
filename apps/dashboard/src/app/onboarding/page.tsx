@@ -1,15 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { getUser } from "@hr-toolkit/supabase/user-queries";
-import { createServerClient } from "@hr-toolkit/supabase/server";
 
 import { motion, AnimatePresence } from "framer-motion";
-import OnboardingForm from "./components/onboarding-form";
+import OnboardingForm from "./components/onboarding";
 import { TextGenerateEffect } from "@/components/text-generate-effect";
 
 export default function OnboardingPage() {
-	// const supabase = createServerClient();
-	// const { data: user, error } = await getUser(supabase);
 	const [isAnimating, setIsAnimating] = useState(true);
 
 	useEffect(() => {
@@ -24,7 +20,7 @@ export default function OnboardingPage() {
 
 	return (
 		<main className="flex flex-col items-center justify-center min-h-screen px-4 py-8">
-			{/* <AnimatePresence mode="wait">
+			<AnimatePresence mode="wait">
 				{isAnimating ? (
 					<motion.div
 						key={"welcome-message"}
@@ -49,8 +45,8 @@ export default function OnboardingPage() {
 						<OnboardingForm />
 					</motion.div>
 				)}
-			</AnimatePresence> */}
-			<OnboardingForm />
+			</AnimatePresence>
+			{/* <OnboardingForm /> */}
 		</main>
 	);
 }
