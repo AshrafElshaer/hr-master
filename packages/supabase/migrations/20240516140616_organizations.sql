@@ -1,5 +1,4 @@
--- Supabase AI is experimental and may produce incorrect answers
--- Always verify the output before executing
+
 
 create table
   organizations (
@@ -15,7 +14,7 @@ create table
     contact_name text not null,
     contact_email text not null,
     contact_number text not null,
-    owner_id uuid references auth.users(id) on delete cascade
+    owner_id uuid  references auth.users(id) on delete cascade
   );
 
 create policy organization_select_policy on organizations for
