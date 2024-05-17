@@ -28,7 +28,7 @@ export default function UserMenu() {
 	});
 
 	if (!user || isLoading) {
-		return <Skeleton className="h-8 w-8" />;
+		return <Skeleton className="h-8 w-8 rounded-full" />;
 	}
 	return (
 		<DropdownMenu>
