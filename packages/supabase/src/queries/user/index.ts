@@ -1,6 +1,13 @@
 import type { SupabaseClient } from "../../types";
 
+export async function getUser(supabase: SupabaseClient) {
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+  if (error) {
+    throw new Error(error.message);
+  }
 
-export function getUser(supabase: SupabaseClient) {
-  return supabase.auth.getUser();
+  return user;
 }

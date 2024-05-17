@@ -18,7 +18,7 @@ export async function createOrganization(
   supabase: SupabaseClient,
   data: CreateOrganization,
 ) {
-  const { data: { user } } = await getUser(supabase);
+  const user = await getUser(supabase);
   if (!user) {
     throw new Error("User not found");
   }

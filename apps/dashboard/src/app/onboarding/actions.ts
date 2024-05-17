@@ -13,10 +13,10 @@ export const onboardingPersonal = action(
     const supabase = createServerClient({
       isAdmin: true,
     });
-    const { data: { user }, error: userError } = await getUser(supabase);
+    const user = await getUser(supabase);
 
-    if (userError || !user) {
-      throw new Error(userError?.message);
+    if (!user) {
+      throw new Error("User not found");
     }
 
     const { error } = await updateUserInfo(supabase, {

@@ -41,6 +41,9 @@ importers:
       '@supabase/supabase-js':
         specifier: ^2.43.1
         version: 2.43.1
+      '@tanstack/react-query':
+        specifier: ^5.36.2
+        version: 5.36.2(react@18.2.0)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -3885,6 +3888,19 @@ packages:
     dependencies:
       '@t3-oss/env-core': 0.10.1(zod@3.23.8)
       zod: 3.23.8
+    dev: false
+
+  /@tanstack/query-core@5.36.1:
+    resolution: {integrity: sha512-BteWYEPUcucEu3NBcDAgKuI4U25R9aPrHSP6YSf2NvaD2pSlIQTdqOfLRsxH9WdRYg7k0Uom35Uacb6nvbIMJg==}
+    dev: false
+
+  /@tanstack/react-query@5.36.2(react@18.2.0):
+    resolution: {integrity: sha512-bHNa+5dead+j6SA8WVlEOPxcGfteVFgdyFTCFcxBgjnPf0fFpHUc7aNZBCnvmPXqy/BeQa9zTuU9ectb7i8ZXA==}
+    peerDependencies:
+      react: ^18.0.0
+    dependencies:
+      '@tanstack/query-core': 5.36.1
+      react: 18.2.0
     dev: false
 
   /@types/cookie@0.4.1:

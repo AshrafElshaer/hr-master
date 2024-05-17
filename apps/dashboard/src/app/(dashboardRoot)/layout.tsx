@@ -3,16 +3,15 @@ import { getUser } from "@hr-toolkit/supabase/user-queries";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { ResizablePanel, ResizablePanelGroup } from "@hr-toolkit/ui/resizable";
+import DashboardHeader from "@/components/dashboard-header/dashboard-header";
 
 import type { ReactNode } from "react";
-import MainSidebar from "@/components/main-sidebar";
+import MainSidebar from "@/components/sidebar/main-sidebar";
 
 async function DashboardLayout({ children }: { children: ReactNode }) {
 	const supabase = createServerClient();
 	const pathname = headers().get("x-pathname");
-	const {
-		data: { user },
-	} = await getUser(supabase);
+	const user = await getUser(supabase);
 
 	if (!user && pathname !== "/auth") {
 		redirect("/auth");
@@ -22,12 +21,8 @@ async function DashboardLayout({ children }: { children: ReactNode }) {
 			direction="vertical"
 			className="w-full  border min-h-screen"
 		>
-			<ResizablePanel
-				defaultSize={4}
-				className="min-h-[50px] border-b "
-			>
-				{/* <DashbaordHeader /> */}
-				{/* header */}
+			<ResizablePanel defaultSize={4} className="min-h-[50px] border-b grid">
+				<DashboardHeader />
 			</ResizablePanel>
 
 			<ResizablePanel defaultSize={96}>
