@@ -4,12 +4,12 @@ import { format } from "date-fns";
 
 export default function CurrentTime() {
 	const [currentTime, setCurrentTime] = useState(
-		format(new Date(), "MMMM dd , yyyy - hh:mm a"),
+		format(new Date(), "EEE , MMMM dd - hh:mm a"),
 	);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setCurrentTime(format(new Date(), "MMMM dd , yyyy - hh:mm a"));
+			setCurrentTime(format(new Date(), "EEE , MMMM dd - hh:mm a"));
 		}, 1000);
 		return () => clearInterval(interval);
 	}, []);
