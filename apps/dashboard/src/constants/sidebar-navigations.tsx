@@ -1,6 +1,8 @@
 import { Clock, Home, Users } from "lucide-react";
 import { TbCalendarPause } from "react-icons/tb";
 import { HiOutlineBanknotes } from "react-icons/hi2";
+import { LuLayoutGrid } from "react-icons/lu";
+
 
 export const sidebarNavigations = [
 	{
@@ -12,6 +14,11 @@ export const sidebarNavigations = [
 		title: "Employees",
 		path: "/employees",
 		icon: <Users size={18} />,
+	},
+	{
+		title: "Departments",
+		path: "/departments",
+		icon: <LuLayoutGrid size={18} />,
 	},
 	{
 		title: "Attendance",

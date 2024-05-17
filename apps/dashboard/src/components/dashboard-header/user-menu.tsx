@@ -54,7 +54,8 @@ export default function UserMenu() {
 				<DropdownMenuItem asChild>
 					<button
 						type="button"
-						className="flex w-full items-center space-x-2 cursor-pointer"
+						className="flex w-full items-center space-x-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+						disabled
 					>
 						<MdSupportAgent className="h-4 w-4" />
 						<span>Support</span>
@@ -63,7 +64,8 @@ export default function UserMenu() {
 				<DropdownMenuItem asChild>
 					<button
 						type="button"
-						className="flex w-full items-center space-x-2 cursor-pointer"
+						className="flex w-full items-center space-x-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+						disabled
 					>
 						<BiMessageRoundedAdd className="h-4 w-4" />
 						<span>Feedback</span>
@@ -71,7 +73,7 @@ export default function UserMenu() {
 				</DropdownMenuItem>
 				<DropdownMenuItem asChild>
 					<Link
-						href="/account"
+						href="/settings"
 						className="flex items-center space-x-2 cursor-pointer"
 					>
 						<Settings className="h-4 w-4" />
