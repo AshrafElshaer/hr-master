@@ -1,5 +1,4 @@
 
-
 create table
   organizations (
     id uuid primary key default uuid_generate_v4 (),
@@ -30,7 +29,7 @@ for update
   using (
     auth.uid () = owner_id
     or (
-    SELECT raw_user_meta_data->>'role' FROM auth.users WHERE id = auth.uid()
+    SELECT role FROM auth.users WHERE id = auth.uid()
   ) = 'manager'
   );
 

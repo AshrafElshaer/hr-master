@@ -30,7 +30,7 @@ const steps = [
 
 export default function OnboardingForm() {
 	return (
-		<div className="flex w-full flex-col gap-4 max-w-xl mx-auto">
+		<div className="flex w-80 md:min-w-[30rem] flex-col gap-4 max-w-xl mx-auto">
 			<Stepper variant="circle-alt" initialStep={0} steps={steps} size="sm">
 				{steps.map((stepProps, index) => {
 					if (index === 0) {
@@ -65,9 +65,6 @@ export function StepperFormActions({
 		isOptionalStep,
 	} = useStepper();
 
-
-
-	
 	return (
 		<div className="w-full flex justify-end gap-2">
 			{hasCompletedAllSteps ? (
