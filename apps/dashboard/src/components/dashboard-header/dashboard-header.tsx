@@ -8,7 +8,7 @@ import MobileSidebar from "../sidebar/mobile-sidebar";
 export default function DashboardHeader() {
 	return (
 		<header className="px-2">
-			<ul className="flex items-center justify-between h-full w-full gap-4">
+			<ul className="flex items-center justify-between h-[50px] w-full gap-4">
 				<li className="grid h-fit md:hidden">
 					<MobileSidebar />
 				</li>
@@ -19,7 +19,7 @@ export default function DashboardHeader() {
 				<li className="ml-auto hidden md:block">
 					<CurrentTime />
 				</li>
-				
+
 				<li className="flex items-center justify-end gap-2 ">
 					<UserMenu />
 				</li>
