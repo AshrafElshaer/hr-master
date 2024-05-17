@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { Skeleton } from "@hr-toolkit/ui/skeleton";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -21,13 +22,13 @@ import { MdSupportAgent } from "react-icons/md";
 export default function UserMenu() {
 	const supabase = createClient();
 	const router = useRouter();
-	const { data: user } = useQuery({
+	const { data: user, isLoading } = useQuery({
 		queryKey: ["user"],
 		queryFn: () => getUser(supabase),
 	});
 
-	if (!user) {
-		return null;
+	if (!user || isLoading) {
+		return <Skeleton className="h-8 w-8" />;
 	}
 	return (
 		<DropdownMenu>
