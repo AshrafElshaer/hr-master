@@ -1,12 +1,17 @@
 "use client";
 import { sidebarNavigations } from "@/constants/sidebar-navigations";
+import type { ReactSetState } from "@/types";
 import { buttonVariants } from "@hr-toolkit/ui/button";
 import { cn } from "@hr-toolkit/ui/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-function MainSidebar() {
+function MainSidebar({
+	setIsMobileOpen,
+}: {
+	setIsMobileOpen?: ReactSetState<boolean>;
+}) {
 	const pathname = usePathname();
 
 	return (
@@ -27,6 +32,9 @@ function MainSidebar() {
 										className: "w-full justify-start gap-2 relative",
 									}),
 								)}
+								onClick={() => {
+									setIsMobileOpen?.(false);
+								}}
 							>
 								{route.icon}
 								{route.title}

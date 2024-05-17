@@ -4,17 +4,17 @@ import { format } from "date-fns";
 
 export default function CurrentTime() {
 	const [currentTime, setCurrentTime] = useState(
-		format(new Date(), "EEE , MMMM dd - hh:mm a"),
+		format(new Date(), "EEEE , MMMM dd - hh:mm a"),
 	);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setCurrentTime(format(new Date(), "EEE , MMMM dd - hh:mm a"));
+			setCurrentTime(format(new Date(), "EEEE , MMMM dd - hh:mm a"));
 		}, 1000);
 		return () => clearInterval(interval);
 	}, []);
 	return (
-		<h4 className=" hidden text-sm font-bold md:block text-secondary-foreground/80 w-fit">
+		<h4 className="  text-sm font-semibold  text-secondary-foreground/80 w-fit">
 			{currentTime}
 		</h4>
 	);
