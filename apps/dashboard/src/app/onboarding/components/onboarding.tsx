@@ -22,6 +22,7 @@ import { Building, Loader, User } from "lucide-react";
 import PersonalForm from "./personal-form";
 import { OrganizationForm } from "./organization-form";
 import { useRouter } from "next/navigation";
+import { TextGenerateEffect } from "@/components/text-generate-effect";
 
 const steps = [
 	{ label: "Personal", icon: User },
@@ -64,6 +65,12 @@ export function StepperFormActions({
 		isLastStep,
 		isOptionalStep,
 	} = useStepper();
+
+	hasCompletedAllSteps && (
+		<div className="h-40 flex items-center justify-center my-2">
+			<TextGenerateEffect words="Welcome Onboard" />
+		</div>
+	);
 
 	return (
 		<div className="w-full flex justify-end gap-2">

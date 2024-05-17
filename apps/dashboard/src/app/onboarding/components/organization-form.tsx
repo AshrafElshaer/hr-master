@@ -95,7 +95,10 @@ export function OrganizationForm() {
 				position: "top-center",
 			});
 		}
-		router.push("/");
+		setTimeout(() => {
+			router.push("/");
+		}, 2000);
+		nextStep();
 	}
 
 	return (
