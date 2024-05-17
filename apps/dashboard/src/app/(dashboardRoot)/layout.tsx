@@ -20,14 +20,14 @@ async function DashboardLayout({ children }: { children: ReactNode }) {
 	return (
 		<ResizablePanelGroup
 			direction="vertical"
-			className="w-full rounded-lg border min-h-screen"
+			className="w-full  border min-h-screen"
 		>
 			<ResizablePanel
 				defaultSize={4}
-				className="min-h-[50px] border-b shadow-md"
+				className="min-h-[50px] border-b "
 			>
 				{/* <DashbaordHeader /> */}
-				header
+				{/* header */}
 			</ResizablePanel>
 
 			<ResizablePanel defaultSize={96}>

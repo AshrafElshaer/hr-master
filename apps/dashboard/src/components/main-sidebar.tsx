@@ -24,12 +24,15 @@ function MainSidebar() {
 								className={cn(
 									buttonVariants({
 										variant: isActivePath ? "secondary" : "ghost",
-										className: "w-full justify-start gap-2 ",
+										className: "w-full justify-start gap-2 relative",
 									}),
 								)}
 							>
 								{route.icon}
 								{route.title}
+								{isActivePath ? (
+									<div className="absolute right-0 top-1 bottom-1 w-[1.5px] rounded bg-primary" />
+								) : null}
 							</Link>
 						</li>
 					);
