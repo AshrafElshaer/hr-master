@@ -66,36 +66,38 @@ export function StepperFormActions({
 		isOptionalStep,
 	} = useStepper();
 
-	hasCompletedAllSteps && (
-		<div className="h-40 flex items-center justify-center my-2">
-			<TextGenerateEffect words="Welcome Onboard" />
-		</div>
-	);
-
 	return (
-		<div className="w-full flex justify-end gap-2">
-			{hasCompletedAllSteps ? (
-				<Button size="sm" onClick={resetSteps}>
-					Reset
-				</Button>
-			) : (
-				<>
-					<Button
-						disabled={isDisabledStep || isSubmitting}
-						onClick={prevStep}
-						size="sm"
-						variant="secondary"
-					>
-						Prev
-					</Button>
-					<Button size="sm" disabled={isSubmitting}>
-						{isSubmitting ? (
-							<Loader className="mr-2 h-4 w-4 animate-spin" />
-						) : null}
-						{isLastStep ? "Finish" : isOptionalStep ? "Skip" : "Next"}
-					</Button>
-				</>
+		<>
+			{hasCompletedAllSteps && (
+				<div className="h-40 flex items-center justify-center my-2">
+					<TextGenerateEffect words="Welcome Onboard" />
+				</div>
 			)}
-		</div>
+
+			<div className="w-full flex justify-end gap-2">
+				{hasCompletedAllSteps ? (
+					<Button size="sm" onClick={resetSteps}>
+						Reset
+					</Button>
+				) : (
+					<>
+						<Button
+							disabled={isDisabledStep || isSubmitting}
+							onClick={prevStep}
+							size="sm"
+							variant="secondary"
+						>
+							Prev
+						</Button>
+						<Button size="sm" disabled={isSubmitting}>
+							{isSubmitting ? (
+								<Loader className="mr-2 h-4 w-4 animate-spin" />
+							) : null}
+							{isLastStep ? "Finish" : isOptionalStep ? "Skip" : "Next"}
+						</Button>
+					</>
+				)}
+			</div>
+		</>
 	);
 }

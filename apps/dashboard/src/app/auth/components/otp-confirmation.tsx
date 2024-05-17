@@ -57,7 +57,7 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 		setIsLoading(false);
 		if (serverError) {
 			toast.error("Error verifying OTP:", {
-				description: "Try to resend the OTP email",
+				description: "Try to resend the passcode",
 				position: "top-center",
 			});
 			return;
