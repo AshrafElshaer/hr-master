@@ -47,6 +47,7 @@ export default function OnboardingForm() {
 						</Step>
 					);
 				})}
+				<Footer />
 			</Stepper>
 		</div>
 	);
@@ -68,12 +69,6 @@ export function StepperFormActions({
 
 	return (
 		<>
-			{hasCompletedAllSteps && (
-				<div className="h-40 flex items-center justify-center my-2">
-					<TextGenerateEffect words="Welcome Onboard" />
-				</div>
-			)}
-
 			<div className="w-full flex justify-end gap-2">
 				{hasCompletedAllSteps ? (
 					<Button size="sm" onClick={resetSteps}>
@@ -98,6 +93,22 @@ export function StepperFormActions({
 					</>
 				)}
 			</div>
+		</>
+	);
+}
+
+function Footer() {
+	const { hasCompletedAllSteps } = useStepper();
+	return (
+		<>
+			{hasCompletedAllSteps ? (
+				<div className="h-52 flex items-center justify-center my-2">
+					<TextGenerateEffect
+						words="Welcome Onboard 🚀 , Let's get you started"
+						className="text-center"
+					/>
+				</div>
+			) : null}
 		</>
 	);
 }
