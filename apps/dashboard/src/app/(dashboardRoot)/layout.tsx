@@ -29,7 +29,7 @@ async function DashboardLayout({ children }: { children: ReactNode }) {
 				<ResizablePanelGroup direction="horizontal">
 					<ResizablePanel
 						defaultSize={1}
-						className="border-r min-w-[230px] hidden md:block shadow-md"
+						className="border-r min-w-[200px] hidden md:block shadow-md"
 					>
 						<MainSidebar />
 					</ResizablePanel>
