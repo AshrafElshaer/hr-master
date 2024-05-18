@@ -4,7 +4,7 @@
 create table
   departments (
     id uuid primary key default uuid_generate_v4 (),
-    name text,
+    name text not null unique,
     description text,
     organization_id uuid references organizations (id)
   );

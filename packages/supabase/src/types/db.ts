@@ -13,19 +13,19 @@ export type Database = {
         Row: {
           description: string | null
           id: string
-          name: string | null
+          name: string
           organization_id: string | null
         }
         Insert: {
           description?: string | null
           id?: string
-          name?: string | null
+          name: string
           organization_id?: string | null
         }
         Update: {
           description?: string | null
           id?: string
-          name?: string | null
+          name?: string
           organization_id?: string | null
         }
         Relationships: [

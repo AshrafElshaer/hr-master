@@ -3,10 +3,6 @@
 	"include": ["."],
 	"exclude": ["dist", "build", "node_modules"],
 	"compilerOptions": {
-		"jsx": "react",
-		"baseUrl": ".",
-		"paths": {
-			"@/*": ["src/*"]
-		}
+		"jsx": "react"
 	}
 }
