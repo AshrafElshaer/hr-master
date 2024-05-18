@@ -1,3 +1,3 @@
-import OtpEmail from "./otp-email";
+import { OtpEmail } from "./otp-email";
 
 export { OtpEmail };

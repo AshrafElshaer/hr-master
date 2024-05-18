@@ -1,6 +1,6 @@
 "use server";
 
-import { OtpEmail } from "@/emails/otp-email";
+import { OtpEmail } from "@hr-toolkit/emails";
 import { resend } from "@/lib/resend";
 import { z } from "zod";
 import { action } from "@/lib/safe-action";

@@ -1,9 +1,11 @@
-
+-- Supabase AI is experimental and may produce incorrect answers
+-- Always verify the output before executing
 
 create table
   departments (
     id uuid primary key default uuid_generate_v4 (),
-    department_name text,
+    name text,
+    description text,
     organization_id uuid references organizations (id)
   );
 

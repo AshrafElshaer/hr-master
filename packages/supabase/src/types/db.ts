@@ -11,18 +11,21 @@ export type Database = {
     Tables: {
       departments: {
         Row: {
-          department_name: string | null
+          description: string | null
           id: string
+          name: string | null
           organization_id: string | null
         }
         Insert: {
-          department_name?: string | null
+          description?: string | null
           id?: string
+          name?: string | null
           organization_id?: string | null
         }
         Update: {
-          department_name?: string | null
+          description?: string | null
           id?: string
+          name?: string | null
           organization_id?: string | null
         }
         Relationships: [
