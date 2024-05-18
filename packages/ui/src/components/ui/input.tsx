@@ -2,6 +2,7 @@ import * as React from "react";
 import { cn } from "../../lib/utils";
 
 import type { LucideIcon } from "lucide-react";
+import { useBoolean } from "@/lib/useBoolean";
 
 export interface InputProps
 	extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -12,17 +13,13 @@ export interface InputProps
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
 	({ className, type, startIcon, endIcon, isError, ...props }, ref) => {
-		const [isFocused, setIsFocused] = React.useState(false);
+		const { setFalse, setTrue, value: isFocused } = useBoolean(false);
+
 		const StartIcon = startIcon;
 		const EndIcon = endIcon;
 
 		return (
-			<div
-				className="w-full relative"
-				onBlur={() => {
-					setIsFocused(false);
-				}}
-			>
+			<div className="w-full relative" onBlur={setFalse}>
 				{StartIcon && (
 					<div
 						className={cn(
@@ -37,7 +34,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 				<input
 					type={type}
 					className={cn(
-						"flex h-9 w-full rounded-md  border bg-transparent px-3 py-1 text-sm ui-transition-all file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ",
+						"flex h-9 w-full rounded-md  border bg-transparent px-3 py-1 text-base md:text-sm ui-transition-all file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ",
 						startIcon ? "pl-8" : "",
 						endIcon ? "pr-8" : "",
 						isFocused ? "border-primary/70" : "border-border",
@@ -45,8 +42,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 						className,
 					)}
 					ref={ref}
-					onFocus={() => setIsFocused(true)}
-					onBlur={() => setIsFocused(false)}
+					onFocus={setTrue}
+					onBlur={setFalse}
 					{...props}
 				/>
 				{EndIcon && (
@@ -57,7 +54,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 							isError ? "text-destructive" : "",
 						)}
 					>
-						<EndIcon className="text-muted-foreground" size={18} />
+						<EndIcon size={18} />
 					</div>
 				)}
 			</div>
