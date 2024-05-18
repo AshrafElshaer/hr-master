@@ -7,7 +7,7 @@ import MobileSidebar from "../sidebar/mobile-sidebar";
 
 export default function DashboardHeader() {
 	return (
-		<header className="px-2">
+		<header className="px-2 md:px-4">
 			<ul className="flex items-center justify-between h-[50px] w-full gap-4">
 				<li className="grid h-fit md:hidden">
 					<MobileSidebar />

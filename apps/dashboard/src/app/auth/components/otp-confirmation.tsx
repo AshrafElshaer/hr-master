@@ -23,6 +23,7 @@ import {
 	InputOTPSlot,
 } from "@hr-toolkit/ui/input-otp";
 import { Loader } from "lucide-react";
+import { useBoolean, useCountdown } from "usehooks-ts";
 
 type Props = {
 	confirmation: EmailOtpConfirmation;
@@ -30,31 +31,35 @@ type Props = {
 };
 
 export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
-	const [isLoading, setIsLoading] = useState(false);
-	const [isResended, setIsResended] = useState(false);
-	const [isResendingLoading, setIsResendingLoading] = useState(false);
-	const [resendTimer, setResendTimer] = useState(60);
+	const [
+		resendTimer,
+		{ resetCountdown: resetResendTimer, startCountdown: startResendTimer },
+	] = useCountdown({
+		countStart: 59,
+		intervalMs: 1000,
+	});
+	const {
+		value: isVerifing,
+		setFalse: setIsVerifingFalse,
+		setTrue: setIsVerifingTrue,
+	} = useBoolean(false);
+	const {
+		value: isResending,
+		setFalse: setIsResendingFalse,
+		setTrue: setIsResendingTrue,
+	} = useBoolean(false);
 
 	useEffect(() => {
-		if (isResended) {
-			setResendTimer(60);
-			setIsResended(false);
-		}
-		const timer = setInterval(() => {
-			setResendTimer((prev) => (prev === 0 ? 0 : prev - 1));
-		}, 1000);
-		return () => {
-			clearInterval(timer);
-		};
-	}, [isResended]);
+		startResendTimer();
+	}, [startResendTimer]);
 
 	async function onComplete(otp: string) {
-		setIsLoading(true);
+		setIsVerifingTrue();
 		const { serverError, validationError } = await verifyOtp({
 			email: confirmation.user?.email ?? "",
 			otpCode: otp,
 		});
-		setIsLoading(false);
+		setIsVerifingFalse();
 		if (serverError) {
 			toast.error("Error verifying OTP:", {
 				description: "Try to resend the passcode",
@@ -71,8 +76,8 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 		}
 	}
 	async function resendOtp() {
-		setIsResendingLoading(true);
-		setIsResended(true);
+		setIsResendingTrue();
+
 		const { data, serverError, validationError } = await sendOtpEmail({
 			email: confirmation.user?.email ?? "",
 		});
@@ -82,42 +87,25 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 				description: serverError,
 				position: "top-center",
 			});
-			setIsResendingLoading(false);
+			setIsResendingFalse();
+			resetResendTimer();
 			return;
 		}
 		if (validationError) {
 			toast.error("Invalid email address", {
 				position: "top-center",
 			});
-			setIsResendingLoading(false);
+			setIsResendingFalse();
+			resetResendTimer();
 			return;
 		}
 		if (data) {
 			setConfirmation(data);
 		}
-		setIsResendingLoading(false);
+		setIsResendingFalse();
+		resetResendTimer();
 	}
 
-	// async function verifyOtp(otp: string) {
-	// 	if (!confirmation.user?.email) {
-	// 		return;
-	// 	}
-	// 	const { data, error } = await supabase.auth.verifyOtp({
-	// 		email: confirmation.user?.email,
-	// 		token: otp,
-	// 		type: "magiclink",
-	// 	});
-	// 	if (error) {
-	// 		toast.error("Error verifying OTP:", {
-	// 			description: error.message,
-	// 			position: "top-center",
-	// 		});
-	// 		return;
-	// 	}
-	// 	if (data.session && data.user) {
-	// 		router.push("/");
-	// 	}
-	// }
 	return (
 		<Card className="flex flex-col items-center w-full max-w-sm">
 			<CardHeader className="flex flex-col items-center w-full">
@@ -161,11 +149,11 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 			<CardFooter className="w-full grid ">
 				<Button
 					variant={"secondary"}
-					disabled={isLoading || resendTimer !== 0 || isResendingLoading}
+					disabled={isVerifing || resendTimer !== 0 || isResending}
 					onClick={resendOtp}
 				>
 					<AnimatePresence mode="wait" initial={false}>
-						{!isLoading && resendTimer === 0 && (
+						{!isVerifing && !isResending && resendTimer === 0 && (
 							<motion.span
 								key="resend-passcode"
 								initial={{ opacity: 0, y: 10 }}
@@ -176,7 +164,7 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 								Resend Passcode
 							</motion.span>
 						)}
-						{!isLoading && !isResendingLoading && resendTimer !== 0 && (
+						{!isVerifing && !isResending && resendTimer !== 0 && (
 							<motion.span
 								key="resend-timer"
 								initial={{ opacity: 0, y: 10 }}
@@ -187,7 +175,7 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 								{`Resend Passcode in ${resendTimer}s`}
 							</motion.span>
 						)}
-						{isLoading && (
+						{isVerifing && (
 							<motion.div
 								key="verifying-otp"
 								initial={{ opacity: 0, y: 10 }}
@@ -200,7 +188,7 @@ export function OtpConfirmation({ confirmation, setConfirmation }: Props) {
 								Verifying Passcode ...
 							</motion.div>
 						)}
-						{isResendingLoading && (
+						{isResending && (
 							<motion.div
 								key="resending-passcode"
 								initial={{ opacity: 0, y: 10 }}
