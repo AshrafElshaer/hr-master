@@ -9,6 +9,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      departments: {
+        Row: {
+          description: string | null
+          id: string
+          name: string
+          organization_id: string
+          person_in_charge_id: string
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          name: string
+          organization_id: string
+          person_in_charge_id: string
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          name?: string
+          organization_id?: string
+          person_in_charge_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "departments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "departments_person_in_charge_id_fkey"
+            columns: ["person_in_charge_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organizations: {
         Row: {
           address: string
@@ -72,6 +111,7 @@ export type Database = {
           city: string | null
           country: string | null
           date_of_birth: string | null
+          department_id: string | null
           email: string
           fisrt_name: string | null
           id: string
@@ -89,6 +129,7 @@ export type Database = {
           city?: string | null
           country?: string | null
           date_of_birth?: string | null
+          department_id?: string | null
           email: string
           fisrt_name?: string | null
           id: string
@@ -106,6 +147,7 @@ export type Database = {
           city?: string | null
           country?: string | null
           date_of_birth?: string | null
+          department_id?: string | null
           email?: string
           fisrt_name?: string | null
           id?: string
@@ -118,6 +160,13 @@ export type Database = {
           zip_code?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "users_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "users_id_fkey"
             columns: ["id"]
@@ -139,7 +188,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      current_user_organization_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      current_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
       role_enum: "owner" | "manager" | "employee"

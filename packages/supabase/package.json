@@ -23,6 +23,7 @@
 		"./user-mutaions": "./src/mutaions/user/index.ts",
 		"./organization-queries": "./src/queries/organization/index.ts",
 		"./organization-mutaions": "./src/mutaions/organization/index.ts",
-		"./departments-mutaions": "./src/mutaions/departments/index.ts"
+		"./departments-mutaions": "./src/mutaions/departments/index.ts",
+		"./departments-queries": "./src/queries/departments/index.ts"
 	}
 }

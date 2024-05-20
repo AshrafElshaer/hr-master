@@ -9,24 +9,27 @@ import { departmentSchema } from "./validation";
 
 export const createNewDepartment = action(
   departmentSchema,
-  async (department) => {
+  async (newDepartment) => {
     const supabase = createServerClient();
-    const {user} = await getUser(supabase);
-    if (!user) {
+    const { user } = await getUser(supabase);
+    if (!user || !user.organization_id) {
       throw new Error("User not found");
     }
 
-    // const { data: newDepartment, error } = await createDepartment(supabase, {
-    //   name: department.departmentName,
-    //   description: department.departmentDescription,
-    //   organization_id: user.organization_id,
-    // });
+    const { data: departmentCreated, error } = await createDepartment(
+      supabase,
+      {
+        name: newDepartment.departmentName,
+        description: newDepartment.departmentDescription,
+        person_in_charge_id: newDepartment.personInCharge,
+        organization_id: user.organization_id,
+      },
+    );
 
-    // if (error) {
-    //   throw error;
-    // }
+    if (error) {
+      throw error;
+    }
 
-    // return newDepartment;
-    return null;
+    return departmentCreated;
   },
 );

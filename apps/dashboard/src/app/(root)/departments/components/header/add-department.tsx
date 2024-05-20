@@ -89,16 +89,42 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@hr-toolkit/ui/form";
-import { departmentSchema } from "../validation";
-import { createNewDepartment } from "../actions";
+import { departmentSchema } from "../../validation";
+import { createNewDepartment } from "../../actions";
+import { getAllManagers } from "@hr-toolkit/supabase/organization-queries";
 import { toast } from "sonner";
 import type { ReactSetState } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
+import {
+	Select,
+	SelectTrigger,
+	SelectValue,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectSeparator,
+} from "@hr-toolkit/ui/select";
+import { ScrollArea } from "@hr-toolkit/ui/scroll-area";
+import { useQuery } from "@tanstack/react-query";
+import { createClient } from "@hr-toolkit/supabase/client";
+import { getUser } from "@hr-toolkit/supabase/user-queries";
+import { Avatar, AvatarFallback, AvatarImage } from "@hr-toolkit/ui/avatar";
 
 function NewDepartmentForm({
 	className,
 	setOpen,
 }: React.ComponentProps<"form"> & { setOpen: ReactSetState<boolean> }) {
+	const supabase = createClient();
+	const { data: currentUser } = useQuery({
+		queryKey: ["user"],
+		queryFn: () => getUser(supabase),
+	});
+
+	const { data: organizationManagers, error: managersError } = useQuery({
+		queryKey: ["managers"],
+		queryFn: () => getAllManagers(supabase),
+	});
 	const form = useForm<z.infer<typeof departmentSchema>>({
 		resolver: zodResolver(departmentSchema),
 		defaultValues: {
@@ -107,6 +133,7 @@ function NewDepartmentForm({
 	});
 
 	async function onSubmit(values: z.infer<typeof departmentSchema>) {
+	
 		const {
 			data: newDepartment,
 			serverError,
@@ -133,6 +160,12 @@ function NewDepartmentForm({
 			toast.success("Department created successfully.");
 			setOpen(false);
 		}
+	}
+
+	if (managersError) {
+		toast.error(
+			`An error occurred while getting organization managers : ${managersError.message}`,
+		);
 	}
 	return (
 		<Form {...form}>
@@ -168,6 +201,47 @@ function NewDepartmentForm({
 						</FormItem>
 					)}
 				/>
+				<FormField
+					control={form.control}
+					name="personInCharge"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Person in Charge</FormLabel>
+							<FormControl>
+								<Select onValueChange={field.onChange} value={field.value}>
+									<SelectTrigger className="w-full">
+										<SelectValue
+											placeholder="Select a person in charge"
+											className="mx-auto"
+										/>
+									</SelectTrigger>
+									<SelectContent>
+										<ScrollArea className="max-h-[195px] w-full">
+											<SelectGroup>
+												<SelectLabel>Managers</SelectLabel>
+												<SelectSeparator />
+												{organizationManagers?.map((manager) => (
+													<SelectItem
+														key={manager.id}
+														value={manager.id}
+														className=" cursor-pointer"
+													>
+														{manager.fisrt_name} {manager.last_name}{" "}
+														{manager.id === currentUser?.user?.id
+															? "( Me )"
+															: ""}
+													</SelectItem>
+												))}
+											</SelectGroup>
+										</ScrollArea>
+									</SelectContent>
+								</Select>
+							</FormControl>
+
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
 				<AnimatePresence mode="wait">
 					<Button
 						type="submit"
@@ -184,7 +258,7 @@ function NewDepartmentForm({
 								className="flex items-center"
 							>
 								<Loader className="h-4 w-4 mr-2 animate-spin" />
-								Submitting...
+								creating ...
 							</motion.span>
 						) : (
 							<motion.span

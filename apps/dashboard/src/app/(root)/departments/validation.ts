@@ -5,4 +5,5 @@ export const departmentSchema = z.object({
     message: "Department name must be at least 2 characters long.",
   }),
   departmentDescription: z.string().optional(),
+  personInCharge: z.string(),
 });
