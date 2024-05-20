@@ -11,7 +11,7 @@ import MainSidebar from "@/components/sidebar/main-sidebar";
 async function DashboardLayout({ children }: { children: ReactNode }) {
 	const supabase = createServerClient();
 	const pathname = headers().get("x-pathname");
-	const user = await getUser(supabase);
+	const { user } = await getUser(supabase);
 
 	if (!user && pathname !== "/auth") {
 		redirect("/auth");
