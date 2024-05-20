@@ -10,23 +10,25 @@ import { getUser } from "@hr-toolkit/supabase/user-queries";
 export const onboardingPersonal = action(
   personalInfoSchema,
   async (data) => {
-    const supabase = createServerClient({
-      isAdmin: true,
-    });
-    const user = await getUser(supabase);
+    const supabase = createServerClient();
 
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    const { error } = await updateUserInfo(supabase, {
-      ...data,
+    const { error, data: updated } = await updateUserInfo(supabase, {
+      fisrt_name: data.firstName,
+      last_name: data.lastName,
+      address: data.address,
+      city: data.city,
+      state: data.state,
+      zip_code: data.zipCode,
+      country: data.country,
+      phone_number: data.phoneNumber,
+      date_of_birth: data.dateOfBirth.toString(),
       role: "owner",
-      userId: user.id,
+      updated_at: new Date().toISOString(),
     });
     if (error) {
       throw new Error(error.message);
     }
+    return updated;
   },
 );
 
@@ -34,18 +36,23 @@ export const onboardingOrganization = action(
   organizationFormSchema,
   async (data) => {
     const supabase = createServerClient();
-    const { organization, orgError, userError } = await createOrganization(
+
+    const organization = await createOrganization(
       supabase,
-      data,
+      {
+        name: data.organizationName,
+        type: data.organizationType,
+        address: data.address,
+        city: data.city,
+        state: data.state,
+        country: data.country,
+        zip_code: data.zipCode,
+        employees_count: data.employeesCount,
+        contact_name: data.contactName,
+        contact_email: data.contactEmail,
+        contact_number: data.contactNumber,
+      },
     );
-
-    if (orgError) {
-      throw new Error(orgError);
-    }
-
-    if (userError) {
-      throw new Error(userError);
-    }
 
     return organization;
   },

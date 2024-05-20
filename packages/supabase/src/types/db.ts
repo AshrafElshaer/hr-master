@@ -9,35 +9,6 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      departments: {
-        Row: {
-          description: string | null
-          id: string
-          name: string
-          organization_id: string | null
-        }
-        Insert: {
-          description?: string | null
-          id?: string
-          name: string
-          organization_id?: string | null
-        }
-        Update: {
-          description?: string | null
-          id?: string
-          name?: string
-          organization_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "departments_organization_id_fkey"
-            columns: ["organization_id"]
-            isOneToOne: false
-            referencedRelation: "organizations"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       organizations: {
         Row: {
           address: string
@@ -48,10 +19,10 @@ export type Database = {
           country: string
           employees_count: number
           id: string
-          organization_name: string
-          organization_type: string
+          name: string
           owner_id: string | null
           state: string
+          type: string
           zip_code: string
         }
         Insert: {
@@ -63,10 +34,10 @@ export type Database = {
           country: string
           employees_count: number
           id?: string
-          organization_name: string
-          organization_type: string
+          name: string
           owner_id?: string | null
           state: string
+          type: string
           zip_code: string
         }
         Update: {
@@ -78,10 +49,10 @@ export type Database = {
           country?: string
           employees_count?: number
           id?: string
-          organization_name?: string
-          organization_type?: string
+          name?: string
           owner_id?: string | null
           state?: string
+          type?: string
           zip_code?: string
         }
         Relationships: [
@@ -94,6 +65,75 @@ export type Database = {
           },
         ]
       }
+      users: {
+        Row: {
+          address: string | null
+          avatar_url: string | null
+          city: string | null
+          country: string | null
+          date_of_birth: string | null
+          email: string
+          fisrt_name: string | null
+          id: string
+          last_name: string | null
+          organization_id: string | null
+          phone_number: string | null
+          role: Database["public"]["Enums"]["role_enum"] | null
+          state: string | null
+          updated_at: string | null
+          zip_code: string | null
+        }
+        Insert: {
+          address?: string | null
+          avatar_url?: string | null
+          city?: string | null
+          country?: string | null
+          date_of_birth?: string | null
+          email: string
+          fisrt_name?: string | null
+          id: string
+          last_name?: string | null
+          organization_id?: string | null
+          phone_number?: string | null
+          role?: Database["public"]["Enums"]["role_enum"] | null
+          state?: string | null
+          updated_at?: string | null
+          zip_code?: string | null
+        }
+        Update: {
+          address?: string | null
+          avatar_url?: string | null
+          city?: string | null
+          country?: string | null
+          date_of_birth?: string | null
+          email?: string
+          fisrt_name?: string | null
+          id?: string
+          last_name?: string | null
+          organization_id?: string | null
+          phone_number?: string | null
+          role?: Database["public"]["Enums"]["role_enum"] | null
+          state?: string | null
+          updated_at?: string | null
+          zip_code?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -102,7 +142,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      role_enum: "owner" | "admin" | "manager" | "employee"
+      role_enum: "owner" | "manager" | "employee"
     }
     CompositeTypes: {
       [_ in never]: never

@@ -22,22 +22,26 @@ import { MdSupportAgent } from "react-icons/md";
 export default function UserMenu() {
 	const supabase = createClient();
 	const router = useRouter();
-	const { data: user, isLoading } = useQuery({
+	const { data, isLoading } = useQuery({
 		queryKey: ["user"],
 		queryFn: () => getUser(supabase),
 	});
+	const user = data?.user;
 
-	if (!user || isLoading) {
+	if (isLoading) {
 		return <Skeleton className="h-8 w-8 rounded-full" />;
+	}
+	if (!user || !user.fisrt_name || !user.last_name) {
+		return null;
 	}
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Avatar className="h-8 w-8 cursor-pointer">
-					<AvatarImage src={user?.user_metadata.avatar_url} />
+					<AvatarImage src={user.avatar_url ?? ""} />
 					<AvatarFallback>
-						{user?.user_metadata.firstName[0]}
-						{user?.user_metadata.lastName[0]}
+						{user.fisrt_name[0]}
+						{user.last_name[0]}
 					</AvatarFallback>
 				</Avatar>
 			</DropdownMenuTrigger>
@@ -47,7 +51,7 @@ export default function UserMenu() {
 				align="end"
 			>
 				<DropdownMenuLabel>
-					{user?.user_metadata.firstName} {user?.user_metadata.lastName}
+					{user.fisrt_name} {user.last_name}
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 

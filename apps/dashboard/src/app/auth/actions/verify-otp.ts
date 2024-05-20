@@ -1,6 +1,7 @@
 "use server";
 import { action } from "@/lib/safe-action";
 import { createServerClient } from "@hr-toolkit/supabase/server";
+import { getUser } from "@hr-toolkit/supabase/user-queries";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -22,11 +23,12 @@ export const verifyOtp = action(
     if (error) {
       throw new Error(error.message);
     }
-    const organizationId = data.user?.user_metadata.organization_id;
+    const { user } = await getUser(supabase);
+    const organizationId = user?.organization_id;
     if (!organizationId) {
       redirect("/onboarding");
     }
-    if (data.session && data.user) {
+    if (data.session && user) {
       redirect("/");
     }
   },

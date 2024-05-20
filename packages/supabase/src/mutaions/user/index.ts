@@ -1,47 +1,22 @@
-import type { SupabaseClient } from "../../types";
+import { getUser } from "../../queries/user";
+import type { Database, SupabaseClient } from "../../types";
 
-interface PersonalInfo {
-  firstName: string;
-  lastName: string;
-  address: string;
-  city: string;
-  state: string;
-  country: string;
-  zipCode: string;
-  phoneNumber: string;
-  dateOfBirth: Date;
-  role?: "owner" | "manager" | "employee";
-  userId: string;
-}
+type PersonalInfo = Database["public"]["Tables"]["users"]["Update"];
 
-export async function updateUserInfo(supabase: SupabaseClient, {
-  firstName,
-  lastName,
-  address,
-  city,
-  state,
-  country,
-  zipCode,
-  phoneNumber,
-  dateOfBirth,
-  role,
-  userId,
-}: PersonalInfo) {
-  return await supabase.auth.admin.updateUserById(
-    userId,
-    {
-      user_metadata: {
-        firstName,
-        lastName,
-        address,
-        city,
-        state,
-        country,
-        zipCode,
-        phoneNumber,
-        dateOfBirth,
-      },
-      role,
-    },
-  );
+export async function updateUserInfo(
+  supabase: SupabaseClient,
+  data: PersonalInfo,
+) {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    throw new Error("Session not found");
+  }
+
+  return await supabase.from("users").update(data).eq("id", userId).select()
+    .single().throwOnError();
 }
