@@ -3,7 +3,10 @@ import { z } from "zod";
 import { action } from "@/lib/safe-action";
 import { createServerClient } from "@hr-toolkit/supabase/server";
 
-import { createDepartment } from "@hr-toolkit/supabase/departments-mutaions";
+import {
+  createDepartment,
+  updateDepartment,
+} from "@hr-toolkit/supabase/departments-mutaions";
 import { getUser } from "@hr-toolkit/supabase/user-queries";
 import { departmentSchema } from "./validation";
 
@@ -31,5 +34,28 @@ export const createNewDepartment = action(
     }
 
     return departmentCreated;
+  },
+);
+
+export const editDepartment = action(
+  departmentSchema,
+  async (data) => {
+    const supabase = createServerClient();
+
+    const { data: departmentUpdated, error } = await updateDepartment(
+      supabase,
+      {
+        id: data.id,
+        name: data.departmentName,
+        description: data.departmentDescription,
+        person_in_charge_id: data.personInCharge,
+      },
+    );
+
+    if (error) {
+      throw error;
+    }
+
+    return departmentUpdated;
   },
 );

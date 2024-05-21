@@ -5,6 +5,7 @@ CREATE TABLE
     id uuid primary key default uuid_generate_v4 (),
     name TEXT NOT NULL,
     description text,
+    employees_count integer default 0;
     organization_id UUID NOT NULL references organizations (id) ON DELETE CASCADE,
     person_in_charge_id UUID NOT NULL references users (id) on delete set null
   );
@@ -57,3 +58,24 @@ create policy departments_delete_policy on departments for delete using (
   and current_user_organization_id() = organization_id
 );
 
+
+-- FUNCTIONS  
+
+-- update department employee count when a new employee is added
+
+
+CREATE
+OR REPLACE FUNCTION update_department_employee_count () RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.department_id IS NOT NULL AND NEW.role = 'employee' THEN
+        UPDATE departments
+        SET employees_count = employees_count + 1
+        WHERE id = NEW.department_id;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER increment_employee_count
+AFTER INSERT ON users FOR EACH ROW
+EXECUTE FUNCTION update_department_employee_count ();

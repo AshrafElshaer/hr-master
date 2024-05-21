@@ -1,9 +1,5 @@
 "use client";
-import * as React from "react";
-
-import { cn } from "@hr-toolkit/ui/utils";
-import { useMediaQuery } from "usehooks-ts";
-import { Button } from "@hr-toolkit/ui/button";
+import React from "react";
 import {
 	Dialog,
 	DialogContent,
@@ -12,75 +8,15 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@hr-toolkit/ui/dialog";
-import {
-	Drawer,
-	DrawerClose,
-	DrawerContent,
-	DrawerDescription,
-	DrawerFooter,
-	DrawerHeader,
-	DrawerTitle,
-	DrawerTrigger,
-} from "@hr-toolkit/ui/drawer";
-import { Input } from "@hr-toolkit/ui/input";
-import { Label } from "@hr-toolkit/ui/label";
-import { Loader, PlusIcon } from "lucide-react";
-
-export function AddNewDepartment() {
-	const [open, setOpen] = React.useState(false);
-	const isDesktop = useMediaQuery("(min-width: 768px)");
-
-	if (isDesktop) {
-		return (
-			<Dialog open={open} onOpenChange={setOpen}>
-				<DialogTrigger asChild>
-					<Button variant={"outline"}>
-						<PlusIcon className=" h-4 w-4 mr-2" />
-						Add Department
-					</Button>
-				</DialogTrigger>
-				<DialogContent>
-					<DialogHeader>
-						<DialogTitle>New Department</DialogTitle>
-						<DialogDescription>
-							Add a new department to your organization.
-						</DialogDescription>
-					</DialogHeader>
-					<NewDepartmentForm setOpen={setOpen} />
-				</DialogContent>
-			</Dialog>
-		);
-	}
-
-	return (
-		<Drawer open={open} onOpenChange={setOpen}>
-			<DrawerTrigger asChild>
-				<Button variant={"outline"}>
-					<PlusIcon className=" h-4 w-4 mr-2" />
-					Add Department
-				</Button>
-			</DrawerTrigger>
-			<DrawerContent>
-				<DrawerHeader className="text-left">
-					<DrawerTitle>New Department</DrawerTitle>
-					<DrawerDescription>
-						Add a new department to your organization.
-					</DrawerDescription>
-				</DrawerHeader>
-				<NewDepartmentForm setOpen={setOpen} className="px-4" />
-				<DrawerFooter>
-					<DrawerClose asChild>
-						<Button variant="outline">Cancel</Button>
-					</DrawerClose>
-				</DrawerFooter>
-			</DrawerContent>
-		</Drawer>
-	);
-}
-
-import type { z } from "zod";
+import type { DepartmentColumn } from "./table/columns";
+import { useQuery } from "@tanstack/react-query";
+import { getUser } from "@hr-toolkit/supabase/user-queries";
+import { getAllManagers } from "@hr-toolkit/supabase/organization-queries";
 import { useForm } from "react-hook-form";
+import { departmentSchema } from "../validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { SupabaseClient } from "@hr-toolkit/supabase/types";
+import type { z } from "zod";
 import {
 	Form,
 	FormControl,
@@ -89,39 +25,89 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@hr-toolkit/ui/form";
-import { departmentSchema } from "../../validation";
-import { createNewDepartment } from "../../actions";
-import { getAllManagers } from "@hr-toolkit/supabase/organization-queries";
-import { toast } from "sonner";
-import type { ReactSetState } from "@/types";
-import { AnimatePresence, motion } from "framer-motion";
+import { cn } from "@hr-toolkit/ui/utils";
+import { Input } from "@hr-toolkit/ui/input";
 import {
 	Select,
-	SelectTrigger,
-	SelectValue,
 	SelectContent,
 	SelectGroup,
 	SelectItem,
 	SelectLabel,
 	SelectSeparator,
+	SelectTrigger,
+	SelectValue,
 } from "@hr-toolkit/ui/select";
 import { ScrollArea } from "@hr-toolkit/ui/scroll-area";
-import { useQuery } from "@tanstack/react-query";
-import { createClient } from "@hr-toolkit/supabase/client";
-import { getUser } from "@hr-toolkit/supabase/user-queries";
-import { queryClient } from "@/lib/react-query";
+import { AnimatePresence } from "framer-motion";
+import { Button } from "@hr-toolkit/ui/button";
+import { motion } from "framer-motion";
+import { Loader } from "lucide-react";
+import { useMediaQuery } from "usehooks-ts";
+import type { User } from "@/types";
+import {
+	Drawer,
+	DrawerClose,
+	DrawerContent,
+	DrawerFooter,
+	DrawerHeader,
+	DrawerTitle,
+} from "@hr-toolkit/ui/drawer";
 import { Avatar, AvatarFallback, AvatarImage } from "@hr-toolkit/ui/avatar";
+import { editDepartment } from "../actions";
+import { toast } from "sonner";
+import { queryClient } from "@/lib/react-query";
 
-function NewDepartmentForm({
+type props = {
+	department: DepartmentColumn | null;
+	onClose: () => void;
+	supabase: SupabaseClient;
+	isEdit: boolean;
+	toggleIsEdit: () => void;
+};
+
+export default function EditDepartmetn({
+	department,
+	onClose,
+	supabase,
+	isEdit,
+	toggleIsEdit,
+}: props) {
+	return (
+		<Dialog open={isEdit} onOpenChange={toggleIsEdit}>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>Edit Department</DialogTitle>
+				</DialogHeader>
+
+				<UpdateForm
+					onClose={onClose}
+					department={department}
+					supabase={supabase}
+				/>
+			</DialogContent>
+		</Dialog>
+	);
+}
+
+function UpdateForm({
+	department,
+	supabase,
 	className,
-	setOpen,
-}: React.ComponentProps<"form"> & { setOpen: ReactSetState<boolean> }) {
-	const supabase = createClient();
+	onClose,
+}: {
+	department: DepartmentColumn | null;
+	supabase: SupabaseClient;
+	className?: string;
+	onClose: () => void;
+}) {
+	if (!department || !department.id) {
+		return null;
+	}
+
 	const { data: currentUser } = useQuery({
 		queryKey: ["user"],
 		queryFn: () => getUser(supabase),
 	});
-
 	const { data: organizationManagers, error: managersError } = useQuery({
 		queryKey: ["managers"],
 		queryFn: () => getAllManagers(supabase),
@@ -129,24 +115,23 @@ function NewDepartmentForm({
 	const form = useForm<z.infer<typeof departmentSchema>>({
 		resolver: zodResolver(departmentSchema),
 		defaultValues: {
-			departmentName: "",
+			departmentName: department.name,
+			departmentDescription: department?.description ?? "",
+			personInCharge: department.person_in_charge_id,
 		},
 	});
 
 	async function onSubmit(values: z.infer<typeof departmentSchema>) {
-		const {
-			data: newDepartment,
-			serverError,
-			validationError,
-		} = await createNewDepartment(values);
-
+		const { data, serverError, validationError } = await editDepartment({
+			...values,
+			id: department?.id,
+		});
 		if (serverError) {
-			toast.error("An error occurred while creating the department.", {
+			toast.error("An error occurred while updating the department.", {
 				description: serverError,
 			});
 			return;
 		}
-
 		if (validationError) {
 			toast.error("Validation error", {
 				description:
@@ -156,20 +141,15 @@ function NewDepartmentForm({
 			return;
 		}
 
-		if (newDepartment) {
-			toast.success("Department created successfully.");
+		if (data) {
+			toast.success("Department updated successfully.");
 			queryClient.invalidateQueries({
 				queryKey: ["departments"],
 			});
-			setOpen(false);
+			onClose();
 		}
 	}
 
-	if (managersError) {
-		toast.error(
-			`An error occurred while getting organization managers : ${managersError.message}`,
-		);
-	}
 	return (
 		<Form {...form}>
 			<form
@@ -195,7 +175,7 @@ function NewDepartmentForm({
 					name="departmentDescription"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Department Description</FormLabel>
+							<FormLabel>Department Descriptipn</FormLabel>
 							<FormControl>
 								<Input placeholder="Information Technology" {...field} />
 							</FormControl>
@@ -278,7 +258,7 @@ function NewDepartmentForm({
 								className="flex items-center"
 							>
 								<Loader className="h-4 w-4 mr-2 animate-spin" />
-								creating ...
+								Updating ...
 							</motion.span>
 						) : (
 							<motion.span
@@ -288,7 +268,7 @@ function NewDepartmentForm({
 								exit={{ opacity: 0, y: -10 }}
 								transition={{ duration: 0.2 }}
 							>
-								Create Department
+								Update Department
 							</motion.span>
 						)}
 					</Button>

@@ -1,9 +1,17 @@
-import type { SupabaseClient } from "../../types";
+import type { User } from "@/types";
+import type { Database, SupabaseClient } from "../../types";
+type Department = Database["public"]["Tables"]["departments"]["Row"];
+
+export interface DepartmentWithUser extends Department {
+  person_in_charge: User[];
+}
 export async function getDepartments(supabase: SupabaseClient) {
-  const { data, error } = await supabase.from("departments").select("*");
+  const { data, error } = await supabase.from("departments")
+    .select("*, person_in_charge:person_in_charge_id(*)");
+
   if (error) {
     throw error;
   }
 
-  return data;
+  return data as DepartmentWithUser[];
 }

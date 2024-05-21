@@ -1,11 +1,17 @@
-import type { GenerateLinkProperties, User } from "@supabase/supabase-js";
+import type { Database } from "@hr-toolkit/supabase/types";
+import type {
+  GenerateLinkProperties,
+  User as AuthUser,
+} from "@supabase/supabase-js";
 import type React from "react";
 
 export type ReactSetState<T> = React.Dispatch<React.SetStateAction<T>>;
 export type EmailOtpConfirmation = {
   properties: GenerateLinkProperties;
-  user: User;
+  user: AuthUser;
 } | {
   properties: null;
   user: null;
 };
+
+export type User = Database["public"]["Tables"]["users"]["Row"];
