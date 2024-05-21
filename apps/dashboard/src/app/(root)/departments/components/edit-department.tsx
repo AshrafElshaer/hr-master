@@ -141,13 +141,11 @@ function UpdateForm({
 			return;
 		}
 
-		if (data) {
-			toast.success("Department updated successfully.");
-			queryClient.invalidateQueries({
-				queryKey: ["departments"],
-			});
-			onClose();
-		}
+		toast.success("Department updated successfully.");
+		queryClient.invalidateQueries({
+			queryKey: ["departments"],
+		});
+		onClose();
 	}
 
 	return (

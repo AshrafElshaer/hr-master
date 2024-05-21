@@ -5,6 +5,7 @@ import { createServerClient } from "@hr-toolkit/supabase/server";
 
 import {
   createDepartment,
+  deleteOrganizationDepartment,
   updateDepartment,
 } from "@hr-toolkit/supabase/departments-mutaions";
 import { getUser } from "@hr-toolkit/supabase/user-queries";
@@ -57,5 +58,26 @@ export const editDepartment = action(
     }
 
     return departmentUpdated;
+  },
+);
+
+export const deleteDepartment = action(
+  z.object({
+    id: z.string(),
+  }),
+  async (data) => {
+    const supabase = createServerClient();
+
+    const { data: departmentDeleted, error } =
+      await deleteOrganizationDepartment(
+        supabase,
+        data.id,
+      );
+
+    if (error) {
+      throw error;
+    }
+
+    return departmentDeleted;
   },
 );

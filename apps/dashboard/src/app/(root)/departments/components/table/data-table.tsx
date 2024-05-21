@@ -23,6 +23,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createClient } from "@hr-toolkit/supabase/client";
 import { getDepartments } from "@hr-toolkit/supabase/departments-queries";
 import { useBoolean } from "usehooks-ts";
+import { DeleteDepartment } from "../delete-department";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -39,6 +40,11 @@ export function DataTable<TData, TValue>({
 		setTrue: setIsEditTrue,
 		setFalse: setIsEditFalse,
 	} = useBoolean(false);
+	const {
+		value: isDelete,
+		toggle: toggleIsDelete,
+		setTrue: setIsDeleteTrue,
+	} = useBoolean(false);
 	const supabase = createClient();
 	const { data: departments } = useQuery({
 		queryKey: ["departments"],
@@ -47,7 +53,7 @@ export function DataTable<TData, TValue>({
 	});
 	const [selectedDepartment, setSelectedDepartment] =
 		useState<DepartmentColumn | null>(null);
-	
+
 	const table = useReactTable({
 		data: departments as TData[],
 		columns,
@@ -55,13 +61,9 @@ export function DataTable<TData, TValue>({
 		meta: {
 			setSelectedDepartment,
 			setIsEditTrue,
+			setIsDeleteTrue,
 		},
 	});
-	// useEffect(() => {
-	// 	console.log({
-	// 		selectedDepartment,
-	// 	});
-	// }, [selectedDepartment]);
 
 	return (
 		<div className="rounded-md border w-full h-full">
@@ -103,8 +105,12 @@ export function DataTable<TData, TValue>({
 							</TableRow>
 						))
 					) : (
-						<TableRow>
-							<TableCell colSpan={columns.length} className="h-24 text-center">
+						
+						<TableRow className="h-full hover:bg-background">
+							<TableCell
+								colSpan={columns.length}
+								className="h-full text-center"
+							>
 								No results.
 							</TableCell>
 						</TableRow>
@@ -119,6 +125,22 @@ export function DataTable<TData, TValue>({
 				department={selectedDepartment}
 				onClose={() => {
 					toggleIsEdit();
+					setTimeout(() => {
+						setSelectedDepartment(null);
+					}, 500);
+				}}
+			/>
+
+			<DeleteDepartment
+				department={{
+					id: selectedDepartment?.id,
+					name: selectedDepartment?.name,
+				}}
+				isDelete={isDelete}
+				toggleIsDelete={toggleIsDelete}
+				supabase={supabase}
+				onClose={() => {
+					toggleIsDelete();
 					setTimeout(() => {
 						setSelectedDepartment(null);
 					}, 500);

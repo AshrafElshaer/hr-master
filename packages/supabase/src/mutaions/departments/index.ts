@@ -19,3 +19,10 @@ export async function updateDepartment(
   return await supabase.from("departments").update(data)
     .eq("id", data.id).select().single();
 }
+
+export async function deleteOrganizationDepartment(
+  supabase: SupabaseClient,
+  id: string,
+) {
+  return await supabase.from("departments").delete().eq("id", id);
+}

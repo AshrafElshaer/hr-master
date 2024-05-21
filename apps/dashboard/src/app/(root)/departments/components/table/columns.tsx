@@ -18,6 +18,7 @@ import { MoreHorizontal, PencilLine, Trash } from "lucide-react";
 type DepartmentColumnMeta = TableMeta<DepartmentColumn> & {
 	setSelectedDepartment: ReactSetState<DepartmentColumn | null>;
 	setIsEditTrue: () => void;
+	setIsDeleteTrue: () => void;
 };
 
 type Department = Database["public"]["Tables"]["departments"]["Row"];
@@ -71,7 +72,6 @@ export const columns: ColumnDef<DepartmentColumn>[] = [
 			const tableMeta: DepartmentColumnMeta = table.options
 				.meta as DepartmentColumnMeta;
 
-
 			return (
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
@@ -93,7 +93,10 @@ export const columns: ColumnDef<DepartmentColumn>[] = [
 						</DropdownMenuItem>
 
 						<DropdownMenuItem
-							// onClick={() => tableMeta.setDeleteDepartment(department)}
+							onClick={() => {
+								tableMeta.setSelectedDepartment(department);
+								tableMeta.setIsDeleteTrue();
+							}}
 							className="flex items-center gap-2"
 						>
 							<Trash size={16} />
