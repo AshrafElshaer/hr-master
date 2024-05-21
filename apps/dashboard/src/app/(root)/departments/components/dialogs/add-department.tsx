@@ -3,6 +3,7 @@ import * as React from "react";
 
 import { cn } from "@hr-toolkit/ui/utils";
 import { useMediaQuery } from "usehooks-ts";
+
 import { Button } from "@hr-toolkit/ui/button";
 import {
 	Dialog,
@@ -78,9 +79,19 @@ export function AddNewDepartment() {
 	);
 }
 
-import type { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
+import { createClient } from "@hr-toolkit/supabase/client";
+import { getUser } from "@hr-toolkit/supabase/user-queries";
+import { getAllManagers } from "@hr-toolkit/supabase/organization-queries";
+import { queryClient } from "@/lib/react-query";
+import { departmentSchema } from "../../validation";
+import { createNewDepartment } from "../../actions";
+
+import type { z } from "zod";
+import type { ReactSetState } from "@/types";
+
 import {
 	Form,
 	FormControl,
@@ -89,11 +100,8 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@hr-toolkit/ui/form";
-import { departmentSchema } from "../../validation";
-import { createNewDepartment } from "../../actions";
-import { getAllManagers } from "@hr-toolkit/supabase/organization-queries";
+
 import { toast } from "sonner";
-import type { ReactSetState } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
 import {
 	Select,
@@ -106,10 +114,6 @@ import {
 	SelectSeparator,
 } from "@hr-toolkit/ui/select";
 import { ScrollArea } from "@hr-toolkit/ui/scroll-area";
-import { useQuery } from "@tanstack/react-query";
-import { createClient } from "@hr-toolkit/supabase/client";
-import { getUser } from "@hr-toolkit/supabase/user-queries";
-import { queryClient } from "@/lib/react-query";
 import { Avatar, AvatarFallback, AvatarImage } from "@hr-toolkit/ui/avatar";
 
 function NewDepartmentForm({

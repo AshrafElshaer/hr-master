@@ -1,5 +1,22 @@
 "use client";
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getUser } from "@hr-toolkit/supabase/user-queries";
+import { getAllManagers } from "@hr-toolkit/supabase/organization-queries";
+import { useForm } from "react-hook-form";
+import { departmentSchema } from "../../validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMediaQuery } from "usehooks-ts";
+import { editDepartment } from "../../actions";
+import { toast } from "sonner";
+import { queryClient } from "@/lib/react-query";
+import { cn } from "@hr-toolkit/ui/utils";
+
+import type { DepartmentColumn } from "../table/columns";
+import type { SupabaseClient } from "@hr-toolkit/supabase/types";
+import type { z } from "zod";
+import type { User } from "@/types";
+
 import {
 	Dialog,
 	DialogContent,
@@ -8,15 +25,10 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@hr-toolkit/ui/dialog";
-import type { DepartmentColumn } from "./table/columns";
-import { useQuery } from "@tanstack/react-query";
-import { getUser } from "@hr-toolkit/supabase/user-queries";
-import { getAllManagers } from "@hr-toolkit/supabase/organization-queries";
-import { useForm } from "react-hook-form";
-import { departmentSchema } from "../validation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import type { SupabaseClient } from "@hr-toolkit/supabase/types";
-import type { z } from "zod";
+
+
+
+
 import {
 	Form,
 	FormControl,
@@ -25,7 +37,7 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@hr-toolkit/ui/form";
-import { cn } from "@hr-toolkit/ui/utils";
+
 import { Input } from "@hr-toolkit/ui/input";
 import {
 	Select,
@@ -42,20 +54,11 @@ import { AnimatePresence } from "framer-motion";
 import { Button } from "@hr-toolkit/ui/button";
 import { motion } from "framer-motion";
 import { Loader } from "lucide-react";
-import { useMediaQuery } from "usehooks-ts";
-import type { User } from "@/types";
-import {
-	Drawer,
-	DrawerClose,
-	DrawerContent,
-	DrawerFooter,
-	DrawerHeader,
-	DrawerTitle,
-} from "@hr-toolkit/ui/drawer";
+
+
+
 import { Avatar, AvatarFallback, AvatarImage } from "@hr-toolkit/ui/avatar";
-import { editDepartment } from "../actions";
-import { toast } from "sonner";
-import { queryClient } from "@/lib/react-query";
+
 
 type props = {
 	department: DepartmentColumn | null;

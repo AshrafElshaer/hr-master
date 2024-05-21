@@ -1,5 +1,10 @@
 "use client";
-
+import { useState } from "react";
+import { cn } from "@hr-toolkit/ui/utils";
+import { useQuery } from "@tanstack/react-query";
+import { createClient } from "@hr-toolkit/supabase/client";
+import { getDepartments } from "@hr-toolkit/supabase/departments-queries";
+import { useBoolean } from "usehooks-ts";
 import {
 	type ColumnDef,
 	type SortingState,
@@ -11,6 +16,8 @@ import {
 	getFilteredRowModel,
 } from "@tanstack/react-table";
 
+import type { DepartmentColumn } from "./columns";
+
 import {
 	Table,
 	TableBody,
@@ -19,17 +26,10 @@ import {
 	TableHeader,
 	TableRow,
 } from "@hr-toolkit/ui/table";
-import { Input } from "@hr-toolkit/ui/input";
-import { cn } from "@hr-toolkit/ui/utils";
-import { useEffect, useState } from "react";
-import type { DepartmentColumn } from "./columns";
-import EditDepartmetn from "../edit-department";
-import { useQuery } from "@tanstack/react-query";
-import { createClient } from "@hr-toolkit/supabase/client";
-import { getDepartments } from "@hr-toolkit/supabase/departments-queries";
-import { useBoolean } from "usehooks-ts";
-import { DeleteDepartment } from "../delete-department";
-import { Search } from "lucide-react";
+
+
+import EditDepartmetn from "../dialogs/edit-department";
+import { DeleteDepartment } from "../dialogs/delete-department";
 import DepartmentFilters from "./filters";
 
 export type TData = DepartmentColumn;

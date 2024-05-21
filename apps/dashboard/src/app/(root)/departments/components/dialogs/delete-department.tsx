@@ -1,7 +1,12 @@
+import { useMutation } from "@tanstack/react-query";
+import { deleteDepartment } from "../../actions";
+import { queryClient } from "@/lib/react-query";
+import { toast } from "sonner";
+
 import type { SupabaseClient } from "@hr-toolkit/supabase/types";
+
 import {
 	AlertDialog,
-	AlertDialogAction,
 	AlertDialogCancel,
 	AlertDialogContent,
 	AlertDialogDescription,
@@ -10,10 +15,6 @@ import {
 	AlertDialogTitle,
 } from "@hr-toolkit/ui/alert-dialog";
 import { Button } from "@hr-toolkit/ui/button";
-import { useMutation } from "@tanstack/react-query";
-import { deleteDepartment } from "../actions";
-import { queryClient } from "@/lib/react-query";
-import { toast } from "sonner";
 import { AnimatePresence, motion } from "framer-motion";
 import { Loader } from "lucide-react";
 type Props = {
