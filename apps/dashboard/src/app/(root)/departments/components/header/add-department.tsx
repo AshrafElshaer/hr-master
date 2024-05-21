@@ -218,7 +218,7 @@ function NewDepartmentForm({
 											className="mx-auto"
 										/>
 									</SelectTrigger>
-									<SelectContent>
+									<SelectContent side="top">
 										<ScrollArea className="max-h-[195px] w-full">
 											<SelectGroup>
 												<SelectLabel>Managers</SelectLabel>

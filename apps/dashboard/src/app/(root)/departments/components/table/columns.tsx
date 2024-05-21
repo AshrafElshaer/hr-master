@@ -13,7 +13,12 @@ import {
 	DropdownMenuTrigger,
 } from "@hr-toolkit/ui/dropdown-menu";
 import { Button } from "@hr-toolkit/ui/button";
-import { MoreHorizontal, PencilLine, Trash } from "lucide-react";
+import {
+	MoreHorizontal,
+	PencilLine,
+	Trash,
+	ChevronsUpDown,
+} from "lucide-react";
 
 type DepartmentColumnMeta = TableMeta<DepartmentColumn> & {
 	setSelectedDepartment: ReactSetState<DepartmentColumn | null>;
@@ -21,7 +26,7 @@ type DepartmentColumnMeta = TableMeta<DepartmentColumn> & {
 	setIsDeleteTrue: () => void;
 };
 
-type Department = Database["public"]["Tables"]["departments"]["Row"];
+export type Department = Database["public"]["Tables"]["departments"]["Row"];
 
 export interface DepartmentColumn extends Department {
 	person_in_charge: User[];
@@ -30,15 +35,48 @@ export interface DepartmentColumn extends Department {
 export const columns: ColumnDef<DepartmentColumn>[] = [
 	{
 		accessorKey: "name",
-		header: "Name",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					className="justify-between w-full p-0"
+				>
+					Name
+					<ChevronsUpDown className="h-4 w-4" />
+				</Button>
+			);
+		},
 	},
 	{
 		accessorKey: "description",
-		header: "Description",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					className="justify-between w-full min-w-48 p-0"
+				>
+					Description
+					<ChevronsUpDown className="h-4 w-4" />
+				</Button>
+			);
+		},
 	},
 	{
 		accessorKey: "person_in_charge",
-		header: "Manager In Charge",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					className="justify-between w-full p-0 min-w-44"
+				>
+					Person in charge
+					<ChevronsUpDown className="h-4 w-4" />
+				</Button>
+			);
+		},
 		cell({ row }) {
 			const user: User = row.getValue("person_in_charge");
 			return (
@@ -57,7 +95,18 @@ export const columns: ColumnDef<DepartmentColumn>[] = [
 	},
 	{
 		accessorKey: "employees_count",
-		header: () => <div className="text-center w-full">Count</div>,
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					className="justify-between w-full min-w-40 p-0 "
+				>
+					Employees Count
+					<ChevronsUpDown className="h-4 w-4" />
+				</Button>
+			);
+		},
 		cell: ({ row }) => (
 			<div className="text-center w-full">
 				{row.getValue("employees_count")}
