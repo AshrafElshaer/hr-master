@@ -26,9 +26,6 @@ import {
 	DialogTrigger,
 } from "@hr-toolkit/ui/dialog";
 
-
-
-
 import {
 	Form,
 	FormControl,
@@ -55,10 +52,7 @@ import { Button } from "@hr-toolkit/ui/button";
 import { motion } from "framer-motion";
 import { Loader } from "lucide-react";
 
-
-
 import { Avatar, AvatarFallback, AvatarImage } from "@hr-toolkit/ui/avatar";
-
 
 type props = {
 	department: DepartmentColumn | null;
@@ -216,8 +210,8 @@ function UpdateForm({
 																	src={manager.avatar_url ?? undefined}
 																/>
 																<AvatarFallback className="text-xs">
-																	{manager.fisrt_name
-																		? manager.fisrt_name[0]
+																	{manager.first_name
+																		? manager.first_name[0]
 																		: ""}
 																	{manager.last_name
 																		? manager.last_name[0]
@@ -225,7 +219,7 @@ function UpdateForm({
 																</AvatarFallback>
 															</Avatar>
 															<span>
-																{manager.fisrt_name} {manager.last_name}{" "}
+																{manager.first_name} {manager.last_name}{" "}
 																{manager.id === currentUser?.user?.id
 																	? "( Me )"
 																	: ""}

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-import DepartmentsHeader from "./components/header/departments-header";
+import DepartmentsHeader from "./components/departments-header";
 import DepartmentTable from "./components/table";
 import { Skeleton } from "@hr-toolkit/ui/skeleton";
 

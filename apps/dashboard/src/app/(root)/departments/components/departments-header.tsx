@@ -1,5 +1,5 @@
 import { Button } from "@hr-toolkit/ui/button";
-import { AddNewDepartment } from "../dialogs/add-department";
+import { AddNewDepartment } from "./dialogs/add-department";
 
 export default function DepartmentsHeader() {
 	return (

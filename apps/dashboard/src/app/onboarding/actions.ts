@@ -13,7 +13,7 @@ export const onboardingPersonal = action(
     const supabase = createServerClient();
 
     const { error, data: updated } = await updateUserInfo(supabase, {
-      fisrt_name: data.firstName,
+      first_name: data.firstName,
       last_name: data.lastName,
       address: data.address,
       city: data.city,

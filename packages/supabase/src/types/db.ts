@@ -116,12 +116,17 @@ export type Database = {
           date_of_birth: string | null
           department_id: string | null
           email: string
-          fisrt_name: string | null
+          employment_status: string | null
+          first_name: string | null
+          gender: string | null
+          hire_date: string | null
           id: string
           last_name: string | null
           organization_id: string | null
           phone_number: string | null
+          position: string | null
           role: Database["public"]["Enums"]["role_enum"] | null
+          salary: number | null
           state: string | null
           updated_at: string | null
           zip_code: string | null
@@ -134,12 +139,17 @@ export type Database = {
           date_of_birth?: string | null
           department_id?: string | null
           email: string
-          fisrt_name?: string | null
+          employment_status?: string | null
+          first_name?: string | null
+          gender?: string | null
+          hire_date?: string | null
           id: string
           last_name?: string | null
           organization_id?: string | null
           phone_number?: string | null
+          position?: string | null
           role?: Database["public"]["Enums"]["role_enum"] | null
+          salary?: number | null
           state?: string | null
           updated_at?: string | null
           zip_code?: string | null
@@ -152,12 +162,17 @@ export type Database = {
           date_of_birth?: string | null
           department_id?: string | null
           email?: string
-          fisrt_name?: string | null
+          employment_status?: string | null
+          first_name?: string | null
+          gender?: string | null
+          hire_date?: string | null
           id?: string
           last_name?: string | null
           organization_id?: string | null
           phone_number?: string | null
+          position?: string | null
           role?: Database["public"]["Enums"]["role_enum"] | null
+          salary?: number | null
           state?: string | null
           updated_at?: string | null
           zip_code?: string | null

@@ -31,7 +31,7 @@ export default function UserMenu() {
 	if (isLoading) {
 		return <Skeleton className="h-8 w-8 rounded-full" />;
 	}
-	if (!user || !user.fisrt_name || !user.last_name) {
+	if (!user || !user.first_name || !user.last_name) {
 		return null;
 	}
 	return (
@@ -40,7 +40,7 @@ export default function UserMenu() {
 				<Avatar className="h-8 w-8 cursor-pointer">
 					<AvatarImage src={user.avatar_url ?? ""} />
 					<AvatarFallback>
-						{user.fisrt_name[0]}
+						{user.first_name[0]}
 						{user.last_name[0]}
 					</AvatarFallback>
 				</Avatar>
@@ -51,7 +51,7 @@ export default function UserMenu() {
 				align="end"
 			>
 				<DropdownMenuLabel>
-					{user.fisrt_name} {user.last_name}
+					{user.first_name} {user.last_name}
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 

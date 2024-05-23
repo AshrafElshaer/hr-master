@@ -8,7 +8,7 @@ create table
     id uuid references auth.users on delete cascade not null primary key,
     updated_at timestamp with time zone,
     email text not null unique,
-    fisrt_name text,
+    first_name text,
     last_name text,
     role role_enum,
     address text ,
@@ -17,11 +17,17 @@ create table
     country text,
     zip_code text,
     phone_number text,
-    date_of_birth timestamp with time zone,
+    date_of_birth text,
     avatar_url text
-    -- organization_id uuid references organizations (id)
+    position text,
+    hire_date text,
+    salary integer default 0,
+    gender text,
+    employment_status text default 'active';
   );
+
     -- create function to get the current user role
+
   CREATE FUNCTION current_user_role() RETURNS text AS $$
     DECLARE
       role text;
@@ -35,6 +41,7 @@ create table
 
 -- Set up Row Level Security (RLS)
 -- See https://supabase.com/docs/guides/auth/row-level-security for more details.
+
 alter table users enable row level security;
 
 create policy "Public users are viewable by everyone." on users for

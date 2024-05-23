@@ -84,11 +84,11 @@ export const columns: ColumnDef<DepartmentColumn>[] = [
 					<Avatar className="h-5 w-5">
 						<AvatarImage src={user?.avatar_url ?? undefined} />
 						<AvatarFallback className="text-xs">
-							{user?.fisrt_name ? user?.fisrt_name[0] : ""}
+							{user?.first_name ? user?.first_name[0] : ""}
 							{user?.last_name ? user?.last_name[0] : ""}
 						</AvatarFallback>
 					</Avatar>
-					{user?.fisrt_name} {user?.last_name}
+					{user?.first_name} {user?.last_name}
 				</div>
 			);
 		},
