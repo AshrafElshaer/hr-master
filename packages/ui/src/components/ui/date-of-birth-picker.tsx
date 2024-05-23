@@ -26,7 +26,7 @@ type DatePickerProps = {
 	date: Date;
 	onSelect: SelectSingleEventHandler;
 	className?: string;
-} & DayPickerSingleProps;
+} & Omit<DayPickerSingleProps, "mode">;
 
 export function DateOfBirthPicker({
 	date,
@@ -51,7 +51,11 @@ export function DateOfBirthPicker({
 					{date ? format(date, "PPP") : <span>Pick a date of birth</span>}
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className="w-auto p-0 z-50" align="start">
+			<PopoverContent
+				className="w-auto p-0 z-50 ui-pointer-events-auto"
+				align="start"
+				sideOffset={12}
+			>
 				<div className="flex gap-4 p-2">
 					<Select
 						onValueChange={(val) => setYear(Number(val))}
@@ -103,6 +107,7 @@ export function DateOfBirthPicker({
 					initialFocus
 					month={new Date(year, month)}
 					disableNavigation
+					mode="single"
 					{...props}
 				/>
 			</PopoverContent>

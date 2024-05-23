@@ -78,6 +78,7 @@ import {
 	SelectValue,
 } from "@hr-toolkit/ui/select";
 import { ScrollArea } from "@hr-toolkit/ui/scroll-area";
+import { DatePicker } from "@hr-toolkit/ui/date-picker";
 
 function EmployeeForm() {
 	const supabase = createClient();
@@ -276,7 +277,6 @@ function EmployeeForm() {
 								<FormLabel>Date Of Birth</FormLabel>
 								<FormControl>
 									<DateOfBirthPicker
-										mode="single"
 										date={field.value}
 										onSelect={field.onChange}
 										className="w-full"
