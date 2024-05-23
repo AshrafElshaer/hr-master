@@ -212,7 +212,6 @@ export function PersonalForm() {
 								<FormLabel>Date of Birth</FormLabel>
 								<FormControl>
 									<DateOfBirthPicker
-										mode="single"
 										date={field.value}
 										onSelect={field.onChange}
 										className="w-full"
