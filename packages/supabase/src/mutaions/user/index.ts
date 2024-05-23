@@ -20,3 +20,49 @@ export async function updateUserInfo(
   return await supabase.from("users").update(data).eq("id", userId).select()
     .single().throwOnError();
 }
+
+export async function createEmployee(
+  supabase: SupabaseClient,
+  data: PersonalInfo,
+) {
+  const { user: currentUser } = await getUser(supabase);
+  if (!currentUser) {
+    throw new Error("User not found");
+  }
+  const { data: { user: newUser }, error } = await supabase.auth.admin
+    .createUser({
+      email: data.email,
+    });
+  if (error) {
+    throw error;
+  }
+  if (!newUser) {
+    throw new Error("Unable to create user");
+  }
+  const { data: newUserUpdates, error: updateError } = await supabase.from(
+    "users",
+  ).update({
+    first_name: data.first_name,
+    last_name: data.last_name,
+    gender: data.gender,
+    date_of_birth: data.date_of_birth,
+    phone_number: data.phone_number,
+    address: data.address,
+    city: data.city,
+    state: data.state,
+    country: data.country,
+    zip_code: data.zip_code,
+    role: data.role,
+    employment_status: data.employment_status,
+    department_id: data.department_id,
+    position: data.position,
+    hire_date: data.hire_date,
+    salary: data.salary,
+    organization_id: currentUser.organization_id,
+  }).eq("id", newUser.id).select().single().throwOnError();
+  if (updateError) {
+    throw updateError;
+  }
+
+  return newUserUpdates;
+}

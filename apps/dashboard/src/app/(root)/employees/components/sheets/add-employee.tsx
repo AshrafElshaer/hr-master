@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import * as dateFns from "date-fns";
 
 import type * as RPNInput from "react-phone-number-input";
@@ -25,7 +25,7 @@ export default function AddNewEmployee() {
 					Add Employee
 				</Button>
 			</SheetTrigger>
-			<SheetContent className="flex flex-col">
+			<SheetContent className="flex flex-col w-full sm:max-w-lg">
 				<SheetHeader className="mb-8">
 					<section className="w-full flex items-center justify-between">
 						<SheetTitle>New Employee</SheetTitle>
@@ -79,6 +79,7 @@ import {
 } from "@hr-toolkit/ui/select";
 import { ScrollArea } from "@hr-toolkit/ui/scroll-area";
 import { DatePicker } from "@hr-toolkit/ui/date-picker";
+import { formatCurrency } from "@/lib/numbers";
 
 function EmployeeForm() {
 	const supabase = createClient();
@@ -103,7 +104,6 @@ function EmployeeForm() {
 			department_id: "",
 			position: "",
 			role: "employee",
-			// -----
 			hire_date: new Date(),
 			salary: 0,
 			employment_status: "active",
@@ -376,6 +376,53 @@ function EmployeeForm() {
 						)}
 					/>
 				</div>
+				<div className="w-full flex flex-col sm:flex-row items-center gap-4">
+					<FormField
+						control={form.control}
+						name="hire_date"
+						render={({ field }) => (
+							<FormItem className="w-full">
+								<FormLabel>Hire Date</FormLabel>
+								<FormControl>
+									<DatePicker
+										className="w-full"
+										mode="single"
+										date={field.value}
+										onSelect={field.onChange}
+										fromDate={new Date()}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="salary"
+						render={({ field }) => (
+							<FormItem className="w-full">
+								<FormLabel>Salary</FormLabel>
+								<FormControl>
+									<Input
+										placeholder="$100,000"
+										inputMode="numeric"
+										{...field}
+										value={
+											field.value ? formatCurrency(field.value.toString()) : ""
+										}
+										onChange={(e) =>
+											field.onChange(
+												Number(e.target.value.replace(/[^0-9.]/g, "")),
+											)
+										}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				</div>
+
 				<Button type="submit" className="w-full">
 					<PlusIcon className=" h-4 w-4 mr-2" />
 					{form.watch("first_name") && form.watch("last_name")

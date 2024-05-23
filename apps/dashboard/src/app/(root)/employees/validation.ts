@@ -5,7 +5,7 @@ export const employeeSchema = z.object({
   address: z.string().min(5, {
     message: "Address must be at least 5 characters long",
   }),
-  avatar_url: z.string().nullable(),
+  avatar_url: z.string().optional(),
   city: z.string().min(3, {
     message: "City must be at least 3 characters long",
   }),
@@ -27,7 +27,7 @@ export const employeeSchema = z.object({
   last_name: z.string().min(3, {
     message: "Last name must be at least 3 characters long",
   }),
-  organization_id: z.string(),
+  organization_id: z.string().optional(),
   phone_number: z.string()
     .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
   position: z.string().min(3, {
