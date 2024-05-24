@@ -17,8 +17,9 @@ import { Button } from "@hr-toolkit/ui/button";
 import { PlusIcon, X } from "lucide-react";
 
 export default function AddNewEmployee() {
+	const [open, setOpen] = React.useState(false);
 	return (
-		<Sheet>
+		<Sheet open={open} onOpenChange={setOpen}>
 			<SheetTrigger asChild>
 				<Button variant="outline">
 					<PlusIcon className=" h-4 w-4 mr-2" />
@@ -39,7 +40,7 @@ export default function AddNewEmployee() {
 				</SheetHeader>
 				{/* <div className="h-full overflow-y-scroll scrollbar-muted"> */}
 				<ScrollArea className="h-full p-4">
-					<EmployeeForm />
+					<EmployeeForm setOpen={setOpen} />
 				</ScrollArea>
 				{/* </div> */}
 			</SheetContent>
@@ -80,8 +81,14 @@ import {
 import { ScrollArea } from "@hr-toolkit/ui/scroll-area";
 import { DatePicker } from "@hr-toolkit/ui/date-picker";
 import { formatCurrency } from "@/lib/numbers";
+import { createNeweEmployee } from "../../actions";
+import { toast } from "sonner";
 
-function EmployeeForm() {
+function EmployeeForm({
+	setOpen,
+}: {
+	setOpen: (open: boolean) => void;
+}) {
 	const supabase = createClient();
 	const { data: departments } = useQuery({
 		queryKey: ["departments"],
@@ -111,9 +118,20 @@ function EmployeeForm() {
 	});
 
 	// 2. Define a submit handler.
-	function onSubmit(values: z.infer<typeof employeeSchema>) {
-		// Do something with the form values.
-		// ✅ This will be type-safe and validated.
+	async function onSubmit(values: z.infer<typeof employeeSchema>) {
+		const { data, serverError, validationError } =
+			await createNeweEmployee(values);
+
+		if (serverError) {
+			toast.error(serverError);
+			return;
+		}
+		toast.success("Employee added successfully", {
+			description:
+				"Email has been sent to the employee with the login details.",
+		});
+
+		setOpen(false);
 		console.log(values);
 	}
 	return (

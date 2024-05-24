@@ -39,6 +39,38 @@ create table
   END;
   $$ LANGUAGE plpgsql;
 
+  -- function to get current user department id 
+
+  CREATE FUNCTION current_user_department_id () RETURNS UUID AS $$
+DECLARE
+    current_user_department_id UUID;
+BEGIN
+    SELECT department_id INTO current_user_department_id
+    FROM public.users
+    WHERE id = auth.uid();
+    
+    RETURN current_user_department_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
+  -- function to get current user organization id
+
+  CREATE FUNCTION current_user_organization_id () RETURNS UUID AS $$
+DECLARE
+    current_user_organization_id UUID;
+BEGIN
+    SELECT organization_id INTO current_user_organization_id
+    FROM public.users
+    WHERE id = auth.uid();
+    
+    RETURN current_user_organization_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
 -- Set up Row Level Security (RLS)
 -- See https://supabase.com/docs/guides/auth/row-level-security for more details.
 
