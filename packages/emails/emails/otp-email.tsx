@@ -1,3 +1,4 @@
+import React from "react";
 import {
 	Body,
 	Container,
@@ -8,12 +9,11 @@ import {
 	Section,
 	Tailwind,
 	Text,
-} from "@react-email/components";
 
-import * as React from "react";
-// import Logo from "./copmonents/logo";
-import { colors } from "./components/colors";
-const baseUrl = "https://fxresearch.app";
+} from "@react-email/components";
+import { colors } from "../components/colors";
+import Logo from "../components/logo";
+
 export function OtpEmail({ otpCode }: { otpCode: string }) {
 	return (
 		<Html>
@@ -48,27 +48,26 @@ export function OtpEmail({ otpCode }: { otpCode: string }) {
 					className={` bg-[${colors.lightTheme.background}] dark:bg-[${colors.darkTheme.background}] py-8 `}
 				>
 					<Container
-						className={`w-[448px] rounded-lg  border-[${colors.lightTheme.border}] dark:border-[${colors.darkTheme.border}] bg-transparent p-8 py-16 mx-auto   shadow `}
+						className={`w-[448px] rounded-lg border  border-[${colors.lightTheme.border}] dark:border-[${colors.darkTheme.border}] bg-transparent p-8 py-16 mx-auto   shadow `}
 						style={{ borderStyle: "solid", borderWidth: "1px" }}
 					>
-						{/* <Logo baseUrl={baseUrl} /> */}
-
-						<Heading
+						<Logo />
+						<Text
 							className={`text-base text-[${colors.lightTheme.foreground}] dark:text-[${colors.darkTheme.foreground}]  `}
 						>
 							Hello there ,
-						</Heading>
+						</Text>
 
-						<Text
+						<Heading
 							className={`text-[16px] text-[${colors.lightTheme.foreground}] dark:text-[${colors.darkTheme.foreground}] w-full text-center font-semibold `}
 						>
 							Verification code
-						</Text>
+						</Heading>
 
 						<Text
 							className={`text-4xl font-bold tracking-widest text-[${colors.lightTheme.foreground}] dark:text-[${colors.darkTheme.foreground}] w-full text-center`}
 						>
-							{otpCode}
+							{otpCode.slice(0, 3)} - {otpCode.slice(3, 6)}
 						</Text>
 
 						<Text
@@ -80,9 +79,8 @@ export function OtpEmail({ otpCode }: { otpCode: string }) {
 						<Text
 							className={`text-[14px] text-[${colors.lightTheme.foreground}] dark:text-[${colors.darkTheme.foreground}] `}
 						>
-							If you didn&apos;t request this code, no worries – your
-							account is safe and sound. Someone might have mistyped their email
-							address.
+							If you didn&apos;t request this code, no worries – your account is
+							safe and sound. Someone might have mistyped their email address.
 						</Text>
 
 						<Section className="mt-[16px] text-center">
@@ -103,3 +101,9 @@ export function OtpEmail({ otpCode }: { otpCode: string }) {
 		</Html>
 	);
 }
+
+OtpEmail.PreviewProps = {
+	otpCode: "123456",
+};
+
+export default OtpEmail;
