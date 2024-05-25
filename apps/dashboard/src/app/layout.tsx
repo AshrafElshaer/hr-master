@@ -35,6 +35,9 @@ export const metadata: Metadata = {
 			"max-snippet": -1,
 		},
 	},
+	icons: {
+		icon: { rel: "icon", url: "/icon.ico" },
+	},
 };
 
 export const viewport = {
