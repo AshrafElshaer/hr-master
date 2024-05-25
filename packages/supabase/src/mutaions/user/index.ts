@@ -33,8 +33,9 @@ export async function createEmployee(
     .createUser({
       email: data.email,
     });
+    
   if (error) {
-    throw error;
+    throw new Error(error.message);
   }
   if (!newUser) {
     throw new Error("Unable to create user");
@@ -59,7 +60,11 @@ export async function createEmployee(
     hire_date: data.hire_date,
     salary: data.salary,
     organization_id: currentUser.organization_id,
-  }).eq("id", newUser.id).select().single().throwOnError();
+  })
+    .eq("id", newUser.id)
+    .select("* , organization:organization_id(name)")
+    .single()
+    .throwOnError();
   if (updateError) {
     throw updateError;
   }

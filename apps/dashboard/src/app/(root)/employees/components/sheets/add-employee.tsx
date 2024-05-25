@@ -14,7 +14,7 @@ import {
 	SheetTrigger,
 } from "@hr-toolkit/ui/sheet";
 import { Button } from "@hr-toolkit/ui/button";
-import { PlusIcon, X } from "lucide-react";
+import { LoaderIcon, MoonStarIcon, PlusIcon, X } from "lucide-react";
 
 export default function AddNewEmployee() {
 	const [open, setOpen] = React.useState(false);
@@ -83,6 +83,7 @@ import { DatePicker } from "@hr-toolkit/ui/date-picker";
 import { formatCurrency } from "@/lib/numbers";
 import { createNeweEmployee } from "../../actions";
 import { toast } from "sonner";
+import { AnimatePresence, motion } from "framer-motion";
 
 function EmployeeForm({
 	setOpen,
@@ -442,10 +443,33 @@ function EmployeeForm({
 				</div>
 
 				<Button type="submit" className="w-full">
-					<PlusIcon className=" h-4 w-4 mr-2" />
-					{form.watch("first_name") && form.watch("last_name")
-						? `Add ${form.watch("first_name")} ${form.watch("last_name")}`
-						: "Add Employee"}
+					<AnimatePresence mode="wait" initial={false}>
+						{!form.formState.isSubmitting ? (
+							<motion.p
+								key="submit"
+								className="w-full flex items-center justify-center"
+								initial={{ opacity: 0, y: 10 }}
+								animate={{ opacity: 1, y: 0 }}
+								exit={{ opacity: 0, y: -10 }}
+							>
+								<PlusIcon className=" h-4 w-4 mr-2" />{" "}
+								{form.watch("first_name") && form.watch("last_name")
+									? `Add ${form.watch("first_name")} ${form.watch("last_name")}`
+									: "Add Employee"}
+							</motion.p>
+						) : (
+							<motion.p
+								key="submitting"
+								className="w-full flex items-center justify-center"
+								initial={{ opacity: 0, y: 10 }}
+								animate={{ opacity: 1, y: 0 }}
+								exit={{ opacity: 0, y: -10 }}
+							>
+								<LoaderIcon className=" h-4 w-4 mr-2 animate-spin" />
+								Adding Employee
+							</motion.p>
+						)}
+					</AnimatePresence>
 				</Button>
 			</form>
 		</Form>
