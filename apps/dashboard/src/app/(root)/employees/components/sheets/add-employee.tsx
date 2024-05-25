@@ -84,6 +84,7 @@ import { formatCurrency } from "@/lib/numbers";
 import { createNeweEmployee } from "../../actions";
 import { toast } from "sonner";
 import { AnimatePresence, motion } from "framer-motion";
+import { Badge } from "@hr-toolkit/ui/badge";
 
 function EmployeeForm({
 	setOpen,
@@ -395,6 +396,28 @@ function EmployeeForm({
 						)}
 					/>
 				</div>
+				<FormField
+					control={form.control}
+					name="employment_status"
+					render={({ field }) => (
+						<FormItem className="w-full">
+							<FormLabel>Employment Status</FormLabel>
+							<FormControl>
+								<Select onValueChange={field.onChange} value={field.value}>
+									<SelectTrigger className="w-full">
+										<SelectValue placeholder="Select a status" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="active">Active</SelectItem>
+										<SelectItem value="on-hold">On Hold</SelectItem>
+									</SelectContent>
+								</Select>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
 				<div className="w-full flex flex-col sm:flex-row items-center gap-4">
 					<FormField
 						control={form.control}
@@ -442,7 +465,11 @@ function EmployeeForm({
 					/>
 				</div>
 
-				<Button type="submit" className="w-full">
+				<Button
+					type="submit"
+					className="w-full"
+					disabled={form.formState.isSubmitting}
+				>
 					<AnimatePresence mode="wait" initial={false}>
 						{!form.formState.isSubmitting ? (
 							<motion.p

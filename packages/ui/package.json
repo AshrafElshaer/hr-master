@@ -9,6 +9,7 @@
 		"./alert": "./src/components/ui/alert.tsx",
 		"./avatar": "./src/components/ui/avatar.tsx",
 		"./button": "./src/components/ui/button.tsx",
+		"./badge" :"./src/components/ui/badge.tsx",
 		"./calendar": "./src/components/ui/calendar.tsx",
 		"./card": "./src/components/ui/card.tsx",
 		"./carousel": "./src/components/ui/carousel.tsx",
