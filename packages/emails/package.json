@@ -4,8 +4,7 @@
 	"private": true,
 	"main": "./emails/index.ts",
 	"scripts": {
-		"build": "email build",
-		"dev": "email dev",
+g		"dev": "email dev",
 		"export": "email export"
 	},
 	"dependencies": {

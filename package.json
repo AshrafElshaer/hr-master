@@ -2,6 +2,7 @@
 	"private": true,
 	"scripts": {
 		"build": "turbo build",
+		"build:dashboard": "turbo build --filter=dashboard",
 		"dev": "turbo dev --filter=dashboard",
 		"dev:email": "turbo dev --filter=@hr-toolkit/emails",
 		"lint": "turbo lint",

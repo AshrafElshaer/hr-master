@@ -15,7 +15,7 @@ import { cn } from "@hr-toolkit/ui/utils";
 import type { DepartmentColumn } from "../table/columns";
 import type { SupabaseClient } from "@hr-toolkit/supabase/types";
 import type { z } from "zod";
-import type { User } from "@/types";
+import type { User } from "@hr-toolkit/supabase/types";
 
 import {
 	Dialog,

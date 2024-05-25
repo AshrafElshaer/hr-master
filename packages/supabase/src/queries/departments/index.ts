@@ -1,4 +1,4 @@
-import type { User } from "@/types";
+import type { User } from "@hr-toolkit/supabase/types";
 import type { Database, SupabaseClient } from "../../types";
 type Department = Database["public"]["Tables"]["departments"]["Row"];
 
