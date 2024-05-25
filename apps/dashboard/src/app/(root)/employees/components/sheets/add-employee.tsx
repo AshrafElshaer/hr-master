@@ -26,7 +26,7 @@ export default function AddNewEmployee() {
 					Add Employee
 				</Button>
 			</SheetTrigger>
-			<SheetContent className="flex flex-col w-full sm:max-w-lg">
+			<SheetContent className="flex flex-col w-full sm:max-w-lg px-2">
 				<SheetHeader className="mb-8">
 					<section className="w-full flex items-center justify-between">
 						<SheetTitle>New Employee</SheetTitle>
@@ -65,7 +65,7 @@ import { useForm } from "react-hook-form";
 import { createClient } from "@hr-toolkit/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { getDepartments } from "@hr-toolkit/supabase/departments-queries";
-import { User } from "@/types";
+
 import { employeeSchema } from "../../validation";
 import { COUNTRIES } from "@/constants/countries";
 import { CountrySelector } from "@/components/country-selector";

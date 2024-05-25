@@ -6,7 +6,8 @@ import { createServerClient } from "@hr-toolkit/supabase/server";
 import { getUser } from "@hr-toolkit/supabase/user-queries";
 import { resend } from "@/lib/resend";
 import { NewEmployeeEmail } from "@hr-toolkit/emails";
-import type { User } from "@/types";
+
+import type { UserWithOrdanization } from "@hr-toolkit/supabase/types";
 
 export const createNeweEmployee = action(employeeSchema, async (data) => {
   const supabase = createServerClient({
@@ -23,7 +24,7 @@ export const createNeweEmployee = action(employeeSchema, async (data) => {
     hire_date: data.hire_date.toString(),
     date_of_birth: data.date_of_birth.toString(),
     organization_id: user.organization_id,
-  }) as unknown as User & { organization: { name: string } };
+  }) as unknown as UserWithOrdanization;
 
 
 

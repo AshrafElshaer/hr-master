@@ -29,7 +29,8 @@ export async function getEmployees(supabase: SupabaseClient) {
   if (user.role === "manager") {
     const { data: employees, error } = await supabase
       .from("users")
-      .select().eq(
+      .select("*, department:department_id(*)")
+      .eq(
         "department_id",
         user.department_id as string,
       );
@@ -41,7 +42,7 @@ export async function getEmployees(supabase: SupabaseClient) {
 
   const { data: employees, error } = await supabase
     .from("users")
-    .select();
+    .select("*, department:department_id(*)");
 
   if (error) {
     throw error;

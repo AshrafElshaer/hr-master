@@ -1,15 +1,13 @@
 "use client";
 
 import type { ColumnDef, TableMeta } from "@tanstack/react-table";
-import type { Database } from "@hr-toolkit/supabase/types";
-import type { ReactSetState, User } from "@/types";
+import type { Database, User } from "@hr-toolkit/supabase/types";
+import type { ReactSetState } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@hr-toolkit/ui/avatar";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@hr-toolkit/ui/dropdown-menu";
 import { Button } from "@hr-toolkit/ui/button";

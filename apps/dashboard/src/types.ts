@@ -14,4 +14,4 @@ export type EmailOtpConfirmation = {
   user: null;
 };
 
-export type User = Database["public"]["Tables"]["users"]["Row"];
+
