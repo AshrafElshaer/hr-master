@@ -47,6 +47,10 @@ export const columns: ColumnDef<Employee>[] = [
 	{
 		accessorKey: "role",
 		header: () => <div className="min-w-28 "> Role</div>,
+		cell({ row }) {
+			return capitalize(row.original.role ?? "");
+		
+		}
 	},
 	
 	{
