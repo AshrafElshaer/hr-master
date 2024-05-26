@@ -26,16 +26,13 @@ export const createNeweEmployee = action(employeeSchema, async (data) => {
     organization_id: user.organization_id,
   }) as unknown as UserWithOrdanization;
 
-
-
-
-  const { data: emailSent, error: emailError } = await resend.emails.send({
+  const { error: emailError } = await resend.emails.send({
     from: "HR Toolkit <support@fxresearch.app>",
     to: newEmployee.email,
     subject: "Welcome to HR Toolkit",
     react: NewEmployeeEmail({
       name: `${newEmployee.first_name} ${newEmployee.last_name}` as string,
-      organizationName: newEmployee.organization.name ,
+      organizationName: newEmployee.organization.name,
     }),
   });
 

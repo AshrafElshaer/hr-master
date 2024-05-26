@@ -12,17 +12,17 @@ export async function createOrganization(
   if (!user) {
     throw new Error("User not found");
   }
-  const { data: organization, error: orgError } = await supabase.from(
+  const { error: orgError } = await supabase.from(
     "organizations",
   )
     .insert([{
       ...data,
       owner_id: user.id,
-    }]).select().single().throwOnError();
+    }]).throwOnError();
 
   if (orgError) {
     throw new Error(`Failed to create organization: ${orgError.message}`);
   }
 
-  return organization;
+  return { success: true };
 }

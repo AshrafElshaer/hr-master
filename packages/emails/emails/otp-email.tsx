@@ -67,7 +67,7 @@ export function OtpEmail({ otpCode }: { otpCode: string }) {
 						<Text
 							className={`text-4xl font-bold tracking-widest text-[${colors.lightTheme.foreground}] dark:text-[${colors.darkTheme.foreground}] w-full text-center`}
 						>
-							{otpCode.slice(0, 3)} - {otpCode.slice(3, 6)}
+							{otpCode}
 						</Text>
 
 						<Text

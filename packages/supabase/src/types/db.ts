@@ -116,6 +116,10 @@ export type Database = {
           date_of_birth: string | null
           department_id: string | null
           email: string
+          emergency_email: string | null
+          emergency_name: string | null
+          emergency_phone_number: string | null
+          emergency_relation: string | null
           employment_status: string | null
           first_name: string | null
           gender: string | null
@@ -139,6 +143,10 @@ export type Database = {
           date_of_birth?: string | null
           department_id?: string | null
           email: string
+          emergency_email?: string | null
+          emergency_name?: string | null
+          emergency_phone_number?: string | null
+          emergency_relation?: string | null
           employment_status?: string | null
           first_name?: string | null
           gender?: string | null
@@ -162,6 +170,10 @@ export type Database = {
           date_of_birth?: string | null
           department_id?: string | null
           email?: string
+          emergency_email?: string | null
+          emergency_name?: string | null
+          emergency_phone_number?: string | null
+          emergency_relation?: string | null
           employment_status?: string | null
           first_name?: string | null
           gender?: string | null
@@ -206,6 +218,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      current_user_department_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       current_user_organization_id: {
         Args: Record<PropertyKey, never>
         Returns: string

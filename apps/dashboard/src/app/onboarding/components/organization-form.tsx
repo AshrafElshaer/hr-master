@@ -90,7 +90,7 @@ export function OrganizationForm() {
 			);
 			return;
 		}
-		if (data?.id) {
+		if (data?.success) {
 			toast.success("Organization created successfully", {
 				position: "top-center",
 			});

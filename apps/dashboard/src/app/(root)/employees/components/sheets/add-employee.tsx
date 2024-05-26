@@ -27,7 +27,7 @@ export default function AddNewEmployee() {
 				</Button>
 			</SheetTrigger>
 			<SheetContent className="flex flex-col w-full sm:max-w-lg px-2">
-				<SheetHeader className="mb-8">
+				<SheetHeader className=" p-4">
 					<section className="w-full flex items-center justify-between">
 						<SheetTitle>New Employee</SheetTitle>
 						<SheetClose>
@@ -39,7 +39,7 @@ export default function AddNewEmployee() {
 					</SheetDescription>
 				</SheetHeader>
 				{/* <div className="h-full overflow-y-scroll scrollbar-muted"> */}
-				<ScrollArea className="h-full p-4">
+				<ScrollArea className="h-full p-6">
 					<EmployeeForm setOpen={setOpen} />
 				</ScrollArea>
 				{/* </div> */}
@@ -85,6 +85,7 @@ import { createNeweEmployee } from "../../actions";
 import { toast } from "sonner";
 import { AnimatePresence, motion } from "framer-motion";
 import { Badge } from "@hr-toolkit/ui/badge";
+import { queryClient } from "@/lib/react-query";
 
 function EmployeeForm({
 	setOpen,
@@ -128,9 +129,14 @@ function EmployeeForm({
 			toast.error(serverError);
 			return;
 		}
+		
 		toast.success("Employee added successfully", {
 			description:
 				"Email has been sent to the employee with the login details.",
+		});
+
+		queryClient.invalidateQueries({
+			queryKey: ["employees"],
 		});
 
 		setOpen(false);
@@ -138,7 +144,9 @@ function EmployeeForm({
 	}
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+				<h4 className="text-xl font-semibold text-foreground/80">Personal</h4>
+
 				<div className="w-full flex flex-col sm:flex-row items-center gap-4">
 					<FormField
 						control={form.control}
@@ -247,47 +255,7 @@ function EmployeeForm({
 						)}
 					/>
 				</div>
-				<div className="w-full flex flex-col sm:flex-row items-center gap-4">
-					<FormField
-						control={form.control}
-						name="email"
-						render={({ field }) => (
-							<FormItem className="w-full">
-								<FormLabel>Email</FormLabel>
-								<FormControl>
-									<Input
-										placeholder="example@domain.com"
-										inputMode="email"
-										{...field}
-									/>
-								</FormControl>
 
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="phone_number"
-						render={({ field }) => (
-							<FormItem className="w-full">
-								<FormLabel>Phone Number</FormLabel>
-								<FormControl>
-									<PhoneInputSimple
-										value={field.value as RPNInput.Value}
-										onChange={(value) => {
-											field.onChange(value);
-										}}
-										defaultCountry={form.watch("country") as RPNInput.Country}
-										placeholder="(214) 876-7876"
-										disabled={!form.getValues().country}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-				</div>
 				<div className="w-full flex flex-col sm:flex-row items-center gap-4">
 					<FormField
 						control={form.control}
@@ -330,6 +298,121 @@ function EmployeeForm({
 						)}
 					/>
 				</div>
+				<div className="w-full flex flex-col sm:flex-row items-center gap-4">
+					<FormField
+						control={form.control}
+						name="email"
+						render={({ field }) => (
+							<FormItem className="w-full">
+								<FormLabel>Email</FormLabel>
+								<FormControl>
+									<Input
+										placeholder="example@domain.com"
+										inputMode="email"
+										{...field}
+									/>
+								</FormControl>
+
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="phone_number"
+						render={({ field }) => (
+							<FormItem className="w-full">
+								<FormLabel>Phone Number</FormLabel>
+								<FormControl>
+									<PhoneInputSimple
+										value={field.value as RPNInput.Value}
+										onChange={(value) => {
+											field.onChange(value);
+										}}
+										defaultCountry={form.watch("country") as RPNInput.Country}
+										placeholder="(214) 876-7876"
+										disabled={!form.getValues().country}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				</div>
+
+				<h4 className="text-xl font-semibold text-foreground/80">Emergency</h4>
+				<div className="w-full flex flex-col sm:flex-row items-center gap-4">
+					<FormField
+						control={form.control}
+						name="emergency_name"
+						render={({ field }) => (
+							<FormItem className="w-full">
+								<FormLabel>Full Name</FormLabel>
+								<FormControl>
+									<Input placeholder="Alex Doe" {...field} />
+								</FormControl>
+
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="emergency_relation"
+						render={({ field }) => (
+							<FormItem className="w-full">
+								<FormLabel>Relation</FormLabel>
+								<FormControl>
+									<Input placeholder="Brother" {...field} />
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				</div>
+				<div className="w-full flex flex-col sm:flex-row items-center gap-4">
+					<FormField
+						control={form.control}
+						name="emergency_email"
+						render={({ field }) => (
+							<FormItem className="w-full">
+								<FormLabel>Email</FormLabel>
+								<FormControl>
+									<Input
+										placeholder="example@domain.com"
+										inputMode="email"
+										{...field}
+									/>
+								</FormControl>
+
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="emergency_phone_number"
+						render={({ field }) => (
+							<FormItem className="w-full">
+								<FormLabel>Phone Number</FormLabel>
+								<FormControl>
+									<PhoneInputSimple
+										value={field.value as RPNInput.Value}
+										onChange={(value) => {
+											field.onChange(value);
+										}}
+										defaultCountry={form.watch("country") as RPNInput.Country}
+										placeholder="(214) 876-7876"
+										disabled={!form.getValues().country}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				</div>
+
+				<h4 className="text-xl font-semibold text-foreground/80">Employment</h4>
 
 				<FormField
 					control={form.control}

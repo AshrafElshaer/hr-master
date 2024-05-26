@@ -37,7 +37,7 @@ export function DateOfBirthPicker({
 	const [year, setYear] = React.useState<number>(date.getFullYear());
 	const [month, setMonth] = React.useState<number>(date.getMonth());
 	return (
-		<Popover>
+		<Popover modal>
 			<PopoverTrigger asChild>
 				<Button
 					variant={"outline"}
@@ -54,7 +54,7 @@ export function DateOfBirthPicker({
 			<PopoverContent
 				className="w-auto p-0 z-50 ui-pointer-events-auto"
 				align="start"
-				sideOffset={12}
+				// sideOffset={12}
 			>
 				<div className="flex gap-4 p-2">
 					<Select

@@ -42,4 +42,13 @@ export const employeeSchema = z.object({
   zip_code: z.string().min(5, {
     message: "Zip code is invalide",
   }),
+  emergency_name: z.string().min(3, {
+    message: "name must be at least 3 characters long",
+  }),
+  emergency_phone_number: z.string()
+    .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
+  emergency_relation: z.string().min(3, {
+    message: "relationship must be at least 3 characters long",
+  }),
+  emergency_email: z.string().email(),
 });

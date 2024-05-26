@@ -37,7 +37,7 @@ export const onboardingOrganization = action(
   async (data) => {
     const supabase = createServerClient();
 
-    const organization = await createOrganization(
+    const {success} = await createOrganization(
       supabase,
       {
         name: data.organizationName,
@@ -54,6 +54,6 @@ export const onboardingOrganization = action(
       },
     );
 
-    return organization;
+    return {success};
   },
 );

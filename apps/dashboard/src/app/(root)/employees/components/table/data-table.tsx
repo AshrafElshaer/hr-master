@@ -16,6 +16,7 @@ import {
 	TableRow,
 } from "@hr-toolkit/ui/table";
 import { cn } from "@hr-toolkit/ui/utils";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -26,6 +27,7 @@ export function DataTable<TData, TValue>({
 	columns,
 	data,
 }: DataTableProps<TData, TValue>) {
+	const router = useRouter();
 	const table = useReactTable({
 		data,
 		columns,
@@ -62,7 +64,10 @@ export function DataTable<TData, TValue>({
 							<TableRow
 								key={row.id}
 								data-state={row.getIsSelected() && "selected"}
-								className="h-8"
+								className="h-8 cursor-pointer"
+								onClick={() => {
+									router.push(`/employees/${(row.original as { id: string }).id}`);
+								}}
 							>
 								{row.getVisibleCells().map((cell) => (
 									<TableCell key={cell.id} className="py-0">

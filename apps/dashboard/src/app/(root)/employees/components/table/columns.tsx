@@ -13,6 +13,7 @@ import {
 import type { ColumnDef, TableMeta } from "@tanstack/react-table";
 import { capitalize } from "lodash";
 import { MoreHorizontal, PencilLine, Trash } from "lucide-react";
+import { FaTrash } from "react-icons/fa";
 
 type EmployeeMeta = TableMeta<Employee> & {
 	setSelectedDepartment: ReactSetState<Employee | null>;
@@ -73,34 +74,14 @@ export const columns: ColumnDef<Employee>[] = [
 			const tableMeta = table.options.meta as EmployeeMeta;
 
 			return (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" className="p-0" size="icon">
-							<span className="sr-only">Open menu</span>
-							<MoreHorizontal className="h-4 w-4" />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						<DropdownMenuItem
-							onClick={() => {}}
-							className="flex items-center gap-2"
-						>
-							<PencilLine size={16} />
-							Edit
-						</DropdownMenuItem>
-
-						<DropdownMenuItem
-							onClick={() => {
-								tableMeta.setSelectedDepartment(employee);
-								tableMeta.setIsDeleteTrue();
-							}}
-							className="flex items-center gap-2"
-						>
-							<Trash size={16} />
-							Delete
-						</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
+				<FaTrash
+					className="cursor-pointer text-destructive w-2 h-2"
+					onClick={(e) => {
+						e.stopPropagation();
+						tableMeta.setSelectedDepartment(employee);
+						tableMeta.setIsDeleteTrue();
+					}}
+				/>
 			);
 		},
 	},

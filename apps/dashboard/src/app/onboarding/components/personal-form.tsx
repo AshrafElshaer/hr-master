@@ -46,8 +46,6 @@ export function PersonalForm() {
 	});
 
 	async function onSubmit(_data: z.infer<typeof personalInfoSchema>) {
-		console.log(_data);
-
 		const { serverError, validationError } = await onboardingPersonal(_data);
 		if (serverError) {
 			toast.error(serverError, {
