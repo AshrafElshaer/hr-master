@@ -21,7 +21,7 @@ export default function MobileSidebar() {
 				<PanelLeftOpen size={20} />
 			</SheetTrigger>
 			<SheetContent side="left" className="w-[20rem]">
-				<SheetHeader className="mb-4">
+				<SheetHeader className="mb-4 p-4">
 					<section className="flex justify-between items-center">
 						<SheetTitle className="flex items-center gap-2">
 							<LogoSVG className="fill-current w-6 h-6" />

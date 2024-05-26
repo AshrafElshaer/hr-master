@@ -75,7 +75,8 @@ export const columns: ColumnDef<Employee>[] = [
 
 			return (
 				<FaTrash
-					className="cursor-pointer text-destructive w-2 h-2"
+					size={14}
+					className="cursor-pointer text-destructive "
 					onClick={(e) => {
 						e.stopPropagation();
 						tableMeta.setSelectedDepartment(employee);
