@@ -45,6 +45,11 @@ export const columns: ColumnDef<Employee>[] = [
 		header: () => <div className="min-w-28 "> Job Tilte</div>,
 	},
 	{
+		accessorKey: "role",
+		header: () => <div className="min-w-28 "> Role</div>,
+	},
+	
+	{
 		accessorKey: "employment_status",
 		header: () => <div className="w-full text-center">Status</div>,
 		cell({ row }) {
