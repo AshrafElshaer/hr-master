@@ -12,7 +12,6 @@ export type Database = {
       departments: {
         Row: {
           description: string | null
-          employees_count: number | null
           id: string
           name: string
           organization_id: string
@@ -20,7 +19,6 @@ export type Database = {
         }
         Insert: {
           description?: string | null
-          employees_count?: number | null
           id?: string
           name: string
           organization_id: string
@@ -28,7 +26,6 @@ export type Database = {
         }
         Update: {
           description?: string | null
-          employees_count?: number | null
           id?: string
           name?: string
           organization_id?: string

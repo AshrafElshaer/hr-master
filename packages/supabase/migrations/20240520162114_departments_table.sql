@@ -1,13 +1,11 @@
 CREATE TABLE public.departments (
   id uuid primary key default uuid_generate_v4 (),
-  name TEXT NOT NULL,
-  description text,
-  employees_count integer default 0;
-
-organization_id UUID NOT NULL references organizations (id) ON DELETE CASCADE,
-person_in_charge_id UUID NOT NULL references users (id) on delete
-set
-  null
+  name text not null,
+  description text null,
+  organization_id UUID NOT NULL references organizations (id) ON DELETE CASCADE,
+  person_in_charge_id UUID NOT NULL references users (id) on delete
+  set
+    null
 );
 
 -- add department id to usres table

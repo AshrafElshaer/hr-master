@@ -21,10 +21,10 @@ create table users (
   salary integer default 0,
   gender text,
   employment_status text default 'active',
-  emergency_name text,
-  emergency_phone_number text,
-  emergency_email text,
-  emergency_relation text;
+  emergency_name text null,
+    emergency_phone_number text null,
+    emergency_email text null,
+    emergency_relation text null,
 
 );
 

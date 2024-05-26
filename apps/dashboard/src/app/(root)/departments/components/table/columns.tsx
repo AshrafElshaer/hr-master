@@ -91,26 +91,7 @@ export const columns: ColumnDef<DepartmentColumn>[] = [
 			);
 		},
 	},
-	{
-		accessorKey: "employees_count",
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-					className="justify-between w-full min-w-40 p-0 "
-				>
-					Employees Count
-					<ChevronsUpDown className="h-4 w-4" />
-				</Button>
-			);
-		},
-		cell: ({ row }) => (
-			<div className="text-center w-full">
-				{row.getValue("employees_count")}
-			</div>
-		),
-	},
+
 	{
 		id: "actions",
 		header: () => <span className="sr-only">Actions</span>,
