@@ -20,8 +20,8 @@ function MainSidebar({
 				{sidebarNavigations.map((route) => {
 					const isActivePath =
 						pathname === route.path ||
-						route.path === pathname.split("/").slice(0, 3).join("/");
-					// console.log({ isActivePath, pathname });
+						route.path === pathname.split("/").slice(0, 2).join("/");
+					
 					return (
 						<li key={route.path} className="w-full justify-start">
 							<Link
