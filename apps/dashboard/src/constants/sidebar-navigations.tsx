@@ -3,7 +3,6 @@ import { TbCalendarPause } from "react-icons/tb";
 import { HiOutlineBanknotes } from "react-icons/hi2";
 import { LuLayoutGrid } from "react-icons/lu";
 
-
 export const sidebarNavigations = [
 	{
 		title: "Dashboard",
@@ -36,3 +35,20 @@ export const sidebarNavigations = [
 		icon: <HiOutlineBanknotes size={18} />,
 	},
 ];
+
+export const roleBasedNavigations = (role: string) => {
+	switch (role) {
+		case "owner":
+			return sidebarNavigations;
+		case "manager":
+			return sidebarNavigations.filter(
+				(route) => route.path !== "/departments",
+			);
+		case "employee":
+			return sidebarNavigations.filter(
+				(route) => route.path !== "/departments" && route.path !== "/employees",
+			);
+		default:
+			return [];
+	}
+};
