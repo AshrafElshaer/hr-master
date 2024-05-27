@@ -36,36 +36,53 @@ export default function EmployeesFilters({ table }: Props) {
 						<Filter size={16} />
 					</Button>
 				</PopoverTrigger>
-				<PopoverContent align="end" className="w-[450px] h-[200px] p-0">
+				<PopoverContent
+					align="end"
+					className="w-[380px]  sm:w-[500px] h-[200px] p-0"
+					// alignOffset={-10}
+				>
 					<Tabs defaultValue="account" className="w-full flex gap-4 h-full">
-						<TabsList className="flex-col justify-start h-full bg-transparent w-1/4  ">
+						<TabsList className="flex-col justify-start h-full bg-transparent ">
 							<TabsTrigger
 								value="department"
-								className="data-[state=active]:bg-accent w-full justify-start"
+								className="data-[state=active]:bg-accent justify-start  w-[8.5rem] gap-2 group"
 							>
 								Department
-								<ChevronRight size={16} className="ml-auto" />
+								<ChevronRight
+									size={16}
+									className="ml-auto hidden group-data-[state=active]:block"
+								/>
 							</TabsTrigger>
 							<TabsTrigger
 								value="role"
-								className="data-[state=active]:bg-accent w-full justify-start"
+								className="data-[state=active]:bg-accent w-[8.5rem] justify-start group"
 							>
 								Role
-								<ChevronRight size={16} className="ml-auto" />
+								<ChevronRight
+									size={16}
+									className="ml-auto hidden group-data-[state=active]:block"
+								/>
 							</TabsTrigger>
 							<TabsTrigger
 								value="status"
-								className="data-[state=active]:bg-accent w-full justify-start"
+								className="data-[state=active]:bg-accent w-[8.5rem] justify-start group"
 							>
 								Status
-								<ChevronRight size={16} className="ml-auto" />
+								<ChevronRight
+									size={16}
+									className="ml-auto hidden group-data-[state=active]:block"
+								/>
 							</TabsTrigger>
 						</TabsList>
-						<TabsContent value="department">
-							Make changes to your department here.
+						<TabsContent value="department" className="w-full pr-2">
+							to your department here. to your department here.to your department here.
 						</TabsContent>
-						<TabsContent value="role">Change your role here.</TabsContent>
-						<TabsContent value="status">Change your status here.</TabsContent>
+						<TabsContent value="role" className="w-full">
+							Change your role here.
+						</TabsContent>
+						<TabsContent value="status" className="w-full">
+							Change your status here.
+						</TabsContent>
 					</Tabs>
 				</PopoverContent>
 			</Popover>
