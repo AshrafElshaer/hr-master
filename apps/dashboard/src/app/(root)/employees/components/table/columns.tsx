@@ -23,10 +23,8 @@ type EmployeeMeta = TableMeta<Employee> & {
 export const columns: ColumnDef<Employee>[] = [
 	{
 		accessorKey: "first_name",
+		accessorFn: (row) => `${row.first_name} ${row.last_name}`,
 		header: () => <div className="min-w-28 ">Name</div>,
-		cell({ row }) {
-			return `${row.original.first_name} ${row.original.last_name}`;
-		},
 	},
 	{
 		accessorKey: "email",
@@ -88,7 +86,6 @@ export const columns: ColumnDef<Employee>[] = [
 						e.stopPropagation();
 						tableMeta.setSelectedEmployee(employee);
 						tableMeta.setIsDeleteTrue();
-
 					}}
 				/>
 			);
