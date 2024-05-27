@@ -1,5 +1,5 @@
 import React from "react";
-import AddNewEmployee from "./sheets/add-employee";
+import AddNewEmployee from "./dialogs/add-employee";
 
 function EmployeesHeader() {
 	return (

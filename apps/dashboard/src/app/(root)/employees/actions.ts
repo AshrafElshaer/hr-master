@@ -1,13 +1,18 @@
 "use server";
 import { action } from "@/lib/safe-action";
 import { employeeSchema } from "./validation";
-import { createEmployee } from "@hr-toolkit/supabase/user-mutaions";
+import {
+  createEmployee,
+  deleteEmployee,
+} from "@hr-toolkit/supabase/user-mutaions";
 import { createServerClient } from "@hr-toolkit/supabase/server";
 import { getUser } from "@hr-toolkit/supabase/user-queries";
 import { resend } from "@/lib/resend";
 import { NewEmployeeEmail } from "@hr-toolkit/emails";
 
 import type { UserWithOrdanization } from "@hr-toolkit/supabase/types";
+import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 export const createNeweEmployee = action(employeeSchema, async (data) => {
   const supabase = createServerClient({
@@ -40,5 +45,29 @@ export const createNeweEmployee = action(employeeSchema, async (data) => {
     throw emailError;
   }
 
+  revalidatePath("/employees");
+
   return newEmployee;
 });
+
+export const deleteEmployeeById = action(
+  z.object({
+    id: z.string(),
+  }),
+  async (data) => {
+    const supabase = createServerClient({
+      isAdmin: true,
+    });
+
+    const { data: deletedUser, error } = await deleteEmployee(supabase, {
+      employeeId: data.id,
+    });
+
+    if (error) {
+      throw error;
+    }
+    revalidatePath("/employees");
+
+    return deletedUser;
+  },
+);

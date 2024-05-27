@@ -50,7 +50,7 @@ function MainSidebar({
 								{route.icon}
 								{route.title}
 								{isActivePath ? (
-									<div className="absolute right-0 top-1 bottom-1 w-[1.5px] rounded-l bg-primary" />
+									<div className="absolute right-0 top-1 bottom-1 w-[3px] rounded-l bg-primary" />
 								) : null}
 							</Link>
 						</li>

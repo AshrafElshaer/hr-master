@@ -33,7 +33,7 @@ export async function createEmployee(
     .createUser({
       email: data.email,
     });
-    
+
   if (error) {
     throw new Error(error.message);
   }
@@ -70,4 +70,12 @@ export async function createEmployee(
   }
 
   return newUserUpdates;
+}
+
+export async function deleteEmployee(supabase: SupabaseClient, {
+  employeeId,
+}: {
+  employeeId: string;
+}) {
+  return await supabase.auth.admin.deleteUser(employeeId);
 }

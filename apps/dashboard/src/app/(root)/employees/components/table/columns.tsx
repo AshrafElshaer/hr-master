@@ -16,8 +16,7 @@ import { MoreHorizontal, PencilLine, Trash } from "lucide-react";
 import { FaTrash } from "react-icons/fa";
 
 type EmployeeMeta = TableMeta<Employee> & {
-	setSelectedDepartment: ReactSetState<Employee | null>;
-	setIsEditTrue: () => void;
+	setSelectedEmployee: ReactSetState<Employee | null>;
 	setIsDeleteTrue: () => void;
 };
 
@@ -49,10 +48,9 @@ export const columns: ColumnDef<Employee>[] = [
 		header: () => <div className="min-w-28 "> Role</div>,
 		cell({ row }) {
 			return capitalize(row.original.role ?? "");
-		
-		}
+		},
 	},
-	
+
 	{
 		accessorKey: "employment_status",
 		header: () => <div className="w-full text-center">Status</div>,
@@ -88,8 +86,9 @@ export const columns: ColumnDef<Employee>[] = [
 					className="cursor-pointer text-destructive "
 					onClick={(e) => {
 						e.stopPropagation();
-						tableMeta.setSelectedDepartment(employee);
+						tableMeta.setSelectedEmployee(employee);
 						tableMeta.setIsDeleteTrue();
+
 					}}
 				/>
 			);

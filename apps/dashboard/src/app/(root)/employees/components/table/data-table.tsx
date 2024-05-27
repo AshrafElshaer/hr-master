@@ -17,6 +17,10 @@ import {
 } from "@hr-toolkit/ui/table";
 import { cn } from "@hr-toolkit/ui/utils";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import type { UserWithDepartment } from "@hr-toolkit/supabase/types";
+import { useBoolean } from "usehooks-ts";
+import DeleteEmployee from "../dialogs/delete-employee";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -27,11 +31,23 @@ export function DataTable<TData, TValue>({
 	columns,
 	data,
 }: DataTableProps<TData, TValue>) {
+	const [selectedEmployee, setSelectedEmployee] =
+		useState<UserWithDepartment | null>(null);
+	const {
+		value: isDelete,
+		setFalse: setIsDeleteFalse,
+		setTrue: setIsDeleteTrue,
+		toggle: toggleIsDelete,
+	} = useBoolean(false);
 	const router = useRouter();
 	const table = useReactTable({
 		data,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
+		meta: {
+			setSelectedEmployee,
+			setIsDeleteTrue,
+		},
 	});
 
 	return (
@@ -66,7 +82,9 @@ export function DataTable<TData, TValue>({
 								data-state={row.getIsSelected() && "selected"}
 								className="h-8 cursor-pointer"
 								onClick={() => {
-									router.push(`/employees/${(row.original as { id: string }).id}`);
+									router.push(
+										`/employees/${(row.original as { id: string }).id}`,
+									);
 								}}
 							>
 								{row.getVisibleCells().map((cell) => (
@@ -85,6 +103,15 @@ export function DataTable<TData, TValue>({
 					)}
 				</TableBody>
 			</Table>
+			<DeleteEmployee
+				employee={selectedEmployee}
+				isDelete={isDelete}
+				toggleIsDelete={toggleIsDelete}
+				onClose={() => {
+					setSelectedEmployee(null);
+					setIsDeleteFalse();
+				}}
+			/>
 		</div>
 	);
 }

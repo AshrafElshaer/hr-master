@@ -129,7 +129,7 @@ function EmployeeForm({
 			toast.error(serverError);
 			return;
 		}
-		
+
 		toast.success("Employee added successfully", {
 			description:
 				"Email has been sent to the employee with the login details.",
@@ -576,7 +576,9 @@ function EmployeeForm({
 								exit={{ opacity: 0, y: -10 }}
 							>
 								<LoaderIcon className=" h-4 w-4 mr-2 animate-spin" />
-								Adding Employee
+								{`Adding ${form.getValues().first_name} ${
+									form.getValues().last_name
+								} ...`}
 							</motion.p>
 						)}
 					</AnimatePresence>
