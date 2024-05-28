@@ -34,7 +34,9 @@ async function DashboardLayout({ children }: { children: ReactNode }) {
 						<MainSidebar />
 					</ResizablePanel>
 
-					<ResizablePanel defaultSize={99}>{children}</ResizablePanel>
+					<ResizablePanel defaultSize={99} >
+						{children}
+					</ResizablePanel>
 				</ResizablePanelGroup>
 			</ResizablePanel>
 		</ResizablePanelGroup>

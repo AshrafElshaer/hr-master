@@ -9,7 +9,7 @@ export type User = Database["public"]["Tables"]["users"]["Row"];
 export type Department = Database["public"]["Tables"]["departments"]["Row"];
 export type Organization = Database["public"]["Tables"]["organizations"]["Row"];
 export interface UserWithDepartment extends User {
-  department: Department;
+  department: Department & { person_in_charge: User };
 }
 export interface UserWithOrdanization extends User {
   organization: Organization;
@@ -18,5 +18,3 @@ export interface UserWithDepartmentAndOrganization extends User {
   department: Department;
   organization: Organization;
 }
-
-

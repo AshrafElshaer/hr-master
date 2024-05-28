@@ -85,7 +85,9 @@ export async function getEmplyeeById(
   employeeId: string,
 ) {
   const { data, error } = await supabase.from("users")
-    .select("* , department:department_id(*)")
+    .select(
+      "* , department:department_id(*,person_in_charge:person_in_charge_id(first_name,last_name))",
+    )
     .eq(
       "id",
       employeeId,
@@ -96,5 +98,6 @@ export async function getEmplyeeById(
   if (error) {
     throw error;
   }
+
   return data as unknown as UserWithDepartment;
 }
