@@ -33,14 +33,14 @@ export const columns: ColumnDef<Employee>[] = [
 	{
 		accessorKey: "department",
 		header: "Department",
-		accessorFn: (row) => row.department?.name ?? "No Department",
+		accessorFn: (row) => row.department?.name ?? "",
 		cell({ row }) {
-			return row.original.department?.name ?? "No Department";
+			return row.original.department?.name ?? "";
 		},
 	},
 	{
 		accessorKey: "position",
-		header: () => <div className="min-w-28 "> Job Tilte</div>,
+		header: () => <div className="min-w-32 "> Job Tilte</div>,
 	},
 	{
 		accessorKey: "role",
