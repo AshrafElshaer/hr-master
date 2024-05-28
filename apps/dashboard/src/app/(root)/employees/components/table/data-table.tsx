@@ -59,6 +59,9 @@ export function DataTable<TData, TValue>({
 			setIsDeleteTrue,
 		},
 	});
+	// console.log({
+	// 	columnFilters,
+	// });
 
 	return (
 		<section className="w-full flex flex-col flex-grow gap-2">

@@ -33,6 +33,7 @@ export const columns: ColumnDef<Employee>[] = [
 	{
 		accessorKey: "department",
 		header: "Department",
+		accessorFn: (row) => row.department?.name ?? "No Department",
 		cell({ row }) {
 			return row.original.department?.name ?? "No Department";
 		},

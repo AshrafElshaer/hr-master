@@ -1,15 +1,20 @@
-import { Button } from "@hr-toolkit/ui/button";
+import { Button, buttonVariants } from "@hr-toolkit/ui/button";
 import { Input } from "@hr-toolkit/ui/input";
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-	PopoverContentWithoutPortal,
 } from "@hr-toolkit/ui/popover";
 import type { Table } from "@tanstack/react-table";
-import { ChevronRight, Filter, Search } from "lucide-react";
+import { ChevronRight, Filter, Search, X } from "lucide-react";
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@hr-toolkit/ui/tabs";
+import { useQuery } from "@tanstack/react-query";
+import { createClient } from "@hr-toolkit/supabase/client";
+import { getDepartments } from "@hr-toolkit/supabase/departments-queries";
+import { Checkbox } from "@hr-toolkit/ui/checkbox";
+import { cn } from "@hr-toolkit/ui/utils";
+import { capitalize } from "lodash";
 
 type Props = {
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -17,75 +22,328 @@ type Props = {
 };
 
 export default function EmployeesFilters({ table }: Props) {
+	const supabase = createClient();
+	const [activeTab, setActiveTab] = React.useState("department");
+	const [open, setOpen] = React.useState(false);
+	const { data: departments } = useQuery({
+		queryKey: ["departments"],
+		queryFn: () => getDepartments(supabase),
+	});
+
+	const departmentFilter = table.getColumn("department")?.getFilterValue();
+	const statusFilter = table.getColumn("employment_status")?.getFilterValue();
+	const roleFilter = table.getColumn("role")?.getFilterValue();
+
+	function clearFilter(column: string) {
+		table.getColumn(column)?.setFilterValue("");
+	}
 	return (
-		<section className="flex justify-between items-center gap-4">
-			<Input
-				placeholder="Filter By Name ..."
-				className="w-full sm:w-52"
-				startIcon={Search}
-				value={
-					(table.getColumn("first_name")?.getFilterValue() as string) ?? ""
-				}
-				onChange={(event) =>
-					table.getColumn("first_name")?.setFilterValue(event.target.value)
-				}
-			/>
-			<Popover>
-				<PopoverTrigger>
-					<Button variant="outline" size="icon">
-						<Filter size={16} />
-					</Button>
-				</PopoverTrigger>
-				<PopoverContent
-					align="end"
-					className="w-[380px]  sm:w-[500px] h-[200px] p-0"
-					// alignOffset={-10}
-				>
-					<Tabs defaultValue="account" className="w-full flex gap-4 h-full">
-						<TabsList className="flex-col justify-start h-full bg-transparent ">
-							<TabsTrigger
-								value="department"
-								className="data-[state=active]:bg-accent justify-start  w-[8.5rem] gap-2 group"
+		<section className="w-full flex flex-col gap-2">
+			<div className="flex justify-start items-center gap-2">
+				<Input
+					placeholder="Filter By Name ..."
+					className="w-full sm:w-40 "
+					startIcon={Search}
+					value={
+						(table.getColumn("first_name")?.getFilterValue() as string) ?? ""
+					}
+					onChange={(event) =>
+						table.getColumn("first_name")?.setFilterValue(event.target.value)
+					}
+				/>
+
+				<div className="hidden sm:flex gap-2">
+					{statusFilter ? (
+						<div
+							className={cn(
+								buttonVariants({
+									variant: "secondary",
+								}),
+							)}
+						>
+							<X
+								size={14}
+								className="mr-2 cursor-pointer"
+								onClick={() => clearFilter("employment_status")}
+							/>
+							<Button
+								variant="ghost"
+								className="p-0"
+								onClick={() => {
+									setOpen(true);
+									setActiveTab("status");
+								}}
 							>
-								Department
-								<ChevronRight
-									size={16}
-									className="ml-auto hidden group-data-[state=active]:block"
-								/>
-							</TabsTrigger>
-							<TabsTrigger
-								value="role"
-								className="data-[state=active]:bg-accent w-[8.5rem] justify-start group"
+								{capitalize(statusFilter as string)}
+							</Button>
+						</div>
+					) : null}
+					{roleFilter ? (
+						<div
+							className={cn(
+								buttonVariants({
+									variant: "secondary",
+								}),
+							)}
+						>
+							<X
+								size={14}
+								className="mr-2 cursor-pointer"
+								onClick={() => clearFilter("role")}
+							/>
+							<Button
+								variant="ghost"
+								className="p-0"
+								onClick={() => {
+									setOpen(true);
+									setActiveTab("role");
+								}}
 							>
-								Role
-								<ChevronRight
-									size={16}
-									className="ml-auto hidden group-data-[state=active]:block"
-								/>
-							</TabsTrigger>
-							<TabsTrigger
-								value="status"
-								className="data-[state=active]:bg-accent w-[8.5rem] justify-start group"
+								{capitalize(roleFilter as string)}
+							</Button>
+						</div>
+					) : null}
+					{departmentFilter ? (
+						<div
+							className={cn(
+								buttonVariants({
+									variant: "secondary",
+								}),
+							)}
+						>
+							<X
+								size={14}
+								className="mr-2 cursor-pointer"
+								onClick={() => clearFilter("department")}
+							/>
+							<Button
+								variant="ghost"
+								className="p-0"
+								onClick={() => {
+									setOpen(true);
+									setActiveTab("department");
+								}}
 							>
-								Status
-								<ChevronRight
-									size={16}
-									className="ml-auto hidden group-data-[state=active]:block"
-								/>
-							</TabsTrigger>
-						</TabsList>
-						<TabsContent value="department" className="w-full pr-2">
-							to your department here. to your department here.to your department here.
-						</TabsContent>
-						<TabsContent value="role" className="w-full">
-							Change your role here.
-						</TabsContent>
-						<TabsContent value="status" className="w-full">
-							Change your status here.
-						</TabsContent>
-					</Tabs>
-				</PopoverContent>
-			</Popover>
+								{departmentFilter as string}
+							</Button>
+						</div>
+					) : null}
+				</div>
+				<Popover open={open} onOpenChange={setOpen}>
+					<PopoverTrigger>
+						<Button variant="outline" size="icon">
+							<Filter size={16} />
+						</Button>
+					</PopoverTrigger>
+					<PopoverContent
+						align="end"
+						className="w-[380px]  sm:w-[500px] h-[200px] p-0"
+					>
+						<Tabs
+							defaultValue="department"
+							className="w-full flex gap-4 h-full"
+							value={activeTab}
+						>
+							<TabsList className="flex-col justify-start h-full bg-transparent ">
+								<TabsTrigger
+									value="department"
+									className="data-[state=active]:bg-accent justify-start  w-[8.5rem] gap-2 group"
+									onClick={() => setActiveTab("department")}
+								>
+									Department
+									<ChevronRight
+										size={16}
+										className="ml-auto hidden group-data-[state=active]:block"
+									/>
+								</TabsTrigger>
+								<TabsTrigger
+									value="role"
+									className="data-[state=active]:bg-accent w-[8.5rem] justify-start group"
+									onClick={() => setActiveTab("role")}
+								>
+									Role
+									<ChevronRight
+										size={16}
+										className="ml-auto hidden group-data-[state=active]:block"
+									/>
+								</TabsTrigger>
+								<TabsTrigger
+									value="status"
+									className="data-[state=active]:bg-accent w-[8.5rem] justify-start group"
+									onClick={() => setActiveTab("status")}
+								>
+									Status
+									<ChevronRight
+										size={16}
+										className="ml-auto hidden group-data-[state=active]:block"
+									/>
+								</TabsTrigger>
+							</TabsList>
+							<TabsContent value="department" className="w-full pr-2 space-y-4">
+								{departments?.map((department) => {
+									const isChecked = departmentFilter === department.name;
+									return (
+										<div
+											key={department.id}
+											className="flex items-center gap-2"
+										>
+											<Checkbox
+												key={department.id}
+												id={department.id}
+												checked={isChecked}
+												onCheckedChange={() =>
+													isChecked
+														? table.getColumn("department")?.setFilterValue("")
+														: table
+																.getColumn("department")
+																?.setFilterValue(department.name)
+												}
+											/>
+											<label
+												htmlFor={department.id}
+												className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+											>
+												{department.name} - {department?.description}
+											</label>
+										</div>
+									);
+								})}
+							</TabsContent>
+							<TabsContent value="role" className="w-full space-y-4">
+								{["owner", "manager", "employee"].map((role) => {
+									const isChecked = roleFilter === role;
+									return (
+										<div key={role} className="flex items-center gap-2">
+											<Checkbox
+												key={role}
+												id={role}
+												checked={isChecked}
+												onCheckedChange={() =>
+													isChecked
+														? table.getColumn("role")?.setFilterValue("")
+														: table.getColumn("role")?.setFilterValue(role)
+												}
+											/>
+											<label
+												htmlFor={role}
+												className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+											>
+												{capitalize(role)}
+											</label>
+										</div>
+									);
+								})}
+							</TabsContent>
+							<TabsContent value="status" className="w-full space-y-4">
+								{["active", "on-hold"].map((status) => {
+									const isChecked = statusFilter === status;
+									return (
+										<div key={status} className="flex items-center gap-2">
+											<Checkbox
+												key={status}
+												id={status}
+												checked={isChecked}
+												onCheckedChange={() =>
+													isChecked
+														? table
+																.getColumn("employment_status")
+																?.setFilterValue("")
+														: table
+																.getColumn("employment_status")
+																?.setFilterValue(status)
+												}
+											/>
+											<label
+												htmlFor={status}
+												className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+											>
+												{capitalize(status)}
+											</label>
+										</div>
+									);
+								})}
+							</TabsContent>
+						</Tabs>
+					</PopoverContent>
+				</Popover>
+			</div>
+			<div className="flex sm:hidden gap-2 justify-end">
+				{statusFilter ? (
+					<div
+						className={cn(
+							buttonVariants({
+								variant: "secondary",
+							}),
+						)}
+					>
+						<X
+							size={14}
+							className="mr-2 cursor-pointer"
+							onClick={() => clearFilter("employment_status")}
+						/>
+						<Button
+							variant="ghost"
+							className="p-0"
+							onClick={() => {
+								setOpen(true);
+								setActiveTab("status");
+							}}
+						>
+							{capitalize(statusFilter as string)}
+						</Button>
+					</div>
+				) : null}
+				{roleFilter ? (
+					<div
+						className={cn(
+							buttonVariants({
+								variant: "secondary",
+							}),
+						)}
+					>
+						<X
+							size={14}
+							className="mr-2 cursor-pointer"
+							onClick={() => clearFilter("role")}
+						/>
+						<Button
+							variant="ghost"
+							className="p-0"
+							onClick={() => {
+								setOpen(true);
+								setActiveTab("role");
+							}}
+						>
+							{capitalize(roleFilter as string)}
+						</Button>
+					</div>
+				) : null}
+				{departmentFilter ? (
+					<div
+						className={cn(
+							buttonVariants({
+								variant: "secondary",
+							}),
+						)}
+					>
+						<X
+							size={14}
+							className="mr-2 cursor-pointer"
+							onClick={() => clearFilter("department")}
+						/>
+						<Button
+							variant="ghost"
+							className="p-0"
+							onClick={() => {
+								setOpen(true);
+								setActiveTab("department");
+							}}
+						>
+							{departmentFilter as string}
+						</Button>
+					</div>
+				) : null}
+			</div>
 		</section>
 	);
 }
