@@ -16,7 +16,7 @@ export default function EmployeeDetailsLayout({
 
 	return (
 		<main className="flex flex-col items-start justify-start h-full p-4 gap-4">
-			<section className=" w-full flex items-center gap-2 overflow-x-scroll overflow-y-clip scrollbar-hide py-1">
+			<section className=" w-full flex items-center gap-2 overflow-x-scroll overflow-y-clip scrollbar-hide py-2">
 				<BackButton />
 				{employeeDetailsNavigation.map((route) => {
 					const isActivePath =
