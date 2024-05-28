@@ -273,6 +273,7 @@ export default function EmployeesFilters({ table }: Props) {
 						className={cn(
 							buttonVariants({
 								variant: "secondary",
+								className: statusFilter === "active" ? "" : "min-w-28"
 							}),
 						)}
 					>
