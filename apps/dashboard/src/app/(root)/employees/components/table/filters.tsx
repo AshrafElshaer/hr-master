@@ -70,7 +70,7 @@ export default function EmployeesFilters({ table }: Props) {
 								variant="ghost"
 								className="p-0"
 								onClick={() => {
-									setOpen(true);
+									!open ? setOpen(true) : null;
 									setActiveTab("status");
 								}}
 							>
@@ -95,7 +95,7 @@ export default function EmployeesFilters({ table }: Props) {
 								variant="ghost"
 								className="p-0"
 								onClick={() => {
-									setOpen(true);
+									!open ? setOpen(true) : null;
 									setActiveTab("role");
 								}}
 							>
@@ -120,7 +120,7 @@ export default function EmployeesFilters({ table }: Props) {
 								variant="ghost"
 								className="p-0"
 								onClick={() => {
-									setOpen(true);
+									!open ? setOpen(true) : null;
 									setActiveTab("department");
 								}}
 							>
@@ -273,7 +273,7 @@ export default function EmployeesFilters({ table }: Props) {
 						className={cn(
 							buttonVariants({
 								variant: "secondary",
-								className: statusFilter === "active" ? "" : "min-w-28"
+								className: statusFilter === "active" ? "" : "min-w-28",
 							}),
 						)}
 					>
@@ -286,7 +286,7 @@ export default function EmployeesFilters({ table }: Props) {
 							variant="ghost"
 							className="p-0"
 							onClick={() => {
-								setOpen(true);
+								!open ? setOpen(true) : null;
 								setActiveTab("status");
 							}}
 						>
@@ -311,7 +311,7 @@ export default function EmployeesFilters({ table }: Props) {
 							variant="ghost"
 							className="p-0"
 							onClick={() => {
-								setOpen(true);
+								!open ? setOpen(true) : null;
 								setActiveTab("role");
 							}}
 						>
@@ -336,7 +336,7 @@ export default function EmployeesFilters({ table }: Props) {
 							variant="ghost"
 							className="p-0"
 							onClick={() => {
-								setOpen(true);
+								!open ? setOpen(true) : null;
 								setActiveTab("department");
 							}}
 						>
