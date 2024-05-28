@@ -1,5 +1,5 @@
 import { getUser } from "../../queries/user";
-import type { Database, SupabaseClient } from "../../types";
+import type { Database, SupabaseClient, UserWithDepartment } from "../../types";
 
 type PersonalInfo = Database["public"]["Tables"]["users"]["Update"];
 
@@ -78,4 +78,23 @@ export async function deleteEmployee(supabase: SupabaseClient, {
   employeeId: string;
 }) {
   return await supabase.auth.admin.deleteUser(employeeId);
+}
+
+export async function getEmplyeeById(
+  supabase: SupabaseClient,
+  employeeId: string,
+) {
+  const { data, error } = await supabase.from("users")
+    .select("* , department:department_id(*)")
+    .eq(
+      "id",
+      employeeId,
+    )
+    .single()
+    .throwOnError();
+
+  if (error) {
+    throw error;
+  }
+  return data as unknown as UserWithDepartment;
 }

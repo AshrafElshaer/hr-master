@@ -1,12 +1,20 @@
-import React from "react";
-import BackButton from "@/components/back-button";
+import { createServerClient } from "@hr-toolkit/supabase/server";
+import { getEmplyeeById } from "@hr-toolkit/supabase/user-mutaions";
+import BasicInfo from "./components/basics";
 
-export default function EmployeeDetails({
+export default async function EmployeeDetails({
 	params,
 }: { params: { id: string } }) {
+	const supabase = createServerClient();
+	// const { data: employee, error } = useQuery({
+	// 	queryKey: ["employee", params.id],
+	// 	queryFn: () => getEmplyeeById(supabase, params.id),
+	// });
+	const employee = await getEmplyeeById(supabase, params.id);
+
 	return (
-		<section className="flex flex-col items-start justify-start h-full gap-4">
-			{params.id}
-		</section>
+		<main className="flex flex-col items-start justify-start h-full p-4 gap-4">
+			<BasicInfo employee={employee} />
+		</main>
 	);
 }

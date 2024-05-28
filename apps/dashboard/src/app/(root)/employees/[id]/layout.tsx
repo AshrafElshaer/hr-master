@@ -17,8 +17,8 @@ export default function EmployeeDetailsLayout({
 	const employeeId = params.id;
 
 	return (
-		<main className="flex flex-col items-start justify-start h-full p-4 gap-4">
-			<section className=" w-full flex items-center gap-2 overflow-x-scroll overflow-y-clip scrollbar-hide py-3">
+		<>
+			<section className=" w-full flex items-center gap-2 overflow-x-scroll overflow-y-clip scrollbar-hide py-3 px-4">
 				<BackButton path="/employees" />
 				{employeeDetailsNavigation.map((route) => {
 					const isActivePath =
@@ -42,7 +42,7 @@ export default function EmployeeDetailsLayout({
 			</section>
 
 			{children}
-		</main>
+		</>
 	);
 }
 const employeeDetailsNavigation = [
