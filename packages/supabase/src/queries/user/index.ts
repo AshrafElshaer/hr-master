@@ -49,4 +49,7 @@ export const getEmployees = unstable_cache(async (supabase: SupabaseClient) => {
   }
 
   return employees;
-}, ["employees"]);
+}, ["employees"], {
+  revalidate: 180,
+  tags: ["employees"],
+});
