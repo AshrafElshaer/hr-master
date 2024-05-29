@@ -7,6 +7,9 @@ import EmployeeTable from "./components/table";
 import type { Metadata } from "next";
 import { Skeleton } from "@hr-toolkit/ui/skeleton";
 
+
+export const revalidate = 300; // 5 minutes
+
 export const metadata: Metadata = {
 	title: "Employees",
 	description: "Manage your employees",
