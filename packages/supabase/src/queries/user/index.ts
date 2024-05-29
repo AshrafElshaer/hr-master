@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "../../types";
-
+import { unstable_cache } from "next/cache";
 export async function getUser(supabase: SupabaseClient) {
   const {
     data: { session },
@@ -20,7 +20,7 @@ export async function getUser(supabase: SupabaseClient) {
   return { user, error };
 }
 
-export async function getEmployees(supabase: SupabaseClient) {
+export const getEmployees = unstable_cache(async (supabase: SupabaseClient) => {
   const { user } = await getUser(supabase);
   if (!user || (user.role === "manager" && !user.department_id)) {
     throw new Error("User not found");
@@ -49,4 +49,4 @@ export async function getEmployees(supabase: SupabaseClient) {
   }
 
   return employees;
-}
+}, ["employees"]);
