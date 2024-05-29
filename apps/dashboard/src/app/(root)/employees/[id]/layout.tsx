@@ -40,7 +40,6 @@ export default function EmployeeDetailsLayout({
 					);
 				})}
 			</section>
-
 			{children}
 		</main>
 	);

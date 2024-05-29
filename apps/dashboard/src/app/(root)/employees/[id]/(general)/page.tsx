@@ -10,13 +10,16 @@ export default async function EmployeeDetails({
 	const employee = await getEmplyeeById(supabase, params.id);
 
 	return (
-		<ScrollArea className="p-4 h-full flex-grow  ">
-			<section className="gap-4 flex flex-col flex-grow md:flex-row  h-full  ">
+		<ScrollArea className="p-4 h-[calc(100svh_-_110px)] sm:pb-4">
+			<section className="gap-4 flex flex-col h-full md:flex-row">
 				<BasicInfo employee={employee} />
 				<div className="flex flex-col gap-4 w-full flex-grow justify-between">
-					<div className="">personal</div>
+				<BasicInfo employee={employee} />
+				<BasicInfo employee={employee} />
+				<BasicInfo employee={employee} />
+					{/* <div className="">personal</div>
 					<div className="">address</div>
-					<div className="">emergency</div>
+					<div className="">emergency</div> */}
 				</div>
 			</section>
 		</ScrollArea>

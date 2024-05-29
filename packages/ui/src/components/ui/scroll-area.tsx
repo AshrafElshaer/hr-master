@@ -16,7 +16,7 @@ const ScrollArea = React.forwardRef<
 		<ScrollAreaPrimitive.Viewport className="h-full w-full rounded-[inherit] scrollArea">
 			{children}
 		</ScrollAreaPrimitive.Viewport>
-		{/* NOTE: For Tracker sheet */}
+
 		<ScrollBar />
 		<ScrollAreaPrimitive.Corner />
 	</ScrollAreaPrimitive.Root>
