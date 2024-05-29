@@ -44,7 +44,7 @@ export default function BasicInfo({ employee }: Props) {
 
 			<Separator className="my-5" />
 
-			<div className="flex flex-col gap-2 *:flex *:items-center *:gap-4">
+			<div className="flex flex-col gap-2 *:flex *:items-center *:gap-2">
 				<span>
 					{" "}
 					<Mail size={20} /> {employee?.email}
