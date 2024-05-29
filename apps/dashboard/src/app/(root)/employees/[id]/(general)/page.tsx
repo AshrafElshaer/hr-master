@@ -2,6 +2,9 @@ import { createServerClient } from "@hr-toolkit/supabase/server";
 import { getEmplyeeById } from "@hr-toolkit/supabase/user-mutaions";
 import BasicInfo from "./components/basics";
 import { ScrollArea } from "@hr-toolkit/ui/scroll-area";
+import PersonalInfo from "./components/peesonal-info";
+import Address from "./components/address";
+import Emergency from "./components/emergency";
 
 export default async function EmployeeDetails({
 	params,
@@ -11,15 +14,12 @@ export default async function EmployeeDetails({
 
 	return (
 		<ScrollArea className="p-4 h-[calc(100svh_-_110px)] sm:pb-4">
-			<section className="gap-4 flex flex-col h-full md:flex-row">
+			<section className="gap-4 flex flex-col h-full sm:flex-row">
 				<BasicInfo employee={employee} />
 				<div className="flex flex-col gap-4 w-full flex-grow justify-between">
-				<BasicInfo employee={employee} />
-				<BasicInfo employee={employee} />
-				<BasicInfo employee={employee} />
-					{/* <div className="">personal</div>
-					<div className="">address</div>
-					<div className="">emergency</div> */}
+					<PersonalInfo employee={employee} />
+					<Address employee={employee} />
+					<Emergency employee={employee} />
 				</div>
 			</section>
 		</ScrollArea>

@@ -13,7 +13,7 @@ type Props = {
 
 export default function BasicInfo({ employee }: Props) {
 	return (
-		<Card className="w-full p-4 flex-grow lg:w-1/3 min-w-fit">
+		<Card className="w-full p-4 flex-grow sm:w-1/3 min-w-fit">
 			<div className="w-full flex flex-col items-center justify-start gap-2">
 				<Avatar className="w-20 h-20 mb-4">
 					<AvatarImage src={employee?.avatar_url ?? ""} />
@@ -26,8 +26,8 @@ export default function BasicInfo({ employee }: Props) {
 					{employee?.first_name} {employee?.last_name}
 				</h2>
 
-				<span className="text-accent-foreground/90 mb-2">
-					{employee?.department?.name} - {employee?.position}
+				<span className="text-secondary-foreground/60 mb-2">
+					{employee?.position}
 				</span>
 				<Badge
 					variant={
@@ -56,15 +56,15 @@ export default function BasicInfo({ employee }: Props) {
 			</div>
 			<Separator className="my-5" />
 			<div className="flex flex-col gap-4 mb-8">
-				<h3 className="font-semibold text-base text-accent-foreground/90">
+				<h3 className="font-semibold text-base text-secondary-foreground/60">
 					Department
 				</h3>
-				<span>
+				<span className="text-xm">
 					{employee?.department?.name} - {employee?.department?.description}
 				</span>
 			</div>
 			<div className="flex flex-col gap-4">
-				<h3 className="font-semibold text-base text-accent-foreground/90">
+				<h3 className="font-semibold text-base text-secondary-foreground/60">
 					Manager
 				</h3>
 				<span>
