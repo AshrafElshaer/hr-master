@@ -1,14 +1,12 @@
 import React, { Suspense } from "react";
-import EmployeesHeader from "./components/employees-header";
-import { createServerClient } from "@hr-toolkit/supabase/server";
-import { getEmployees } from "@hr-toolkit/supabase/user-queries";
-import { Badge } from "@hr-toolkit/ui/badge";
-import EmployeeTable from "./components/table";
 import type { Metadata } from "next";
+
+import EmployeesHeader from "./components/employees-header";
+import EmployeeTable from "./components/table";
 import { Skeleton } from "@hr-toolkit/ui/skeleton";
 
 
-export const revalidate = 300; // 5 minutes
+
 
 export const metadata: Metadata = {
 	title: "Employees",
