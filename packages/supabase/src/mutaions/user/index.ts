@@ -60,6 +60,10 @@ export async function createEmployee(
     hire_date: data.hire_date,
     salary: data.salary,
     organization_id: currentUser.organization_id,
+    emergency_email: data.emergency_email,
+    emergency_name: data.emergency_name,
+    emergency_phone_number: data.emergency_phone_number,
+    emergency_relation: data.emergency_relation,
   })
     .eq("id", newUser.id)
     .select("* , organization:organization_id(name)")

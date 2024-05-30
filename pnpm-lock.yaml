@@ -53,6 +53,9 @@ importers:
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
+      country-code-lookup:
+        specifier: ^0.1.3
+        version: 0.1.3
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
@@ -4820,6 +4823,10 @@ packages:
     dependencies:
       object-assign: 4.1.1
       vary: 1.1.2
+    dev: false
+
+  /country-code-lookup@0.1.3:
+    resolution: {integrity: sha512-gLu+AQKHUnkSQNTxShKgi/4tYd0vEEait3JMrLNZgYlmIZ9DJLkHUjzXE9qcs7dy3xY/kUx2/nOxZ0Z3D9JE+A==}
     dev: false
 
   /country-flag-icons@1.5.11:

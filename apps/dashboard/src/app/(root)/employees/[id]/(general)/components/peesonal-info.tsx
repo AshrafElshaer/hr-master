@@ -12,29 +12,20 @@ type Props = {
 
 export default function PersonalInfo({ employee }: Props) {
 	return (
-		<Card className="w-full p-4  flex flex-col gap-8">
+		<Card className="w-full p-4 flex-grow flex flex-col gap-8">
 			<CardHeader className="p-0 flex-row items-center gap-2 font-bold">
-				<User size={20} />
+				<User size={18} />
 				<span>Personal Information</span>
 				<button
 					type="button"
 					className="ml-auto text-accent-foreground/70 hover:text-accent-foreground transition-colors"
 				>
-					<Pencil size={20} />
+					<Pencil size={18} />
 				</button>
 			</CardHeader>
 			<CardContent className="p-0">
 				<div className="flex flex-col gap-4 lg:flex-row">
 					<div className="w-full flex flex-col justify-between gap-4">
-						<div className="flex items-center gap-4">
-							<span className="font-semibold text-secondary-foreground/80 text-sm">
-								Full Name -
-							</span>
-							<span>
-								{employee.first_name} {employee.last_name}
-							</span>
-						</div>
-
 						<div className="flex items-center gap-4">
 							<span className="font-semibold text-secondary-foreground/80 text-sm">
 								Date of Birth -
