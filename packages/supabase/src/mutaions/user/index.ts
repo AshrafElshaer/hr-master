@@ -105,3 +105,20 @@ export async function getEmplyeeById(
 
   return data as unknown as UserWithDepartment;
 }
+
+export async function updateEmployeeById(
+  supabase: SupabaseClient,
+  data: Partial<PersonalInfo>,
+) {
+  const { data: updated, error } = await supabase.from("users").update(data).eq(
+    "id",
+    data.id as string,
+  )
+    .select()
+    .single().throwOnError();
+
+  if (error) {
+    throw error;
+  }
+  return updated;
+}

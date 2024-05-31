@@ -5,7 +5,7 @@ import { Card } from "@hr-toolkit/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@hr-toolkit/ui/avatar";
 import { Badge } from "@hr-toolkit/ui/badge";
 import { capitalize } from "lodash";
-import { Mail, Pencil, Phone } from "lucide-react";
+import { Loader, Mail, Pencil, Phone } from "lucide-react";
 import { Separator } from "@hr-toolkit/ui/separator";
 
 type Props = {
@@ -83,7 +83,12 @@ export default function BasicInfo({ employee }: Props) {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { employeeSchema } from "../../../validation";
+import { createClient } from "@hr-toolkit/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+import { getDepartments } from "@hr-toolkit/supabase/departments-queries";
+import { cn } from "@hr-toolkit/ui/utils";
 
+import type * as RPNInput from "react-phone-number-input";
 import type { z } from "zod";
 
 import {
@@ -105,10 +110,7 @@ import {
 import { Button, buttonVariants } from "@hr-toolkit/ui/button";
 import { Input } from "@hr-toolkit/ui/input";
 import { PhoneInputSimple } from "@/components/pnone-input";
-import type * as RPNInput from "react-phone-number-input";
-import { createClient } from "@hr-toolkit/supabase/client";
-import { useQuery } from "@tanstack/react-query";
-import { getDepartments } from "@hr-toolkit/supabase/departments-queries";
+
 import {
 	Select,
 	SelectContent,
@@ -116,7 +118,10 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@hr-toolkit/ui/select";
-import { cn } from "@hr-toolkit/ui/utils";
+import { motion, AnimatePresence } from "framer-motion";
+import { updateEmployeeById } from "@hr-toolkit/supabase/user-mutaions";
+import { updateEmployee } from "../../../actions";
+import { toast } from "sonner";
 
 const formSchema = employeeSchema.pick({
 	first_name: true,
@@ -129,6 +134,7 @@ const formSchema = employeeSchema.pick({
 });
 
 function EditBasic({ employee }: Props) {
+	const [open, setOpen] = React.useState(false);
 	const supabase = createClient();
 	const { data: departments } = useQuery({
 		queryKey: ["departments"],
@@ -150,13 +156,20 @@ function EditBasic({ employee }: Props) {
 	});
 
 	// 2. Define a submit handler.
-	function onSubmit(values: z.infer<typeof formSchema>) {
-		// Do something with the form values.
-		// ✅ This will be type-safe and validated.
-		console.log(values);
+	async function onSubmit(values: z.infer<typeof formSchema>) {
+		const { serverError } = await updateEmployee({
+			...values,
+			id: employee.id,
+		});
+		if (serverError) {
+			return toast.error(serverError);
+		}
+
+		toast.success("Employee updated successfully");
+		setOpen(false);
 	}
 	return (
-		<Dialog>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger className="ml-auto text-accent-foreground/70 hover:text-accent-foreground transition-colors">
 				<Pencil size={18} />
 			</DialogTrigger>
@@ -307,7 +320,29 @@ function EditBasic({ employee }: Props) {
 							className="w-full"
 							disabled={form.formState.isSubmitting || !form.formState.isValid}
 						>
-							Submit
+							<AnimatePresence mode="wait" initial={false}>
+								{form.formState.isSubmitting ? (
+									<motion.span
+										key="submitting"
+										initial={{ opacity: 0, y: 10 }}
+										animate={{ opacity: 1, y: 0 }}
+										exit={{ opacity: 0, y: -10 }}
+										className="flex items-center justify-center"
+									>
+										<Loader className="h-4 w-4 mr-2 animate-spin" />
+										Saving ...
+									</motion.span>
+								) : (
+									<motion.span
+										key="submit"
+										initial={{ opacity: 0, y: 10 }}
+										animate={{ opacity: 1, y: 0 }}
+										exit={{ opacity: 0, y: -10 }}
+									>
+										Save
+									</motion.span>
+								)}
+							</AnimatePresence>
 						</Button>
 						<DialogClose
 							className={cn(

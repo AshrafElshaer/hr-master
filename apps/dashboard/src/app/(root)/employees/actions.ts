@@ -4,6 +4,7 @@ import { employeeSchema } from "./validation";
 import {
   createEmployee,
   deleteEmployee,
+  updateEmployeeById,
 } from "@hr-toolkit/supabase/user-mutaions";
 import { createServerClient } from "@hr-toolkit/supabase/server";
 import { getUser } from "@hr-toolkit/supabase/user-queries";
@@ -69,5 +70,27 @@ export const deleteEmployeeById = action(
     revalidatePath("/employees");
 
     return deletedUser;
+  },
+);
+
+export const updateEmployee = action(
+  employeeSchema
+    .partial()
+    .extend({
+      id: z.string(),
+    })
+    .omit({
+      hire_date: true,
+      date_of_birth: true,
+    }),
+  async (data) => {
+
+    const supabase = createServerClient();
+    const updated = await updateEmployeeById(supabase, data);
+
+    revalidatePath("/employees");
+    revalidatePath(`/employees/${updated.id}`);
+
+    return updated;
   },
 );
