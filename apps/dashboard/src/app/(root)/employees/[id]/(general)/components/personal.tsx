@@ -1,7 +1,8 @@
+"use client";
 import React from "react";
 import type { UserWithDepartment } from "@hr-toolkit/supabase/types";
 import { Card, CardContent, CardHeader } from "@hr-toolkit/ui/card";
-import { Pencil, User } from "lucide-react";
+import { User } from "lucide-react";
 import { Button } from "@hr-toolkit/ui/button";
 import { format } from "date-fns";
 import { capitalize } from "lodash";
@@ -16,12 +17,6 @@ export default function PersonalInfo({ employee }: Props) {
 			<CardHeader className="p-0 flex-row items-center gap-2 font-bold">
 				<User size={18} />
 				<span>Personal Information</span>
-				<button
-					type="button"
-					className="ml-auto text-accent-foreground/70 hover:text-accent-foreground transition-colors"
-				>
-					<Pencil size={18} />
-				</button>
 			</CardHeader>
 			<CardContent className="p-0">
 				<div className="flex flex-col gap-4 lg:flex-row">
@@ -49,12 +44,6 @@ export default function PersonalInfo({ employee }: Props) {
 						</div>
 					</div>
 					<div className="w-full flex flex-col  gap-4">
-						<div className="flex items-center gap-4">
-							<span className="font-semibold text-secondary-foreground/80 text-sm">
-								Role -
-							</span>
-							<span>{capitalize(employee.role ?? "")}</span>
-						</div>
 						<div className="flex items-center gap-4">
 							<span className="font-semibold text-secondary-foreground/80 text-sm">
 								Hired At -

@@ -69,7 +69,7 @@ import { getDepartments } from "@hr-toolkit/supabase/departments-queries";
 import { employeeSchema } from "../../validation";
 import { COUNTRIES } from "@/constants/countries";
 import { CountrySelector } from "@/components/country-selector";
-import { PhoneInputSimple } from "@/components/pnone-input";
+import { PhoneInputSimple } from "@/components/phone-input";
 import { DateOfBirthPicker } from "@hr-toolkit/ui/date-of-birth-picker";
 import {
 	Select,
@@ -426,7 +426,6 @@ function EmployeeForm({
 										<SelectValue placeholder="Select a department" />
 									</SelectTrigger>
 									<SelectContent>
-
 										{departments?.map((department) => (
 											<SelectItem key={department.id} value={department.id}>
 												{department.name}

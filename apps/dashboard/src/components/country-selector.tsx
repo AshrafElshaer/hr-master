@@ -1,5 +1,5 @@
 import type * as RPNInput from "react-phone-number-input";
-import type { CountrySelectProps } from "./pnone-input";
+import type { CountrySelectProps } from "./phone-input";
 import React from "react";
 import {
 	Popover,

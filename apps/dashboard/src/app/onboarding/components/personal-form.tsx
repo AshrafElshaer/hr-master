@@ -23,7 +23,7 @@ import {
 } from "@hr-toolkit/ui/form";
 import { Input } from "@hr-toolkit/ui/input";
 import { CountrySelector } from "@/components/country-selector";
-import { PhoneInputSimple } from "@/components/pnone-input";
+import { PhoneInputSimple } from "@/components/phone-input";
 import { DateOfBirthPicker } from "@hr-toolkit/ui/date-of-birth-picker";
 import { StepperFormActions } from "./onboarding";
 import { personalInfoSchema } from "../validations";

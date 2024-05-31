@@ -1,4 +1,4 @@
-import type { CountrySelectOption } from "@/components/pnone-input";
+import type { CountrySelectOption } from "@/components/phone-input";
 
 export const COUNTRIES: CountrySelectOption[] = [
   { label: "Afghanistan", value: "AF" },

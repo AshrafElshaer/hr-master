@@ -28,7 +28,7 @@ import {
 import { ScrollArea } from "@hr-toolkit/ui/scroll-area";
 import { COUNTRIES } from "@/constants/countries";
 import { CountrySelector } from "@/components/country-selector";
-import { PhoneInputSimple } from "@/components/pnone-input";
+import { PhoneInputSimple } from "@/components/phone-input";
 import { onboardingOrganization } from "../actions";
 import { organizationFormSchema } from "../validations";
 

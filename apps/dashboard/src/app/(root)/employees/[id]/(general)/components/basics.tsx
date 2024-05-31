@@ -59,7 +59,7 @@ export default function BasicInfo({ employee }: Props) {
 				</span>
 			</div>
 			<Separator className="my-5" />
-			<div className="flex flex-col gap-4 mb-8">
+			<div className="flex flex-col gap-4 mb-4">
 				<h3 className="font-semibold text-base text-secondary-foreground/60">
 					Department
 				</h3>
@@ -67,9 +67,15 @@ export default function BasicInfo({ employee }: Props) {
 					{employee?.department?.name} - {employee?.department?.description}
 				</span>
 			</div>
-			<div className="flex flex-col gap-4">
+			<div className="flex items-center gap-4 mb-2">
 				<h3 className="font-semibold text-base text-secondary-foreground/60">
-					Manager
+					Role -
+				</h3>
+				<span className="text-xm">{capitalize(employee.role ?? "")}</span>
+			</div>
+			<div className="flex  gap-4">
+				<h3 className="font-semibold text-base text-secondary-foreground/60">
+					Manager -
 				</h3>
 				<span>
 					{employee?.department?.person_in_charge.first_name}{" "}
@@ -109,7 +115,7 @@ import {
 } from "@hr-toolkit/ui/form";
 import { Button, buttonVariants } from "@hr-toolkit/ui/button";
 import { Input } from "@hr-toolkit/ui/input";
-import { PhoneInputSimple } from "@/components/pnone-input";
+import { PhoneInputSimple } from "@/components/phone-input";
 
 import {
 	Select,
@@ -131,6 +137,7 @@ const formSchema = employeeSchema.pick({
 	position: true,
 	employment_status: true,
 	department_id: true,
+	role: true,
 });
 
 function EditBasic({ employee }: Props) {
@@ -152,10 +159,12 @@ function EditBasic({ employee }: Props) {
 				typeof formSchema
 			>["employment_status"],
 			department_id: employee.department_id ?? "",
+			role: employee.role as z.infer<typeof formSchema>["role"],
 		},
+		
 	});
 
-	// 2. Define a submit handler.
+
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		const { serverError } = await updateEmployee({
 			...values,
@@ -181,7 +190,7 @@ function EditBasic({ employee }: Props) {
 				</DialogHeader>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-						<div className="flex items-center gap-4">
+						<div className="flex  items-center gap-4">
 							<FormField
 								control={form.control}
 								name="first_name"
@@ -211,7 +220,7 @@ function EditBasic({ employee }: Props) {
 								)}
 							/>
 						</div>
-						<div className="flex items-center gap-4">
+						<div className="flex  items-center gap-4">
 							<FormField
 								control={form.control}
 								name="email"
@@ -219,7 +228,11 @@ function EditBasic({ employee }: Props) {
 									<FormItem>
 										<FormLabel>Email</FormLabel>
 										<FormControl>
-											<Input placeholder="example@domain.com" disabled {...field} />
+											<Input
+												placeholder="example@domain.com"
+												disabled
+												{...field}
+											/>
 										</FormControl>
 
 										<FormMessage />
@@ -275,17 +288,27 @@ function EditBasic({ employee }: Props) {
 								</FormItem>
 							)}
 						/>
-						<div className="flex items-center gap-4">
+						<div className="flex  items-center gap-4">
 							<FormField
 								control={form.control}
-								name="position"
+								name="role"
 								render={({ field }) => (
 									<FormItem className="w-full">
-										<FormLabel>Position</FormLabel>
+										<FormLabel>Role</FormLabel>
 										<FormControl>
-											<Input placeholder="Software Engineer" {...field} />
+											<Select
+												onValueChange={field.onChange}
+												value={field.value}
+											>
+												<SelectTrigger className="w-full">
+													<SelectValue placeholder="Select a role" />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectItem value="manager">Manager</SelectItem>
+													<SelectItem value="employee">Employee</SelectItem>
+												</SelectContent>
+											</Select>
 										</FormControl>
-
 										<FormMessage />
 									</FormItem>
 								)}
@@ -304,7 +327,7 @@ function EditBasic({ employee }: Props) {
 												<SelectTrigger className="w-full">
 													<SelectValue placeholder="Select a status" />
 												</SelectTrigger>
-												<SelectContent side="top">
+												<SelectContent>
 													<SelectItem value="active">Active</SelectItem>
 													<SelectItem value="on-hold">On Hold</SelectItem>
 												</SelectContent>
@@ -315,6 +338,20 @@ function EditBasic({ employee }: Props) {
 								)}
 							/>
 						</div>
+						<FormField
+							control={form.control}
+							name="position"
+							render={({ field }) => (
+								<FormItem className="w-full">
+									<FormLabel>Position</FormLabel>
+									<FormControl>
+										<Input placeholder="Software Engineer" {...field} />
+									</FormControl>
+
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 						<Button
 							type="submit"
 							className="w-full"
