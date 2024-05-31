@@ -426,7 +426,7 @@ function EmployeeForm({
 										<SelectValue placeholder="Select a department" />
 									</SelectTrigger>
 									<SelectContent>
-										{/*  TODO: Fetch departments from the server */}
+
 										{departments?.map((department) => (
 											<SelectItem key={department.id} value={department.id}>
 												{department.name}
