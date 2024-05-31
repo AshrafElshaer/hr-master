@@ -12,8 +12,9 @@ import {
 import { PanelLeftOpen, X } from "lucide-react";
 import LogoSVG from "../logo-svg";
 import MainSidebar from "./main-sidebar";
+import type { User } from "@hr-toolkit/supabase/types";
 
-export default function MobileSidebar() {
+export default function MobileSidebar({ currentUser }: { currentUser: User }) {
 	const [isOpen, setIsOpen] = React.useState(false);
 	return (
 		<Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -32,7 +33,7 @@ export default function MobileSidebar() {
 						</SheetClose>
 					</section>
 				</SheetHeader>
-				<MainSidebar setIsMobileOpen={setIsOpen} />
+				<MainSidebar setIsMobileOpen={setIsOpen} currentUser={currentUser} />
 			</SheetContent>
 		</Sheet>
 	);

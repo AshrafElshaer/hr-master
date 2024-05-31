@@ -18,30 +18,29 @@ import { LogOutIcon, MessageSquarePlus, Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { BiMessageRoundedAdd } from "react-icons/bi";
 import { MdSupportAgent } from "react-icons/md";
+import type { User } from "@hr-toolkit/supabase/types";
 
-export default function UserMenu() {
+export default function UserMenu({
+	currentUser,
+}: { currentUser: User }) {
 	const supabase = createClient();
 	const router = useRouter();
-	const { data, isLoading } = useQuery({
-		queryKey: ["user"],
-		queryFn: () => getUser(supabase),
-	});
-	const user = data?.user;
+	// const { data, isLoading } = useQuery({
+	// 	queryKey: ["user"],
+	// 	queryFn: () => getUser(supabase),
+	// });
+	// const user = data?.user;
 
-	if (isLoading) {
-		return <Skeleton className="h-8 w-8 rounded-full" />;
-	}
-	if (!user || !user.first_name || !user.last_name) {
-		return null;
-	}
+	
+	
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Avatar className="h-8 w-8 cursor-pointer">
-					<AvatarImage src={user.avatar_url ?? ""} />
+					<AvatarImage src={currentUser.avatar_url ?? ""} />
 					<AvatarFallback>
-						{user.first_name[0]}
-						{user.last_name[0]}
+						{currentUser.first_name ? currentUser.first_name[0] : ""}
+						{currentUser.last_name ? currentUser.last_name[0] : ""}
 					</AvatarFallback>
 				</Avatar>
 			</DropdownMenuTrigger>
@@ -51,7 +50,7 @@ export default function UserMenu() {
 				align="end"
 			>
 				<DropdownMenuLabel>
-					{user.first_name} {user.last_name}
+					{currentUser.first_name} {currentUser.last_name}
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 

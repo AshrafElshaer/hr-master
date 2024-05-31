@@ -1,5 +1,3 @@
-"use client";
-
 import { createClient } from "@hr-toolkit/supabase/client";
 import { Button } from "@hr-toolkit/ui/button";
 

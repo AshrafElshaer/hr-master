@@ -16,13 +16,16 @@ async function DashboardLayout({ children }: { children: ReactNode }) {
 	if (!user && pathname !== "/auth") {
 		redirect("/auth");
 	}
+	if (user === null) {
+		return null;
+	}
 	return (
 		<ResizablePanelGroup
 			direction="vertical"
 			className="w-full  border min-h-[100svh]"
 		>
 			<ResizablePanel defaultSize={4} className="min-h-[50px] border-b grid">
-				<DashboardHeader />
+				<DashboardHeader currentUser={user} />
 			</ResizablePanel>
 
 			<ResizablePanel defaultSize={96}>
@@ -31,12 +34,10 @@ async function DashboardLayout({ children }: { children: ReactNode }) {
 						defaultSize={1}
 						className="border-r min-w-[200px] hidden md:block shadow-md"
 					>
-						<MainSidebar />
+						<MainSidebar currentUser={user} />
 					</ResizablePanel>
 
-					<ResizablePanel defaultSize={99} >
-						{children}
-					</ResizablePanel>
+					<ResizablePanel defaultSize={99}>{children}</ResizablePanel>
 				</ResizablePanelGroup>
 			</ResizablePanel>
 		</ResizablePanelGroup>

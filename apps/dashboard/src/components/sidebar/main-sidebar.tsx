@@ -5,6 +5,7 @@ import {
 } from "@/constants/sidebar-navigations";
 import type { ReactSetState } from "@/types";
 import { createClient } from "@hr-toolkit/supabase/client";
+import type { User } from "@hr-toolkit/supabase/types";
 import { getUser } from "@hr-toolkit/supabase/user-queries";
 import { buttonVariants } from "@hr-toolkit/ui/button";
 import { cn } from "@hr-toolkit/ui/utils";
@@ -15,20 +16,17 @@ import React from "react";
 
 function MainSidebar({
 	setIsMobileOpen,
+	currentUser,
 }: {
 	setIsMobileOpen?: ReactSetState<boolean>;
+	currentUser: User;
 }) {
-	const supabase = createClient();
-	const { data: currentUser } = useQuery({
-		queryKey: ["user"],
-		queryFn: () => getUser(supabase),
-	});
 	const pathname = usePathname();
 
 	return (
 		<nav className="w-full h-full">
 			<ul className="flex flex-col items-start justify-start h-full gap-1 p-2">
-				{roleBasedNavigations(currentUser?.user?.role ?? "").map((route) => {
+				{roleBasedNavigations(currentUser.role ?? "").map((route) => {
 					const isActivePath =
 						pathname === route.path ||
 						route.path === pathname.split("/").slice(0, 2).join("/");
