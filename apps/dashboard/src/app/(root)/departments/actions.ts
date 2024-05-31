@@ -7,7 +7,7 @@ import {
   createDepartment,
   deleteOrganizationDepartment,
   updateDepartment,
-} from "@hr-toolkit/supabase/departments-mutaions";
+} from "@hr-toolkit/supabase/departments-mutations";
 import { getUser } from "@hr-toolkit/supabase/user-queries";
 import { departmentSchema } from "./validation";
 

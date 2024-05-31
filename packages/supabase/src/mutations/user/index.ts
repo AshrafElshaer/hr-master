@@ -84,7 +84,7 @@ export async function deleteEmployee(supabase: SupabaseClient, {
   return await supabase.auth.admin.deleteUser(employeeId);
 }
 
-export async function getEmplyeeById(
+export async function getEmployeeById(
   supabase: SupabaseClient,
   employeeId: string,
 ) {

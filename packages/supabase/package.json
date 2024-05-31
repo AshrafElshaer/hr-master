@@ -21,10 +21,10 @@
 		"./middleware": "./src/client/middleware.ts",
 		"./types": "./src/types/index.ts",
 		"./user-queries": "./src/queries/user/index.ts",
-		"./user-mutaions": "./src/mutaions/user/index.ts",
+		"./user-mutations": "./src/mutations/user/index.ts",
 		"./organization-queries": "./src/queries/organization/index.ts",
-		"./organization-mutaions": "./src/mutaions/organization/index.ts",
-		"./departments-mutaions": "./src/mutaions/departments/index.ts",
+		"./organization-mutations": "./src/mutations/organization/index.ts",
+		"./departments-mutations": "./src/mutations/departments/index.ts",
 		"./departments-queries": "./src/queries/departments/index.ts"
 	}
 }

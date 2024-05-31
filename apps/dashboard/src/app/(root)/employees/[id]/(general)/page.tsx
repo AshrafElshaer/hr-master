@@ -1,8 +1,8 @@
 import { createServerClient } from "@hr-toolkit/supabase/server";
-import { getEmplyeeById } from "@hr-toolkit/supabase/user-mutaions";
+import { getEmployeeById } from "@hr-toolkit/supabase/user-mutations";
 import BasicInfo from "./components/basics";
 import { ScrollArea } from "@hr-toolkit/ui/scroll-area";
-import PersonalInfo from "./components/peesonal-info";
+import PersonalInfo from "./components/personal";
 import Address from "./components/address";
 import Emergency from "./components/emergency";
 
@@ -10,7 +10,7 @@ export default async function EmployeeDetails({
 	params,
 }: { params: { id: string } }) {
 	const supabase = createServerClient();
-	const employee = await getEmplyeeById(supabase, params.id);
+	const employee = await getEmployeeById(supabase, params.id);
 
 	return (
 		<ScrollArea className="p-4 h-[calc(100svh_-_110px)] sm:pb-4">

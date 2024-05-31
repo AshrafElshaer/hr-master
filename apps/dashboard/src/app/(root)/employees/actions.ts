@@ -5,7 +5,7 @@ import {
   createEmployee,
   deleteEmployee,
   updateEmployeeById,
-} from "@hr-toolkit/supabase/user-mutaions";
+} from "@hr-toolkit/supabase/user-mutations";
 import { createServerClient } from "@hr-toolkit/supabase/server";
 import { getUser } from "@hr-toolkit/supabase/user-queries";
 import { resend } from "@/lib/resend";
@@ -84,7 +84,6 @@ export const updateEmployee = action(
       date_of_birth: true,
     }),
   async (data) => {
-
     const supabase = createServerClient();
     const updated = await updateEmployeeById(supabase, data);
 

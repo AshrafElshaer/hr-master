@@ -2,8 +2,8 @@
 import { action } from "@/lib/safe-action";
 import { personalInfoSchema } from "./validations";
 import { createServerClient } from "@hr-toolkit/supabase/server";
-import { updateUserInfo } from "@hr-toolkit/supabase/user-mutaions";
-import { createOrganization } from "@hr-toolkit/supabase/organization-mutaions";
+import { updateUserInfo } from "@hr-toolkit/supabase/user-mutations";
+import { createOrganization } from "../../../../../packages/supabase/src/mutations/organization";
 import { organizationFormSchema } from "./validations";
 import { getUser } from "@hr-toolkit/supabase/user-queries";
 
@@ -37,7 +37,7 @@ export const onboardingOrganization = action(
   async (data) => {
     const supabase = createServerClient();
 
-    const {success} = await createOrganization(
+    const { success } = await createOrganization(
       supabase,
       {
         name: data.organizationName,
@@ -54,6 +54,6 @@ export const onboardingOrganization = action(
       },
     );
 
-    return {success};
+    return { success };
   },
 );

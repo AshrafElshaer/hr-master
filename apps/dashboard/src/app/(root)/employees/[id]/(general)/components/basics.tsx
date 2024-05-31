@@ -119,7 +119,7 @@ import {
 	SelectValue,
 } from "@hr-toolkit/ui/select";
 import { motion, AnimatePresence } from "framer-motion";
-import { updateEmployeeById } from "@hr-toolkit/supabase/user-mutaions";
+
 import { updateEmployee } from "../../../actions";
 import { toast } from "sonner";
 
@@ -189,7 +189,7 @@ function EditBasic({ employee }: Props) {
 									<FormItem>
 										<FormLabel>First Name</FormLabel>
 										<FormControl>
-											<Input placeholder="shadcn" {...field} />
+											<Input placeholder="John" {...field} />
 										</FormControl>
 
 										<FormMessage />
@@ -203,7 +203,7 @@ function EditBasic({ employee }: Props) {
 									<FormItem>
 										<FormLabel>Last Name</FormLabel>
 										<FormControl>
-											<Input placeholder="shadcn" {...field} />
+											<Input placeholder="Doe" {...field} />
 										</FormControl>
 
 										<FormMessage />
@@ -219,7 +219,7 @@ function EditBasic({ employee }: Props) {
 									<FormItem>
 										<FormLabel>Email</FormLabel>
 										<FormControl>
-											<Input placeholder="shadcn" disabled {...field} />
+											<Input placeholder="example@domain.com" disabled {...field} />
 										</FormControl>
 
 										<FormMessage />
@@ -283,7 +283,7 @@ function EditBasic({ employee }: Props) {
 									<FormItem className="w-full">
 										<FormLabel>Position</FormLabel>
 										<FormControl>
-											<Input placeholder="shadcn" {...field} />
+											<Input placeholder="Software Engineer" {...field} />
 										</FormControl>
 
 										<FormMessage />
@@ -304,7 +304,7 @@ function EditBasic({ employee }: Props) {
 												<SelectTrigger className="w-full">
 													<SelectValue placeholder="Select a status" />
 												</SelectTrigger>
-												<SelectContent>
+												<SelectContent side="top">
 													<SelectItem value="active">Active</SelectItem>
 													<SelectItem value="on-hold">On Hold</SelectItem>
 												</SelectContent>
