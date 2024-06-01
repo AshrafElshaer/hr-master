@@ -1,5 +1,5 @@
 import { createServerClient } from "@hr-toolkit/supabase/server";
-import { getEmployeeById } from "@hr-toolkit/supabase/user-mutations";
+import { getEmployeeById } from "@hr-toolkit/supabase/user-queries";
 import BasicInfo from "./components/basics";
 import { ScrollArea } from "@hr-toolkit/ui/scroll-area";
 import PersonalInfo from "./components/personal";

@@ -275,6 +275,7 @@ export default function EmployeesFilters({ table }: Props) {
 								variant: "secondary",
 								className: statusFilter === "active" ? "" : "min-w-28",
 							}),
+							"min-w-fit",
 						)}
 					>
 						<X

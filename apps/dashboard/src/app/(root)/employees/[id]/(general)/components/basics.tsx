@@ -185,7 +185,7 @@ function EditBasic({ employee }: Props) {
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle className="text-center">
-						Edit {employee.first_name} Info
+						Edit {employee.first_name}'s Employment 
 					</DialogTitle>
 				</DialogHeader>
 				<Form {...form}>

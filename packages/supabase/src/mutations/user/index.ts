@@ -84,27 +84,6 @@ export async function deleteEmployee(supabase: SupabaseClient, {
   return await supabase.auth.admin.deleteUser(employeeId);
 }
 
-export async function getEmployeeById(
-  supabase: SupabaseClient,
-  employeeId: string,
-) {
-  const { data, error } = await supabase.from("users")
-    .select(
-      "* , department:department_id(*,person_in_charge:person_in_charge_id(first_name,last_name))",
-    )
-    .eq(
-      "id",
-      employeeId,
-    )
-    .single()
-    .throwOnError();
-
-  if (error) {
-    throw error;
-  }
-
-  return data as unknown as UserWithDepartment;
-}
 
 export async function updateEmployeeById(
   supabase: SupabaseClient,
