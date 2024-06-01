@@ -40,17 +40,18 @@ export default function EmployeesFilters({ table }: Props) {
 	return (
 		<section className="w-full flex flex-col gap-2">
 			<div className="flex justify-start items-center gap-2">
-				<Input
-					placeholder="Filter By Name ..."
-					className="w-full sm:w-40 "
-					startIcon={Search}
-					value={
-						(table.getColumn("first_name")?.getFilterValue() as string) ?? ""
-					}
-					onChange={(event) =>
-						table.getColumn("first_name")?.setFilterValue(event.target.value)
-					}
-				/>
+				<div className="w-full sm:w-40 mr-auto">
+					<Input
+						placeholder="Filter By Name ..."
+						startIcon={Search}
+						value={
+							(table.getColumn("first_name")?.getFilterValue() as string) ?? ""
+						}
+						onChange={(event) =>
+							table.getColumn("first_name")?.setFilterValue(event.target.value)
+						}
+					/>
+				</div>
 
 				<div className="hidden sm:flex gap-2">
 					{statusFilter ? (
@@ -275,7 +276,6 @@ export default function EmployeesFilters({ table }: Props) {
 								variant: "secondary",
 								className: statusFilter === "active" ? "" : "min-w-28",
 							}),
-							"min-w-fit",
 						)}
 					>
 						<X
