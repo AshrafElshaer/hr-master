@@ -7,6 +7,15 @@ export type SupabaseClientOptions = {
   isAdmin: boolean;
 };
 
+export const createFetch =
+  (options: Pick<RequestInit, "next" | "cache">) =>
+  (url: RequestInfo | URL, init?: RequestInit) => {
+    return fetch(url, {
+      ...init,
+      ...options,
+    });
+  };
+
 export function createServerClient(options: SupabaseClientOptions = {
   isAdmin: false,
 }) {
@@ -20,6 +29,11 @@ export function createServerClient(options: SupabaseClientOptions = {
       ? env.NEXT_PUBLIC_SUPABASR_SERVICE_ROLE_KEY
       : env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
+      global: {
+        fetch: createFetch({
+          cache: "force-cache",
+        }),
+      },
       cookies: {
         get(name: string) {
           return cookieStore.get(name)?.value;
