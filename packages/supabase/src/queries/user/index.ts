@@ -2,10 +2,10 @@ import type { SupabaseClient, UserWithDepartment } from "../../types";
 import { unstable_cache } from "next/cache";
 export async function getUser(supabase: SupabaseClient) {
   const {
-    data: { user: userAuth },
+    data: { session },
     error,
-  } = await supabase.auth.getUser();
-  if (error || !userAuth) {
+  } = await supabase.auth.getSession();
+  if (error || !session) {
     return { error, user: null };
   }
   const { data: user } = await supabase
@@ -13,7 +13,7 @@ export async function getUser(supabase: SupabaseClient) {
     .select()
     .eq(
       "id",
-      userAuth.id,
+      session.user.id,
     )
     .single();
 
