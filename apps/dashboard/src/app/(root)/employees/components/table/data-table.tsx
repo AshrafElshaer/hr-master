@@ -7,6 +7,7 @@ import {
 	getCoreRowModel,
 	useReactTable,
 	getFilteredRowModel,
+	getPaginationRowModel,
 } from "@tanstack/react-table";
 
 import {
@@ -24,6 +25,7 @@ import type { UserWithDepartment } from "@hr-toolkit/supabase/types";
 import { useBoolean } from "usehooks-ts";
 import DeleteEmployee from "../dialogs/delete-employee";
 import EmployeesFilters from "./filters";
+import { DataTablePagination } from "@/components/table-pagination";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -50,6 +52,7 @@ export function DataTable<TData, TValue>({
 		getCoreRowModel: getCoreRowModel(),
 		onColumnFiltersChange: setColumnFilters,
 		getFilteredRowModel: getFilteredRowModel(),
+		getPaginationRowModel: getPaginationRowModel(),
 		state: {
 			// sorting,
 			columnFilters,
@@ -59,14 +62,12 @@ export function DataTable<TData, TValue>({
 			setIsDeleteTrue,
 		},
 	});
-	// console.log({
-	// 	columnFilters,
-	// });
+	
 
 	return (
 		<section className="w-full flex flex-col flex-grow gap-2">
 			<EmployeesFilters table={table} />
-			<div className="rounded-md border w-full flex-grow overflow-x-scroll overflow-y-hidden scrollbar-muted">
+			<div className="rounded-md border max-h-[34rem] w-full flex-grow overflow-scroll  scrollbar-muted flex flex-col">
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
@@ -124,6 +125,8 @@ export function DataTable<TData, TValue>({
 						)}
 					</TableBody>
 				</Table>
+				<DataTablePagination table={table} />
+
 				<DeleteEmployee
 					employee={selectedEmployee}
 					isDelete={isDelete}

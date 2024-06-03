@@ -20,8 +20,11 @@ type Props = {
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	table: Table<any>;
 };
+interface DataTableFiltersProps<TData> {
+	table: Table<TData>;
+}
 
-export default function EmployeesFilters({ table }: Props) {
+export default function EmployeesFilters<TData>({ table }: DataTableFiltersProps<TData>) {
 	const supabase = createClient();
 	const [activeTab, setActiveTab] = React.useState("department");
 	const [open, setOpen] = React.useState(false);
@@ -180,7 +183,10 @@ export default function EmployeesFilters({ table }: Props) {
 									/>
 								</TabsTrigger>
 							</TabsList>
-							<TabsContent value="department" className="w-full pr-2 space-y-4 py-2">
+							<TabsContent
+								value="department"
+								className="w-full pr-2 space-y-4 py-2"
+							>
 								{departments?.map((department) => {
 									const isChecked = departmentFilter === department.name;
 									return (
