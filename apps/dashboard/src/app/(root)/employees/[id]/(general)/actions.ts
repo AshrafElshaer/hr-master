@@ -5,14 +5,13 @@ import { updateEmployeeById } from "@hr-toolkit/supabase/user-mutations";
 import { revalidatePath } from "next/cache";
 
 export async function uploadProfileImg(
-  organizationId: string,
-  userId: string,
+
   formData: FormData,
 ) {
-  const supabase = createServerClient({
-    isAdmin: true,
-  });
+  const supabase = createServerClient();
   const file = formData.get("file") as File;
+  const userId = formData.get("userId") as string;
+  const organizationId = formData.get("organizationId") as string;
   const imgPath = `${organizationId}/${userId}`;
 
   await supabase.storage.from("avatars").remove([imgPath]);

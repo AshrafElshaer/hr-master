@@ -75,11 +75,12 @@ export default function UploadProfileImg({ userId, organizationId }: Props) {
 					onUpload={async (files) => {
 						const formData = new FormData();
 						formData.append("file", files[0]);
-						const uploaded = await uploadProfileImg(
-							organizationId,
-							userId,
-							formData,
-						);
+						formData.append("organizationId", organizationId);
+						formData.append("userId", userId);
+						const uploaded =
+							await uploadProfileImg(
+								formData,
+							);
 						if (!uploaded) {
 							setFiles([]);
 						}
@@ -97,7 +98,9 @@ export default function UploadProfileImg({ userId, organizationId }: Props) {
 							isError={isInputError}
 							startIcon={Link}
 						/>
-						<Button size="sm"onClick={saveUrl}>Save</Button>
+						<Button size="sm" onClick={saveUrl}>
+							Save
+						</Button>
 					</div>
 				)}
 			</DialogContent>
