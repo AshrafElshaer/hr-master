@@ -53,7 +53,6 @@ export const getEmployees = unstable_cache(
   },
   ["employees"],
   {
-    revalidate: 180,
     tags: ["employees"],
   },
 );
