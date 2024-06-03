@@ -2,7 +2,7 @@ import type { SupabaseClient, UserWithDepartment } from "../../types";
 import { unstable_cache } from "next/cache";
 export async function getUser(supabase: SupabaseClient) {
   const {
-    data: { user:userAuth },
+    data: { user: userAuth },
     error,
   } = await supabase.auth.getUser();
   if (error || !userAuth) {
@@ -53,6 +53,7 @@ export const getEmployees = unstable_cache(
   },
   ["employees"],
   {
+    revalidate: 180,
     tags: ["employees"],
   },
 );

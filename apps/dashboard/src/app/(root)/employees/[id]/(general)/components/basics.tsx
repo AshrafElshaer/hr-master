@@ -5,7 +5,7 @@ import { Card } from "@hr-toolkit/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@hr-toolkit/ui/avatar";
 import { Badge } from "@hr-toolkit/ui/badge";
 import { capitalize } from "lodash";
-import { Loader, Mail, Pencil, Phone } from "lucide-react";
+import { Camera, Loader, Mail, Pencil, Phone } from "lucide-react";
 import { Separator } from "@hr-toolkit/ui/separator";
 
 type Props = {
@@ -18,13 +18,18 @@ export default function BasicInfo({ employee }: Props) {
 			<div className="flex justify-e">
 				<EditBasic employee={employee} />
 			</div>
+
 			<div className="w-full flex flex-col items-center justify-start gap-2">
-				<Avatar className="w-20 h-20 mb-4">
+				<Avatar className="w-20 h-20 mb-4 relative group">
 					<AvatarImage src={employee?.avatar_url ?? ""} />
 					<AvatarFallback className="text-4xl">
 						{employee?.first_name?.[0]}
 						{employee?.last_name?.[0]}
 					</AvatarFallback>
+					<UploadProfileImg
+						userId={employee.id}
+						organizationId={employee.organization_id}
+					/>
 				</Avatar>
 				<h2 className="font-bold text-lg">
 					{employee?.first_name} {employee?.last_name}
@@ -128,6 +133,8 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { updateEmployee } from "../../../actions";
 import { toast } from "sonner";
+import { DialogUploaderDemo } from "@/components/file-uploader-dialog";
+import UploadProfileImg from "./upload-profile-img";
 
 const formSchema = employeeSchema.pick({
 	first_name: true,
@@ -161,9 +168,7 @@ function EditBasic({ employee }: Props) {
 			department_id: employee.department_id ?? "",
 			role: employee.role as z.infer<typeof formSchema>["role"],
 		},
-		
 	});
-
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		const { serverError } = await updateEmployee({
@@ -185,7 +190,7 @@ function EditBasic({ employee }: Props) {
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle className="text-center">
-						Edit {employee.first_name}'s Employment 
+						Edit {employee.first_name}'s Employment
 					</DialogTitle>
 				</DialogHeader>
 				<Form {...form}>
