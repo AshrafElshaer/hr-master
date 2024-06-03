@@ -145,7 +145,7 @@ export default function EmployeesFilters({ table }: Props) {
 							className="w-full flex gap-4 h-full"
 							value={activeTab}
 						>
-							<TabsList className="flex-col justify-start h-full bg-transparent ">
+							<TabsList className="flex-col justify-start h-full bg-transparent py-2">
 								<TabsTrigger
 									value="department"
 									className="data-[state=active]:bg-accent justify-start  w-[8.5rem] gap-2 group"
@@ -180,7 +180,7 @@ export default function EmployeesFilters({ table }: Props) {
 									/>
 								</TabsTrigger>
 							</TabsList>
-							<TabsContent value="department" className="w-full pr-2 space-y-4">
+							<TabsContent value="department" className="w-full pr-2 space-y-4 py-2">
 								{departments?.map((department) => {
 									const isChecked = departmentFilter === department.name;
 									return (
@@ -210,7 +210,7 @@ export default function EmployeesFilters({ table }: Props) {
 									);
 								})}
 							</TabsContent>
-							<TabsContent value="role" className="w-full space-y-4">
+							<TabsContent value="role" className="w-full space-y-4 py-2">
 								{["owner", "manager", "employee"].map((role) => {
 									const isChecked = roleFilter === role;
 									return (
@@ -235,7 +235,7 @@ export default function EmployeesFilters({ table }: Props) {
 									);
 								})}
 							</TabsContent>
-							<TabsContent value="status" className="w-full space-y-4">
+							<TabsContent value="status" className="w-full space-y-4 py-2">
 								{["active", "on-hold"].map((status) => {
 									const isChecked = statusFilter === status;
 									return (
