@@ -31,7 +31,10 @@ export function createServerClient(options: SupabaseClientOptions = {
     {
       global: {
         fetch: createFetch({
-          cache: "force-cache",
+          cache: "no-cache",
+          next:{
+
+          }
         }),
       },
       cookies: {

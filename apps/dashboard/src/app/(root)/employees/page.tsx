@@ -5,7 +5,7 @@ import EmployeesHeader from "./components/employees-header";
 import EmployeeTable from "./components/table";
 import { Skeleton } from "@hr-toolkit/ui/skeleton";
 
-export const revalidate = 60 * 5; // 5 minutes
+export const revalidate = 60 * 2; // 5 minutes
 
 export const metadata: Metadata = {
 	title: "Employees",
