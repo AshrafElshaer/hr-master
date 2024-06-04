@@ -27,10 +27,10 @@ import {
 	TableRow,
 } from "@hr-toolkit/ui/table";
 
-
 import EditDepartmetn from "../dialogs/edit-department";
 import { DeleteDepartment } from "../dialogs/delete-department";
 import DepartmentFilters from "./filters";
+import { DataTablePagination } from "@/components/table-pagination";
 
 export type TData = DepartmentColumn;
 
@@ -88,7 +88,7 @@ export function DataTable<TData, TValue>({
 	return (
 		<section className="w-full h-full flex flex-col">
 			<DepartmentFilters table={table} />
-			<div className="rounded-md border w-full flex-grow overflow-x-scroll overflow-y-hidden scrollbar-muted">
+			<div className="rounded-md border h-1 w-full flex-grow overflow-scroll  scrollbar-muted">
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
@@ -141,36 +141,36 @@ export function DataTable<TData, TValue>({
 						)}
 					</TableBody>
 				</Table>
-
-				<EditDepartmetn
-					isEdit={isEdit}
-					toggleIsEdit={toggleIsEdit}
-					supabase={supabase}
-					department={selectedDepartment}
-					onClose={() => {
-						toggleIsEdit();
-						setTimeout(() => {
-							setSelectedDepartment(null);
-						}, 500);
-					}}
-				/>
-
-				<DeleteDepartment
-					department={{
-						id: selectedDepartment?.id,
-						name: selectedDepartment?.name,
-					}}
-					isDelete={isDelete}
-					toggleIsDelete={toggleIsDelete}
-					supabase={supabase}
-					onClose={() => {
-						toggleIsDelete();
-						setTimeout(() => {
-							setSelectedDepartment(null);
-						}, 500);
-					}}
-				/>
 			</div>
+			<DataTablePagination table={table} />
+			<EditDepartmetn
+				isEdit={isEdit}
+				toggleIsEdit={toggleIsEdit}
+				supabase={supabase}
+				department={selectedDepartment}
+				onClose={() => {
+					toggleIsEdit();
+					setTimeout(() => {
+						setSelectedDepartment(null);
+					}, 500);
+				}}
+			/>
+
+			<DeleteDepartment
+				department={{
+					id: selectedDepartment?.id,
+					name: selectedDepartment?.name,
+				}}
+				isDelete={isDelete}
+				toggleIsDelete={toggleIsDelete}
+				supabase={supabase}
+				onClose={() => {
+					toggleIsDelete();
+					setTimeout(() => {
+						setSelectedDepartment(null);
+					}, 500);
+				}}
+			/>
 		</section>
 	);
 }
