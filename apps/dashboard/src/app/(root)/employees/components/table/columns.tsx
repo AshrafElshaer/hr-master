@@ -78,6 +78,7 @@ export const columns: ColumnDef<Employee>[] = [
 		cell: ({ row, table }) => {
 			const employee = row.original;
 			const tableMeta = table.options.meta as EmployeeMeta;
+			if(employee.role === "owner") return null
 
 			return (
 				<FaTrash

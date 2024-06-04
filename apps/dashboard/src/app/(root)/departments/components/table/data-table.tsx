@@ -88,7 +88,7 @@ export function DataTable<TData, TValue>({
 	return (
 		<section className="w-full h-full flex flex-col">
 			<DepartmentFilters table={table} />
-			<div className="rounded-md border h-1 w-full flex-grow overflow-scroll  scrollbar-muted">
+			<div className="rounded-md border h-[24rem] sm:h-[30rem] w-full flex-grow overflow-scroll  scrollbar-muted">
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (

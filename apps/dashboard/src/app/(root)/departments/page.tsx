@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function DepartmentsPage() {
 	return (
-		<main className="flex flex-col items-center justify-start h-full p-4 gap-4">
+		<main className="flex flex-col items-center justify-start h-full p-4 ">
 			<DepartmentsHeader />
 			<Suspense fallback={<TableSkeleton />}>
 				<DepartmentTable />
