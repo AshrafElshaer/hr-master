@@ -62,12 +62,11 @@ export function DataTable<TData, TValue>({
 			setIsDeleteTrue,
 		},
 	});
-	
 
 	return (
 		<section className="w-full flex flex-col flex-grow gap-2">
 			<EmployeesFilters table={table} />
-			<div className="rounded-md border max-h-[34rem] w-full flex-grow overflow-scroll  scrollbar-muted flex flex-col">
+			<div className="rounded-md border h-1 w-full flex-grow overflow-scroll  scrollbar-muted">
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
@@ -125,18 +124,18 @@ export function DataTable<TData, TValue>({
 						)}
 					</TableBody>
 				</Table>
-				<DataTablePagination table={table} />
-
-				<DeleteEmployee
-					employee={selectedEmployee}
-					isDelete={isDelete}
-					toggleIsDelete={toggleIsDelete}
-					onClose={() => {
-						setSelectedEmployee(null);
-						setIsDeleteFalse();
-					}}
-				/>
 			</div>
+			<DataTablePagination table={table} />
+
+			<DeleteEmployee
+				employee={selectedEmployee}
+				isDelete={isDelete}
+				toggleIsDelete={toggleIsDelete}
+				onClose={() => {
+					setSelectedEmployee(null);
+					setIsDeleteFalse();
+				}}
+			/>
 		</section>
 	);
 }
