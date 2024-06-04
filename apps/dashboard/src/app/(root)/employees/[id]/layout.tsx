@@ -1,68 +1,26 @@
-"use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import type { Metadata, ResolvingMetadata } from "next";
+import EmployeeNavigation from "./navigation";
+import { createServerClient } from "@hr-toolkit/supabase/server";
+import { getEmployeeById } from "@hr-toolkit/supabase/user-queries";
 
-import { cn } from "@hr-toolkit/ui/utils";
+type Props = { children: React.ReactNode; params: { id: string } };
 
-import BackButton from "@/components/back-button";
-import { buttonVariants } from "@hr-toolkit/ui/button";
-import { Clock, FileText, NotebookTabs } from "lucide-react";
-import { HiOutlineBanknotes } from "react-icons/hi2";
+export async function generateMetadata(
+	{ params }: Props,
+	parent: ResolvingMetadata,
+): Promise<Metadata> {
+	const supabase = createServerClient();
+	const employee = await getEmployeeById(supabase, params.id);
+	return {
+		title: `${employee.first_name} ${employee.last_name}`,
+	};
+}
 
-export default function EmployeeDetailsLayout({
-	children,
-	params,
-}: { children: React.ReactNode; params: { id: string } }) {
-	const pathname = usePathname();
-	const employeeId = params.id;
-
+export default function EmployeeDetailsLayout({ children, params }: Props) {
 	return (
 		<main className="flex flex-col h-full ">
-			<section className=" w-full flex items-center gap-2 overflow-x-scroll overflow-y-clip scrollbar-hide py-3 px-4">
-				<BackButton path="/employees" />
-				{employeeDetailsNavigation.map((route) => {
-					const isActivePath =
-						pathname === `/employees/${employeeId}${route.path}`;
-					return (
-						<Link
-							href={`/employees/${employeeId}${route.path}`}
-							key={`/employees/${employeeId}${route.path}`}
-							className={cn(
-								buttonVariants({
-									variant: isActivePath ? "secondary" : "ghost",
-									className: "gap-2",
-								}),
-							)}
-						>
-							{route.icon}
-							{route.title}
-						</Link>
-					);
-				})}
-			</section>
+			<EmployeeNavigation employeeId={params.id} />
 			{children}
 		</main>
 	);
 }
-const employeeDetailsNavigation = [
-	{
-		title: "General",
-		path: "",
-		icon: <NotebookTabs className="w-4 h-4" />,
-	},
-	{
-		title: "Attendance",
-		path: "/attendance",
-		icon: <Clock className="w-4 h-4" />,
-	},
-	{
-		title: "Payroll",
-		path: "/payroll",
-		icon: <HiOutlineBanknotes className="w-4 h-4" />,
-	},
-	{
-		title: "Documents",
-		path: "/documents",
-		icon: <FileText className="w-4 h-4" />,
-	},
-];
