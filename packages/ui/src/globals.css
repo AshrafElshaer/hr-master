@@ -93,7 +93,7 @@
   /* Muted scrollbar for IE, Edge and Firefox */
    .scrollbar-muted {
       scrollbar-width: thin;
-      scrollbar-color: hsl(var(--muted)) transparent;
+      scrollbar-color: hsl(var(--border)) transparent;
     /* Firefox */
       scrollbar-gutter: thin;
     } 
