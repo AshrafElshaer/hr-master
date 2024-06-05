@@ -21,7 +21,7 @@ export default function EmployeeNavigation({ employeeId }: Props) {
 			<BackButton path="/employees" />
 			{employeeDetailsNavigation.map((route) => {
 				const isActivePath =
-					pathname === `/employees/${employeeId}${route.path}`;
+					pathname === `/employees/${employeeId}${route.path}`  || (route.subRoutes && route.subRoutes.some(subRoute => pathname === `/employees/${employeeId}${route.path}${subRoute.path}`));
 				return (
 					<Link
 						href={`/employees/${employeeId}${route.path}`}
@@ -62,5 +62,23 @@ const employeeDetailsNavigation = [
 		title: "Documents",
 		path: "/documents",
 		icon: <FileText className="w-4 h-4" />,
+		subRoutes: [
+			{
+				name: "Personal",
+				path: "/personal",
+			  },
+			  {
+				name: "Employment",
+				path: "/employment",
+			  },
+			  {
+				name: "Tax",
+				path: "/tax",
+			  },
+			  {
+				name: "Bank",
+				path: "/bank",
+			  },
+		]
 	},
 ];

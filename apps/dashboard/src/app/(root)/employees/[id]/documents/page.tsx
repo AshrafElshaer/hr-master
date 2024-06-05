@@ -1,11 +1,19 @@
+import { createServerClient } from "@hr-toolkit/supabase/server";
+import { getEmployeeById } from "@hr-toolkit/supabase/user-queries";
 import React from "react";
 
-function EmployeeDocuments({ params }: { params: { id: string } }) {
+async function EmployeeDocuments({ params }: { params: { id: string } }) {
+	const supabase = createServerClient();
+	const employee = await getEmployeeById(supabase, params.id);
+	const { data } = await supabase.storage
+		.from("employee-documents")
+		.list(`${employee.organization_id?.toString()}/${params.id}`);
+
 	return (
-		<div>
+		<main className="flex flex-col items-center justify-start h-full p-4 ">
 			EmployeeDocuments
 			<p>{params.id}</p>
-		</div>
+		</main>
 	);
 }
 

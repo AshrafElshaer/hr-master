@@ -1,7 +1,9 @@
-import type { Metadata, ResolvingMetadata } from "next";
-import EmployeeNavigation from "./navigation";
 import { createServerClient } from "@hr-toolkit/supabase/server";
 import { getEmployeeById } from "@hr-toolkit/supabase/user-queries";
+
+import type { Metadata, ResolvingMetadata } from "next";
+
+import EmployeeNavigation from "./navigation";
 
 type Props = { children: React.ReactNode; params: { id: string } };
 
