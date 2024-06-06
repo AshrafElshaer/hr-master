@@ -18,10 +18,15 @@ export default function EmployeeNavigation({ employeeId }: Props) {
 
 	return (
 		<section className=" w-full flex items-center gap-2 overflow-x-scroll overflow-y-clip scrollbar-hide py-3 px-4">
-			<BackButton path="/employees" />
+			<BackButton />
 			{employeeDetailsNavigation.map((route) => {
 				const isActivePath =
-					pathname === `/employees/${employeeId}${route.path}`  || (route.subRoutes && route.subRoutes.some(subRoute => pathname === `/employees/${employeeId}${route.path}${subRoute.path}`));
+					pathname === `/employees/${employeeId}${route.path}` ||
+					route.subRoutes?.some(
+						(subRoute) =>
+							pathname ===
+							`/employees/${employeeId}${route.path}${subRoute.path}`,
+					);
 				return (
 					<Link
 						href={`/employees/${employeeId}${route.path}`}
@@ -66,19 +71,19 @@ const employeeDetailsNavigation = [
 			{
 				name: "Personal",
 				path: "/personal",
-			  },
-			  {
+			},
+			{
 				name: "Employment",
 				path: "/employment",
-			  },
-			  {
+			},
+			{
 				name: "Tax",
 				path: "/tax",
-			  },
-			  {
+			},
+			{
 				name: "Bank",
 				path: "/bank",
-			  },
-		]
+			},
+		],
 	},
 ];
