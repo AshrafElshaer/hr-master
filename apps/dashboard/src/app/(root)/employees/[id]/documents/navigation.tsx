@@ -22,6 +22,7 @@ import {
 	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@hr-toolkit/ui/breadcrumb";
+import { Skeleton } from "@hr-toolkit/ui/skeleton";
 
 type Props = {
 	employeeId: string;
@@ -34,15 +35,15 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 		[pathname],
 	);
 
-	const { data, error, refetch } = useQuery({
-		queryKey: ["employee", "employee_folders", employeeId],
+	const { data, error, isLoading } = useQuery({
+		queryKey: ["employee", "employee_folders", employeeId, searchedFolder],
 		queryFn: () => getEmployeeFolders(employeeId, searchedFolder),
 	});
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	useEffect(() => {
-		refetch();
-		console.log({ searchedFolder });
-	}, [searchedFolder]);
+	// useEffect(() => {
+	// 	refetch();
+	// 	console.log({ searchedFolder });
+	// }, [searchedFolder]);
 
 	const folders = data
 		?.filter((folder) => Boolean(!folder.metadata))
@@ -51,32 +52,40 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 	return (
 		<section className="w-full flex flex-col gap-4 ">
 			<div className="w-full flex items-center gap-4 ">
-				{Array.from(folders ?? []).map((folder) => {
-					const isActivePath = pathname.endsWith(folder);
-					return (
-						<Link
-							key={folder}
-							className={cn(
-								buttonVariants({
-									variant: "ghost",
-								}),
-								"flex flex-col items-center hover:bg-background",
-								isActivePath && "text-foreground",
-							)}
-							href={`${pathname}/${folder}`}
-						>
-							<IoIosFolderOpen className="w-10 h-10 sm:w-14 sm:h-14" />
-							{capitalize(folder)}
-						</Link>
-					);
-				})}
-				<button
-					type="button"
-					className="flex flex-col items-center text-foreground/70 text-sm"
-				>
-					<FolderPlus className="w-10 h-10 sm:w-14 sm:h-14" />
-					Add Folder
-				</button>
+				{isLoading
+					? Array.from({ length: 5 }).map((_, idx) => (
+							<div
+								className={cn(
+									buttonVariants({
+										variant: "ghost",
+									}),
+									"flex flex-col items-center hover:bg-background",
+								)}
+								key={idx.toString()}
+							>
+								<IoIosFolderOpen className="w-10 h-10 sm:w-14 sm:h-14 animate-pulse rounded-md text-primary/10" />
+								<Skeleton className="w-3/4 mx-auto h-2" />
+							</div>
+						))
+					: (folders ?? []).map((folder) => {
+							const isActivePath = pathname.endsWith(folder);
+							return (
+								<Link
+									key={folder}
+									className={cn(
+										buttonVariants({
+											variant: "ghost",
+										}),
+										"flex flex-col items-center hover:bg-background",
+										isActivePath && "text-foreground",
+									)}
+									href={`${pathname}/${folder}`}
+								>
+									<IoIosFolderOpen className="w-10 h-10 sm:w-14 sm:h-14" />
+									{capitalize(folder)}
+								</Link>
+							);
+						})}
 			</div>
 			<Breadcrumb>
 				<BreadcrumbList>
@@ -93,9 +102,14 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 							<>
 								<BreadcrumbItem key={folder}>
 									<BreadcrumbLink>
-										<Link href={`/employees/${employeeId}/documents/${searchedFolder.split("/").slice(0, idx + 1).join("/")}`}
+										<Link
+											href={`/employees/${employeeId}/documents/${searchedFolder
+												.split("/")
+												.slice(0, idx + 1)
+												.join("/")}`}
 										>
-											{capitalize(folder)}</Link>
+											{capitalize(folder)}
+										</Link>
 									</BreadcrumbLink>
 								</BreadcrumbItem>
 								<BreadcrumbSeparator key={folder} />
