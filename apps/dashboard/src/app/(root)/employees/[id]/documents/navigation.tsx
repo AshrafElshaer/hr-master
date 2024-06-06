@@ -5,9 +5,9 @@ import { IoIosFolderOpen } from "react-icons/io";
 import { FaFolderPlus } from "react-icons/fa6";
 import React, { useEffect, useMemo } from "react";
 import { cn } from "@hr-toolkit/ui/utils";
-import { buttonVariants } from "@hr-toolkit/ui/button";
+import { Button, buttonVariants } from "@hr-toolkit/ui/button";
 import { usePathname } from "next/navigation";
-import { FolderPlus } from "lucide-react";
+import { FolderPlus, Search } from "lucide-react";
 import { createClient } from "@hr-toolkit/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { getEmployeeById } from "@hr-toolkit/supabase/user-queries";
@@ -23,6 +23,7 @@ import {
 	BreadcrumbSeparator,
 } from "@hr-toolkit/ui/breadcrumb";
 import { Skeleton } from "@hr-toolkit/ui/skeleton";
+import { Input } from "@hr-toolkit/ui/input";
 
 type Props = {
 	employeeId: string;
@@ -30,27 +31,90 @@ type Props = {
 
 export default function DocumentsNavigation({ employeeId }: Props) {
 	const pathname = usePathname();
-	const searchedFolder = useMemo(
+	const folderRoute = useMemo(
 		() => getSegmentAfterDocuments(pathname),
 		[pathname],
 	);
 
+	const [searchedFolder, setSearchedFolder] = React.useState("");
+	
+	useEffect(() => {
+		setSearchedFolder("");
+	}, [pathname]);
+
 	const { data, error, isLoading } = useQuery({
-		queryKey: ["employee", "employee_folders", employeeId, searchedFolder],
-		queryFn: () => getEmployeeFolders(employeeId, searchedFolder),
+		queryKey: ["employee", "employee_folders", employeeId, folderRoute],
+		queryFn: () => getEmployeeFolders(employeeId, folderRoute),
 	});
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	// useEffect(() => {
-	// 	refetch();
-	// 	console.log({ searchedFolder });
-	// }, [searchedFolder]);
 
 	const folders = data
 		?.filter((folder) => Boolean(!folder.metadata))
-		.map((folder) => folder.name);
+		.map((folder) => folder.name)
+		.filter((folder) => folder.includes(searchedFolder));
 
 	return (
 		<section className="w-full flex flex-col gap-4 ">
+			<div className="w-full flex flex-col sm:flex-row items-center gap-4 justify-between">
+				<div className="flex items-center gap-2">
+					<Input
+						placeholder="Search for folder"
+						startIcon={Search}
+						value={searchedFolder}
+						onChange={(e) => setSearchedFolder(e.target.value)}
+					/>
+					<div className="flex items-center gap-2 sm:hidden">
+						<Button variant="outline" size="icon">
+							<FolderPlus className="w-4 h-4" />
+						</Button>
+						<Button variant="outline">Upload</Button>
+					</div>
+				</div>
+				{!pathname.endsWith("documents") && (
+					<Breadcrumb>
+						<BreadcrumbList>
+							<BreadcrumbItem>
+								<BreadcrumbLink>
+									<Link href={`/employees/${employeeId}/documents`}>All</Link>
+								</BreadcrumbLink>
+							</BreadcrumbItem>
+							<BreadcrumbSeparator />
+							{folderRoute
+								.split("/")
+								.slice(0, -1)
+								.map((folder, idx) => (
+									<>
+										<BreadcrumbItem key={`${folder}-${idx.toString()}`}>
+											<BreadcrumbLink>
+												<Link
+													href={`/employees/${employeeId}/documents/${folderRoute
+														.split("/")
+														.slice(0, idx + 1)
+														.join("/")}`}
+												>
+													{capitalize(folder)}
+												</Link>
+											</BreadcrumbLink>
+										</BreadcrumbItem>
+										<BreadcrumbSeparator key={`${folder}-${idx.toString()}`} />
+									</>
+								))}
+
+							<BreadcrumbItem>
+								<BreadcrumbPage>
+									{capitalize(folderRoute.split("/").at(-1))}
+								</BreadcrumbPage>
+							</BreadcrumbItem>
+						</BreadcrumbList>
+					</Breadcrumb>
+				)}
+
+				<div className="sm:flex items-center gap-2 hidden">
+					<Button variant="outline" size="icon">
+						<FolderPlus className="w-4 h-4" />
+					</Button>
+					<Button variant="outline">Upload</Button>
+				</div>
+			</div>
 			<div className="w-full flex items-center gap-4 ">
 				{isLoading
 					? Array.from({ length: 5 }).map((_, idx) => (
@@ -87,42 +151,6 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 							);
 						})}
 			</div>
-			<Breadcrumb>
-				<BreadcrumbList>
-					<BreadcrumbItem>
-						<BreadcrumbLink>
-							<Link href={`/employees/${employeeId}/documents`}>All</Link>
-						</BreadcrumbLink>
-					</BreadcrumbItem>
-					<BreadcrumbSeparator />
-					{searchedFolder
-						.split("/")
-						.slice(0, -1)
-						.map((folder, idx) => (
-							<>
-								<BreadcrumbItem key={folder}>
-									<BreadcrumbLink>
-										<Link
-											href={`/employees/${employeeId}/documents/${searchedFolder
-												.split("/")
-												.slice(0, idx + 1)
-												.join("/")}`}
-										>
-											{capitalize(folder)}
-										</Link>
-									</BreadcrumbLink>
-								</BreadcrumbItem>
-								<BreadcrumbSeparator key={folder} />
-							</>
-						))}
-
-					<BreadcrumbItem>
-						<BreadcrumbPage>
-							{capitalize(searchedFolder.split("/").at(-1))}
-						</BreadcrumbPage>
-					</BreadcrumbItem>
-				</BreadcrumbList>
-			</Breadcrumb>
 		</section>
 	);
 }
