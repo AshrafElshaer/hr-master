@@ -54,7 +54,7 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 
 	return (
 		<section className="w-full flex flex-col gap-4 ">
-			<div className="w-full flex flex-col sm:flex-row items-center gap-4 justify-between">
+			<div className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
 				<div className="flex items-center gap-2">
 					<Input
 						placeholder="Search for folder"
