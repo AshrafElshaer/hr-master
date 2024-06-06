@@ -64,7 +64,7 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 					/>
 					<div className="flex items-center gap-2 sm:hidden">
 						<Button variant="outline" size="icon">
-							<FolderPlus className="w-4 h-4" />
+							<FolderPlus className="w-5 h-5" />
 						</Button>
 						<Button variant="outline">
 							<CloudUpload className="h-4 w-4 mr-2" />
@@ -113,7 +113,7 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 
 				<div className="sm:flex items-center gap-2 hidden">
 					<Button variant="outline" size="icon">
-						<FolderPlus className="w-4 h-4" />
+						<FolderPlus className="w-5 h-5" />
 					</Button>
 					<Button variant="outline">
 						<CloudUpload className="h-4 w-4 mr-2" />
