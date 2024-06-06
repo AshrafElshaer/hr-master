@@ -7,7 +7,7 @@ import React, { useEffect, useMemo } from "react";
 import { cn } from "@hr-toolkit/ui/utils";
 import { Button, buttonVariants } from "@hr-toolkit/ui/button";
 import { usePathname } from "next/navigation";
-import { FolderPlus, Search } from "lucide-react";
+import { CloudUpload, FolderPlus, Search } from "lucide-react";
 import { createClient } from "@hr-toolkit/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { getEmployeeById } from "@hr-toolkit/supabase/user-queries";
@@ -37,13 +37,13 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 	);
 
 	const [searchedFolder, setSearchedFolder] = React.useState("");
-	
+
 	useEffect(() => {
 		setSearchedFolder("");
 	}, [pathname]);
 
 	const { data, error, isLoading } = useQuery({
-		queryKey: ["employee", "employee_folders", employeeId, folderRoute],
+		queryKey: ["employee", "employee_folders", employeeId, pathname],
 		queryFn: () => getEmployeeFolders(employeeId, folderRoute),
 	});
 
@@ -66,7 +66,10 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 						<Button variant="outline" size="icon">
 							<FolderPlus className="w-4 h-4" />
 						</Button>
-						<Button variant="outline">Upload</Button>
+						<Button variant="outline">
+							<CloudUpload className="h-4 w-4 mr-2" />
+							Upload
+						</Button>
 					</div>
 				</div>
 				{!pathname.endsWith("documents") && (
@@ -112,7 +115,10 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 					<Button variant="outline" size="icon">
 						<FolderPlus className="w-4 h-4" />
 					</Button>
-					<Button variant="outline">Upload</Button>
+					<Button variant="outline">
+						<CloudUpload className="h-4 w-4 mr-2" />
+						Upload
+					</Button>
 				</div>
 			</div>
 			<div className="w-full flex items-center gap-4 ">
