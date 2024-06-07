@@ -1,4 +1,13 @@
 "use client";
+import React from "react";
+import { usePathname } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+
+import { capitalize } from "lodash";
+import { toast } from "sonner";
+import { queryClient } from "@/lib/react-query";
+import { createFolder } from "../../actions";
+
 import { Button } from "@hr-toolkit/ui/button";
 import {
 	Dialog,
@@ -9,16 +18,10 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@hr-toolkit/ui/dialog";
-import { useMutation } from "@tanstack/react-query";
-import { FolderPlus } from "lucide-react";
+import { FolderPlus, Loader } from "lucide-react";
 
-import React from "react";
-import { createFolder } from "../../actions";
 import { Input } from "@hr-toolkit/ui/input";
-import { capitalize } from "lodash";
-import { toast } from "sonner";
-import { queryClient } from "@/lib/react-query";
-import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 type Props = {
 	employeeId: string;
@@ -71,14 +74,40 @@ export default function CreateFolderDialog({ employeeId, folderPath }: Props) {
 						of the folder you want to create.
 					</DialogDescription>
 				</DialogHeader>
-				<Input
-					placeholder="Folder name"
-					value={folderName}
-					onChange={(e) => setFolderName(e.target.value)}
-				/>
-				<Button onClick={createNewFolder} disabled={isPending}>
-					Create folder
-				</Button>
+				<form onSubmit={createNewFolder}>
+					<Input
+						placeholder="Folder name"
+						value={folderName}
+						onChange={(e) => setFolderName(e.target.value)}
+					/>
+					<Button type="submit" disabled={isPending}>
+						<AnimatePresence mode="wait" initial={false}>
+							{isPending ? (
+								<motion.p
+									key="submitting"
+									initial={{ opacity: 0, y: 10 }}
+									animate={{ opacity: 1, y: 0 }}
+									exit={{ opacity: 0, y: -10 }}
+									transition={{ duration: 0.2 }}
+									className="flex items-center"
+								>
+									<Loader className="h-4 w-4 mr-2 animate-spin" />
+									Creating folder...
+								</motion.p>
+							) : (
+								<motion.p
+									key="submit"
+									initial={{ opacity: 0, y: 10 }}
+									animate={{ opacity: 1, y: 0 }}
+									exit={{ opacity: 0, y: -10 }}
+									transition={{ duration: 0.2 }}
+								>
+									Create folder
+								</motion.p>
+							)}
+						</AnimatePresence>
+					</Button>
+				</form>
 				<DialogClose asChild>
 					<Button variant="outline" className="w-full">
 						Cancel
