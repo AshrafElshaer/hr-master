@@ -11,7 +11,8 @@ import { CloudUpload, FolderPlus, Search } from "lucide-react";
 import { createClient } from "@hr-toolkit/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { getEmployeeById } from "@hr-toolkit/supabase/user-queries";
-import { getEmployeeFolders } from "./actions";
+import { getEmployeeFolders } from "@hr-toolkit/supabase/storage-queries";
+
 import { capitalize } from "lodash";
 
 import {
@@ -24,6 +25,7 @@ import {
 } from "@hr-toolkit/ui/breadcrumb";
 import { Skeleton } from "@hr-toolkit/ui/skeleton";
 import { Input } from "@hr-toolkit/ui/input";
+import CreateFolderDialog from "./components/dialogs/create-folder";
 
 type Props = {
 	employeeId: string;
@@ -31,26 +33,28 @@ type Props = {
 
 export default function DocumentsNavigation({ employeeId }: Props) {
 	const pathname = usePathname();
-	const folderRoute = useMemo(
+	const folderPath = useMemo(
 		() => getSegmentAfterDocuments(pathname),
 		[pathname],
 	);
 
 	const [searchedFolder, setSearchedFolder] = React.useState("");
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: set search when pathname changes
 	useEffect(() => {
 		setSearchedFolder("");
 	}, [pathname]);
 
 	const { data, error, isLoading } = useQuery({
 		queryKey: ["employee", "employee_folders", employeeId, pathname],
-		queryFn: () => getEmployeeFolders(employeeId, folderRoute),
+		queryFn: () => getEmployeeFolders(employeeId, folderPath),
 	});
+
 
 	const folders = data
 		?.filter((folder) => Boolean(!folder.metadata))
 		.map((folder) => folder.name)
-		.filter((folder) => folder.includes(searchedFolder));
+		.filter((folder) => folder.includes(searchedFolder.toLowerCase()));
 
 	return (
 		<section className="w-full flex flex-col gap-4 ">
@@ -63,9 +67,10 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 						onChange={(e) => setSearchedFolder(e.target.value)}
 					/>
 					<div className="flex items-center gap-2 sm:hidden">
-						<Button variant="outline" size="icon">
-							<FolderPlus className="w-5 h-5" />
-						</Button>
+						<CreateFolderDialog
+							employeeId={employeeId}
+							folderPath={folderPath}
+						/>
 						<Button variant="outline">
 							<CloudUpload className="h-4 w-4 mr-2" />
 							Upload
@@ -81,7 +86,7 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 								</BreadcrumbLink>
 							</BreadcrumbItem>
 							<BreadcrumbSeparator />
-							{folderRoute
+							{folderPath
 								.split("/")
 								.slice(0, -1)
 								.map((folder, idx) => (
@@ -89,7 +94,7 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 										<BreadcrumbItem key={`${folder}-${idx.toString()}`}>
 											<BreadcrumbLink>
 												<Link
-													href={`/employees/${employeeId}/documents/${folderRoute
+													href={`/employees/${employeeId}/documents/${folderPath
 														.split("/")
 														.slice(0, idx + 1)
 														.join("/")}`}
@@ -104,7 +109,7 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 
 							<BreadcrumbItem>
 								<BreadcrumbPage>
-									{capitalize(folderRoute.split("/").at(-1))}
+									{capitalize(folderPath.split("/").at(-1))}
 								</BreadcrumbPage>
 							</BreadcrumbItem>
 						</BreadcrumbList>
@@ -112,9 +117,7 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 				)}
 
 				<div className="sm:flex items-center gap-2 hidden">
-					<Button variant="outline" size="icon">
-						<FolderPlus className="w-5 h-5" />
-					</Button>
+					<CreateFolderDialog employeeId={employeeId} folderPath={folderPath} />
 					<Button variant="outline">
 						<CloudUpload className="h-4 w-4 mr-2" />
 						Upload

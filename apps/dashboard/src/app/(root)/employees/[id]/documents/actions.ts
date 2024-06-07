@@ -1,29 +1,22 @@
 "use server";
 
 import { DEFAULT_STORAGE_FOLDERS } from "@/constants/default-storage-files";
+import { action } from "@/lib/safe-action";
 
 import { createServerClient } from "@hr-toolkit/supabase/server";
 import { getEmployeeById } from "@hr-toolkit/supabase/user-queries";
+import { createStorageFolder } from "@hr-toolkit/supabase/storage-mutations";
+import { z } from "zod";
 
-export const getEmployeeFolders = async (
-  employeeId: string,
-  folder: string,
-) => {
+const newFolderSchema = z.object({
+  employeeId: z.string(),
+  folderName: z.string(),
+  folderPath: z.string(),
+});
+
+export const createFolder = action(newFolderSchema, async (input) => {
   const supabase = createServerClient();
-  const employee = await getEmployeeById(supabase, employeeId);
-  const { data, error } = await supabase.storage
-    .from("employee-documents")
-    .list(`${employee.organization_id}/${employeeId}/${folder}`, {
-      sortBy:{
-        column: 'name',
-        order: 'desc'
-      
-      },
-    })
+  const newFolder = await createStorageFolder(supabase, input);
 
-  if (error) {
-    throw error;
-  }
-
-  return data;
-};
+  return newFolder;
+});
