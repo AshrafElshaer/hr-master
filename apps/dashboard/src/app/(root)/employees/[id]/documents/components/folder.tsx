@@ -1,0 +1,81 @@
+import React, { useRef, useEffect } from "react";
+import { capitalize } from "lodash";
+import { cn } from "@hr-toolkit/ui/utils";
+
+import { buttonVariants } from "@hr-toolkit/ui/button";
+import Link from "next/link";
+import { IoIosFolderOpen } from "react-icons/io";
+
+import {
+	ContextMenu,
+	ContextMenuContent,
+	ContextMenuItem,
+	ContextMenuTrigger,
+} from "@hr-toolkit/ui/context-menu";
+import { Pencil, Trash } from "lucide-react";
+import { useBoolean } from "usehooks-ts";
+import { Input } from "@hr-toolkit/ui/input";
+import RenameFolder from "./dialogs/rename-folder";
+type Props = {
+	folder: string;
+	pathname: string;
+	isActivePath: boolean;
+	folderPath: string;
+	employeeId: string;
+};
+
+export default function Folder({
+	folder,
+	isActivePath,
+	pathname,
+	folderPath,
+	employeeId,
+}: Props) {
+	const {
+		value: isEdit,
+		setFalse: setIsEditFalse,
+		setTrue: setIsEditTrue,
+		setValue: setIsEdit,
+	} = useBoolean(false);
+
+	return (
+		<>
+			<ContextMenu>
+				<ContextMenuTrigger asChild>
+					<Link
+						key={folder}
+						className={cn(
+							buttonVariants({
+								variant: "ghost",
+							}),
+							"flex flex-col items-center hover:bg-background ",
+							isActivePath && "text-foreground",
+						)}
+						href={`${pathname}/${folder}`}
+					>
+						<IoIosFolderOpen className="w-10 h-10 sm:w-14 sm:h-14" />
+						{capitalize(folder)}
+					</Link>
+				</ContextMenuTrigger>
+				<ContextMenuContent loop className="*:cursor-pointer">
+					<ContextMenuItem onClick={setIsEditTrue}>
+						<Pencil className="w-4 h-4 mr-2" />
+						Rename
+					</ContextMenuItem>
+					<ContextMenuItem className="text-destructive focus:text-destructive ">
+						<Trash className="w-4 h-4 mr-2" />
+						Delete
+					</ContextMenuItem>
+				</ContextMenuContent>
+			</ContextMenu>
+			<RenameFolder
+				folderPath={folderPath}
+				open={isEdit}
+				setOpen={setIsEdit}
+				name={folder}
+				setIsEditFalse={setIsEditFalse}
+				employeeId={employeeId}
+			/>
+		</>
+	);
+}

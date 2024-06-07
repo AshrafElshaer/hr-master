@@ -26,55 +26,59 @@ import { motion, AnimatePresence } from "framer-motion";
 type Props = {
 	employeeId: string;
 	folderPath: string;
+	name: string;
+	open: boolean;
+	setOpen: (open: boolean) => void;
+	setIsEditFalse: () => void;
 };
 
-export default function CreateFolderDialog({ employeeId, folderPath }: Props) {
-	const [open, setOpen] = React.useState(false);
-	const [folderName, setFolderName] = React.useState("");
+export default function RenameFolder({
+	employeeId,
+	folderPath,
+	name,
+	open,
+	setOpen,
+	setIsEditFalse,
+}: Props) {
+	const [folderName, setFolderName] = React.useState(name);
 	const pathname = usePathname();
 	const { mutateAsync, isPending } = useMutation({
 		mutationFn: createFolder,
 	});
 
-	async function createNewFolder() {
-		if (!folderName) return toast.error("Folder name is required");
+	// async function createNewFolder() {
+	// 	if (!folderName) return toast.error("Folder name is required");
 
-		const { data, serverError } = await mutateAsync({
-			employeeId,
-			folderName,
-			folderPath,
-		});
-		if (serverError) {
-			return toast.error(serverError);
-		}
-		if (data) {
-			toast.success("Folder created successfully");
-			setOpen(false);
-			queryClient.invalidateQueries({
-				queryKey: ["employee", "employee_folders", employeeId, pathname],
-			});
-		}
-	}
+	// 	const { data, serverError } = await mutateAsync({
+	// 		employeeId,
+	// 		folderName,
+	// 		folderPath,
+	// 	});
+	// 	if (serverError) {
+	// 		return toast.error(serverError);
+	// 	}
+	// 	if (data) {
+	// 		toast.success("Folder created successfully");
+	// 		setOpen(false);
+	// 		queryClient.invalidateQueries({
+	// 			queryKey: ["employee", "employee_folders", employeeId, pathname],
+	// 		});
+	// 	}
+	// }
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger asChild>
-				<Button variant="outline" size="icon">
-					<FolderPlus className="w-5 h-5" />
-				</Button>
-			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle className="flex items-center">
-						<FolderPlus className="w-6 h-6 mr-2" /> New Folder At{" "}
-						{folderPath === "" ? "root" : folderPath} Directory
+						<FolderPlus className="w-6 h-6 mr-2" /> Rename {capitalize(name)} Folder
 					</DialogTitle>
 					<DialogDescription>
 						Create a new folder in the current directory. Please enter the name
 						of the folder you want to create.
 					</DialogDescription>
 				</DialogHeader>
-				<form onSubmit={createNewFolder}>
+				<form>
 					<Input
 						placeholder="Folder name"
 						value={folderName}
@@ -92,7 +96,7 @@ export default function CreateFolderDialog({ employeeId, folderPath }: Props) {
 									className="flex items-center w-full"
 								>
 									<Loader className="h-4 w-4 mr-2 animate-spin" />
-									Creating folder...
+									Renaming folder...
 								</motion.p>
 							) : (
 								<motion.p
@@ -103,7 +107,7 @@ export default function CreateFolderDialog({ employeeId, folderPath }: Props) {
 									transition={{ duration: 0.2 }}
 									className="w-full"
 								>
-									Create folder
+									Rename folder
 								</motion.p>
 							)}
 						</AnimatePresence>

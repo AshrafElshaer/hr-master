@@ -26,6 +26,7 @@ import {
 import { Skeleton } from "@hr-toolkit/ui/skeleton";
 import { Input } from "@hr-toolkit/ui/input";
 import CreateFolderDialog from "./components/dialogs/create-folder";
+import Folder from "./components/folder";
 
 type Props = {
 	employeeId: string;
@@ -49,7 +50,6 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 		queryKey: ["employee", "employee_folders", employeeId, pathname],
 		queryFn: () => getEmployeeFolders(employeeId, folderPath),
 	});
-
 
 	const folders = data
 		?.filter((folder) => Boolean(!folder.metadata))
@@ -143,20 +143,14 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 					: (folders ?? []).map((folder) => {
 							const isActivePath = pathname.endsWith(folder);
 							return (
-								<Link
+								<Folder
 									key={folder}
-									className={cn(
-										buttonVariants({
-											variant: "ghost",
-										}),
-										"flex flex-col items-center hover:bg-background",
-										isActivePath && "text-foreground",
-									)}
-									href={`${pathname}/${folder}`}
-								>
-									<IoIosFolderOpen className="w-10 h-10 sm:w-14 sm:h-14" />
-									{capitalize(folder)}
-								</Link>
+									folder={folder}
+									pathname={pathname}
+									isActivePath={isActivePath}
+									folderPath={folderPath}
+									employeeId={employeeId}
+								/>
 							);
 						})}
 			</div>
