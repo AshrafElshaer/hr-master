@@ -22,6 +22,7 @@ import { FolderPlus, Loader } from "lucide-react";
 
 import { Input } from "@hr-toolkit/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
+import { folderNameSchema } from "./rename-folder";
 
 type Props = {
 	employeeId: string;
@@ -38,11 +39,15 @@ export default function CreateFolderDialog({ employeeId, folderPath }: Props) {
 
 	async function createNewFolder(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
-		if (!folderName) return toast.error("Folder name is required");
+		const { data: input, error } = folderNameSchema.safeParse(folderName);
+
+		if (error) {
+			return toast.error(error.errors[0].message);
+		}
 
 		const { data, serverError } = await mutateAsync({
 			employeeId,
-			folderName,
+			folderName: input.toLowerCase(),
 			folderPath,
 		});
 		if (serverError) {

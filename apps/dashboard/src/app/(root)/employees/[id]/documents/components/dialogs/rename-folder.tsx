@@ -17,13 +17,11 @@ import {
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-
 } from "@hr-toolkit/ui/dialog";
 import { FolderPen, Loader } from "lucide-react";
 
 import { Input } from "@hr-toolkit/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
-
 
 type Props = {
 	employeeId: string;
@@ -35,7 +33,7 @@ type Props = {
 };
 
 const folderNameRegex = /[/\\]/;
-const inputSchema = z
+export const folderNameSchema = z
 	.string()
 	.min(3, {
 		message: "Folder name must be at least 3 characters",
@@ -60,7 +58,7 @@ export default function RenameFolder({
 
 	async function rename(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
-		const { data: input, error } = inputSchema.safeParse(folderName);
+		const { data: input, error } = folderNameSchema.safeParse(folderName);
 
 		if (error) {
 			return toast.error(error.errors[0].message);
@@ -74,7 +72,7 @@ export default function RenameFolder({
 			employeeId,
 			folderName: name,
 			folderPath,
-			newFolderName: input,
+			newFolderName: input.toLowerCase(),
 		});
 
 		if (serverError) {

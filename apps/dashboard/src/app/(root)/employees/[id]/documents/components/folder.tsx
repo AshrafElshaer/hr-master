@@ -18,6 +18,7 @@ import {
 import { Trash } from "lucide-react";
 import { CiEdit } from "react-icons/ci";
 import RenameFolder from "./dialogs/rename-folder";
+import DeleteFolder from "./dialogs/delete-folder";
 
 type Props = {
 	folder: string;
@@ -41,6 +42,11 @@ export default function Folder({
 		setValue: setIsEdit,
 	} = useBoolean(false);
 
+	const {
+		value: isDelete,
+		setValue: setIsDelete,
+		setTrue: setIsDeleteTrue,
+	} = useBoolean(false);
 	return (
 		<>
 			<ContextMenu>
@@ -66,7 +72,10 @@ export default function Folder({
 						<CiEdit className="w-5 h-5 mr-1" />
 						Rename
 					</ContextMenuItem>
-					<ContextMenuItem className="text-destructive focus:text-destructive ">
+					<ContextMenuItem
+						className="text-destructive focus:text-destructive "
+						onClick={setIsDeleteTrue}
+					>
 						<Trash className="w-4 h-4 mr-2" />
 						Delete
 					</ContextMenuItem>
@@ -79,6 +88,13 @@ export default function Folder({
 				name={folder}
 				setIsEditFalse={setIsEditFalse}
 				employeeId={employeeId}
+			/>
+			<DeleteFolder
+				isDelete={isDelete}
+				setIsDelete={setIsDelete}
+				folderPath={folderPath}
+				employeeId={employeeId}
+				name={folder}
 			/>
 		</>
 	);
