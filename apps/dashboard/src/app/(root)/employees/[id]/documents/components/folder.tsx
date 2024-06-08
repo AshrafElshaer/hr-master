@@ -1,4 +1,6 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
+import { useBoolean } from "usehooks-ts";
+
 import { capitalize } from "lodash";
 import { cn } from "@hr-toolkit/ui/utils";
 
@@ -12,10 +14,11 @@ import {
 	ContextMenuItem,
 	ContextMenuTrigger,
 } from "@hr-toolkit/ui/context-menu";
-import { Pencil, Trash } from "lucide-react";
-import { useBoolean } from "usehooks-ts";
-import { Input } from "@hr-toolkit/ui/input";
+
+import { Trash } from "lucide-react";
+import { CiEdit } from "react-icons/ci";
 import RenameFolder from "./dialogs/rename-folder";
+
 type Props = {
 	folder: string;
 	pathname: string;
@@ -57,9 +60,10 @@ export default function Folder({
 						{capitalize(folder)}
 					</Link>
 				</ContextMenuTrigger>
+
 				<ContextMenuContent loop className="*:cursor-pointer">
 					<ContextMenuItem onClick={setIsEditTrue}>
-						<Pencil className="w-4 h-4 mr-2" />
+						<CiEdit className="w-5 h-5 mr-1" />
 						Rename
 					</ContextMenuItem>
 					<ContextMenuItem className="text-destructive focus:text-destructive ">

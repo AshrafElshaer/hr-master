@@ -2,11 +2,12 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
+import { z } from "zod";
 
 import { capitalize } from "lodash";
 import { toast } from "sonner";
 import { queryClient } from "@/lib/react-query";
-import { createFolder } from "../../actions";
+import { renameFolder } from "../../actions";
 
 import { Button } from "@hr-toolkit/ui/button";
 import {
@@ -16,12 +17,13 @@ import {
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
+
 } from "@hr-toolkit/ui/dialog";
-import { FolderPlus, Loader } from "lucide-react";
+import { FolderPen, Loader } from "lucide-react";
 
 import { Input } from "@hr-toolkit/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
+
 
 type Props = {
 	employeeId: string;
@@ -31,6 +33,16 @@ type Props = {
 	setOpen: (open: boolean) => void;
 	setIsEditFalse: () => void;
 };
+
+const folderNameRegex = /[/\\]/;
+const inputSchema = z
+	.string()
+	.min(3, {
+		message: "Folder name must be at least 3 characters",
+	})
+	.refine((value) => !folderNameRegex.test(value), {
+		message: "Folder name cannot contain / or \\",
+	});
 
 export default function RenameFolder({
 	employeeId,
@@ -43,42 +55,53 @@ export default function RenameFolder({
 	const [folderName, setFolderName] = React.useState(name);
 	const pathname = usePathname();
 	const { mutateAsync, isPending } = useMutation({
-		mutationFn: createFolder,
+		mutationFn: renameFolder,
 	});
 
-	// async function createNewFolder() {
-	// 	if (!folderName) return toast.error("Folder name is required");
+	async function rename(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		const { data: input, error } = inputSchema.safeParse(folderName);
 
-	// 	const { data, serverError } = await mutateAsync({
-	// 		employeeId,
-	// 		folderName,
-	// 		folderPath,
-	// 	});
-	// 	if (serverError) {
-	// 		return toast.error(serverError);
-	// 	}
-	// 	if (data) {
-	// 		toast.success("Folder created successfully");
-	// 		setOpen(false);
-	// 		queryClient.invalidateQueries({
-	// 			queryKey: ["employee", "employee_folders", employeeId, pathname],
-	// 		});
-	// 	}
-	// }
+		if (error) {
+			return toast.error(error.errors[0].message);
+		}
 
+		toast.warning(
+			"This action might take a while depending on folder size, Please be patient",
+		);
+
+		const { data, serverError } = await mutateAsync({
+			employeeId,
+			folderName: name,
+			folderPath,
+			newFolderName: input,
+		});
+
+		if (serverError) {
+			return toast.error(serverError);
+		}
+		if (data) {
+			toast.success(`Folder renamed to ${capitalize(input)} successfully`);
+			setIsEditFalse();
+			queryClient.invalidateQueries({
+				queryKey: ["employee", "employee_folders", employeeId, pathname],
+			});
+		}
+	}
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle className="flex items-center">
-						<FolderPlus className="w-6 h-6 mr-2" /> Rename {capitalize(name)} Folder
+						<FolderPen className="w-6 h-6 mr-2" /> Rename {capitalize(name)}{" "}
+						Folder
 					</DialogTitle>
 					<DialogDescription>
 						Create a new folder in the current directory. Please enter the name
 						of the folder you want to create.
 					</DialogDescription>
 				</DialogHeader>
-				<form>
+				<form onSubmit={rename}>
 					<Input
 						placeholder="Folder name"
 						value={folderName}
@@ -93,7 +116,7 @@ export default function RenameFolder({
 									animate={{ opacity: 1, y: 0 }}
 									exit={{ opacity: 0, y: -10 }}
 									transition={{ duration: 0.2 }}
-									className="flex items-center w-full"
+									className="flex items-center w-full justify-center"
 								>
 									<Loader className="h-4 w-4 mr-2 animate-spin" />
 									Renaming folder...

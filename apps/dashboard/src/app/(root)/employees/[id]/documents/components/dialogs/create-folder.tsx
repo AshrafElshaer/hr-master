@@ -32,11 +32,12 @@ export default function CreateFolderDialog({ employeeId, folderPath }: Props) {
 	const [open, setOpen] = React.useState(false);
 	const [folderName, setFolderName] = React.useState("");
 	const pathname = usePathname();
-	const { mutateAsync, isPending } = useMutation({
+	const { mutateAsync, isPending, error } = useMutation({
 		mutationFn: createFolder,
 	});
 
-	async function createNewFolder() {
+	async function createNewFolder(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
 		if (!folderName) return toast.error("Folder name is required");
 
 		const { data, serverError } = await mutateAsync({
@@ -46,6 +47,9 @@ export default function CreateFolderDialog({ employeeId, folderPath }: Props) {
 		});
 		if (serverError) {
 			return toast.error(serverError);
+		}
+		if (error) {
+			return toast.error(error.message);
 		}
 		if (data) {
 			toast.success("Folder created successfully");

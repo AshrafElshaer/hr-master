@@ -13,9 +13,7 @@ export async function createStorageFolder(
   },
 ) {
   const employee = await getEmployeeById(supabase, employeeId);
-  // console.log({
-  //   fol
-  // })
+
   const fullPath = decodeURIComponent(
     [
       employee.organization_id,
@@ -36,4 +34,77 @@ export async function createStorageFolder(
   }
 
   return data;
+}
+export async function renameStorageFolder(
+  supabase: SupabaseClient,
+  { employeeId, folderPath, folderName, newFolderName }: {
+    employeeId: string;
+    folderPath: string;
+    folderName: string;
+    newFolderName: string;
+  },
+) {
+  const employee = await getEmployeeById(supabase, employeeId);
+  const rootDirectory = [employee.organization_id, employeeId].join("/");
+
+  const directoryPath = folderPath
+    ? [rootDirectory, folderPath, folderName].join("/")
+    : [rootDirectory, folderName].join("/");
+
+  const filesPaths = await getSubFilesPaths(
+    supabase,
+    directoryPath,
+  );
+
+  const newFilePathsObject: Record<string, string> = filesPaths.reduce(
+    (acc, filePath) => {
+      const key = filePath;
+      const value = filePath.replace(folderName, newFolderName);
+
+      return Object.assign({}, acc, { [key]: value });
+    },
+    {},
+  );
+
+  for (const [oldPath, newPath] of Object.entries(newFilePathsObject)) {
+    const { error } = await supabase.storage.from("employee-documents")
+      .move(oldPath, newPath);
+
+    if (error) {
+      throw Error(error.message);
+    }
+  }
+
+  return true;
+}
+
+export async function deleteStorageFolder() {}
+
+async function getSubFilesPaths(
+  supabase: SupabaseClient,
+  directoryPath: string,
+): Promise<string[]> {
+  const { data, error } = await supabase.storage.from("employee-documents")
+    .list(directoryPath);
+
+  if (error) {
+    throw Error(error.message);
+  }
+
+  const files: string[] = [];
+
+  for (const file of data) {
+    if (!file.metadata) {
+      const subFolder: string[] = await getSubFilesPaths(
+        supabase,
+        `${directoryPath}/${file.name}`,
+      );
+
+      files.push(...subFolder);
+    } else {
+      files.push(`${directoryPath}/${file.name}`);
+    }
+  }
+
+  return files;
 }
