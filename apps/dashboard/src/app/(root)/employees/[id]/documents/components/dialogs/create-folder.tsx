@@ -53,9 +53,7 @@ export default function CreateFolderDialog({ employeeId, folderPath }: Props) {
 		if (serverError) {
 			return toast.error(serverError);
 		}
-		if (error) {
-			return toast.error(error.message);
-		}
+
 		if (data) {
 			toast.success("Folder created successfully");
 			setOpen(false);
