@@ -8,15 +8,15 @@ export const getEmployeeFolders = async (
 ) => {
   const supabase = createServerClient();
   const employee = await getEmployeeById(supabase, employeeId);
+
   const { data, error } = await supabase.storage
     .from("employee-documents")
     .list(`${employee.organization_id}/${employeeId}/${folder}`, {
-      sortBy:{
-        column: 'name',
-        order: 'desc'
-      
+      sortBy: {
+        column: "name",
+        order: "desc",
       },
-    })
+    });
 
   if (error) {
     throw error;

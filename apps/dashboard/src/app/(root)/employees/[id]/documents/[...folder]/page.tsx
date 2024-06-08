@@ -4,5 +4,5 @@ type Props = {
 };
 export default function FoldersPage(props: Props) {
 	console.log(props);
-	return <div>FoldersPage , {props.params.folder}</div>;
+	return <div>FoldersPage , {decodeURI(props.params.folder)}</div>;
 }

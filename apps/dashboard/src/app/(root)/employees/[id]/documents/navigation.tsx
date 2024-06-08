@@ -35,7 +35,7 @@ type Props = {
 export default function DocumentsNavigation({ employeeId }: Props) {
 	const pathname = usePathname();
 	const folderPath = useMemo(
-		() => getSegmentAfterDocuments(pathname),
+		() => getSegmentAfterDocuments(decodeURI(pathname)),
 		[pathname],
 	);
 
@@ -99,7 +99,7 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 														.slice(0, idx + 1)
 														.join("/")}`}
 												>
-													{capitalize(folder)}
+													{decodeURI(capitalize(folder))}
 												</Link>
 											</BreadcrumbLink>
 										</BreadcrumbItem>
@@ -109,7 +109,7 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 
 							<BreadcrumbItem>
 								<BreadcrumbPage>
-									{capitalize(folderPath.split("/").at(-1))}
+									{decodeURI(capitalize(folderPath.split("/").at(-1)))}
 								</BreadcrumbPage>
 							</BreadcrumbItem>
 						</BreadcrumbList>
