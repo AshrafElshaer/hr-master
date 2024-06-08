@@ -47,7 +47,7 @@ function DeleteFolder({
 						<span className="p-1 rounded bg-border mx-1 text-foreground select-none">
 							{name}
 						</span>
-						of the folder to confirm.
+						to confirm deletion.
 					</p>
 					<Input
 						placeholder="Folder name"
