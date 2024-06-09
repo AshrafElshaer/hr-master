@@ -16,8 +16,8 @@ export default function DashboardHeader({
 					<MobileSidebar currentUser={currentUser} />
 				</li>
 				<li className="flex items-center gap-2 text-foreground">
-					<LogoSVG className="fill-current w-6 h-6" />
-					<h1 className="text-lg font-semibold">HR Toolkit</h1>
+					<LogoSVG className="fill-current w-6 h-6 select-none" />
+					<h1 className="text-lg font-semibold select-none">HR Toolkit</h1>
 				</li>
 				<li className="ml-auto hidden md:block">
 					<CurrentTime />
