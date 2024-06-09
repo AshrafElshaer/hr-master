@@ -3,10 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/lib/react-query";
 import { toast } from "sonner";
 
-import type {
-
-	UserWithDepartment,
-} from "@hr-toolkit/supabase/types";
+import type { UserWithDepartment } from "@hr-toolkit/supabase/types";
 
 import {
 	AlertDialog,
@@ -53,9 +50,6 @@ export default function DeleteEmployee({
 			return;
 		}
 
-		queryClient.invalidateQueries({
-			queryKey: ["employees"],
-		});
 		toast.success("Employee deleted successfully");
 		onClose();
 	}

@@ -33,8 +33,14 @@ export function DeleteDepartment({
 	onClose,
 	toggleIsDelete,
 }: Props) {
-	const { mutateAsync, isPending, error } = useMutation({
+	const { mutateAsync, isPending } = useMutation({
 		mutationFn: deleteDepartment,
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["departments"],
+			});
+			onClose();
+		},
 	});
 
 	async function handleDelete() {
@@ -58,10 +64,6 @@ export function DeleteDepartment({
 		}
 
 		toast.success("The department has been deleted successfully.");
-		queryClient.invalidateQueries({
-			queryKey: ["departments"],
-		});
-		onClose();
 	}
 	return (
 		<AlertDialog open={isDelete} onOpenChange={toggleIsDelete}>

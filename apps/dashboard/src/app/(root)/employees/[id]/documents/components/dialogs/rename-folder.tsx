@@ -54,6 +54,11 @@ export default function RenameFolder({
 	const pathname = usePathname();
 	const { mutateAsync, isPending } = useMutation({
 		mutationFn: renameFolder,
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["employee", "employee_folders", employeeId, pathname],
+			});
+		},
 	});
 
 	async function rename(e: React.FormEvent<HTMLFormElement>) {
@@ -81,9 +86,6 @@ export default function RenameFolder({
 		if (data) {
 			toast.success(`Folder renamed to ${capitalize(input)} successfully`);
 			setIsEditFalse();
-			queryClient.invalidateQueries({
-				queryKey: ["employee", "employee_folders", employeeId, pathname],
-			});
 		}
 	}
 	return (
