@@ -96,7 +96,7 @@ export default function CreateFolderDialog({ employeeId, folderPath }: Props) {
 									animate={{ opacity: 1, y: 0 }}
 									exit={{ opacity: 0, y: -10 }}
 									transition={{ duration: 0.2 }}
-									className="flex items-center w-full"
+									className="flex items-center justify-center w-full"
 								>
 									<Loader className="h-4 w-4 mr-2 animate-spin" />
 									Creating folder...

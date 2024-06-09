@@ -78,7 +78,31 @@ export async function renameStorageFolder(
   return true;
 }
 
-export async function deleteStorageFolder() {}
+export async function deleteStorageFolder(supabase: SupabaseClient, {
+  employeeId,
+  folderPath,
+  folderName,
+}: {
+  employeeId: string;
+  folderPath: string;
+  folderName: string;
+}) {
+  const employee = await getEmployeeById(supabase, employeeId);
+  const rootDirectory = [employee.organization_id, employeeId].join("/");
+  const directoryPath = folderPath
+    ? [rootDirectory, folderPath, folderName].join("/")
+    : [rootDirectory, folderName].join("/");
+  const filesPaths = await getSubFilesPaths(supabase, directoryPath);
+
+  const { error } = await supabase.storage.from("employee-documents").remove(
+    filesPaths,
+  );
+  if (error) {
+    throw Error(error.message);
+  }
+
+  return true;
+}
 
 async function getSubFilesPaths(
   supabase: SupabaseClient,

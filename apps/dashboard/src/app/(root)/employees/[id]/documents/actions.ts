@@ -1,11 +1,11 @@
 "use server";
 
-
 import { action } from "@/lib/safe-action";
 
 import { createServerClient } from "@hr-toolkit/supabase/server";
 import {
   createStorageFolder,
+  deleteStorageFolder,
   renameStorageFolder,
 } from "@hr-toolkit/supabase/storage-mutations";
 import { z } from "zod";
@@ -37,5 +37,19 @@ export const renameFolder = action(
     const newFolder = await renameStorageFolder(supabase, input);
 
     return newFolder;
+  },
+);
+
+export const deleteFolder = action(
+  newFolderSchema,
+  async ({ employeeId, folderPath, folderName }) => {
+    const supabase = createServerClient();
+    const isDeleted = await deleteStorageFolder(supabase, {
+      employeeId,
+      folderPath,
+      folderName,
+    });
+
+    return isDeleted;
   },
 );

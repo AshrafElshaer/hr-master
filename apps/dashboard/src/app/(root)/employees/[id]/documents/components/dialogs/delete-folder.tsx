@@ -14,6 +14,12 @@ import { Input } from "@hr-toolkit/ui/input";
 import { capitalize } from "lodash";
 
 import React from "react";
+import { deleteFolder } from "../../actions";
+import { toast } from "sonner";
+import { queryClient } from "@/lib/react-query";
+import { usePathname } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { Loader } from "lucide-react";
 type Props = {
 	isDelete: boolean;
 	setIsDelete: (value: boolean) => void;
@@ -28,7 +34,31 @@ function DeleteFolder({
 	name,
 	setIsDelete,
 }: Props) {
+	const pathname = usePathname();
 	const [confirmName, setConfirmName] = React.useState("");
+	const { mutateAsync, isPending } = useMutation({
+		mutationFn: deleteFolder,
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["employee", "employee_folders", employeeId, pathname],
+			});
+		},
+	});
+
+	async function handleDelete() {
+		const { data, serverError } = await mutateAsync({
+			employeeId,
+			folderPath,
+			folderName: name,
+		});
+		if (serverError) {
+			return toast.error(serverError);
+		}
+		if (data) {
+			toast.success("Folder deleted successfully");
+			setIsDelete(false);
+		}
+	}
 
 	return (
 		<AlertDialog open={isDelete} onOpenChange={setIsDelete}>
@@ -57,7 +87,13 @@ function DeleteFolder({
 				</div>
 				<AlertDialogFooter>
 					<AlertDialogCancel>Cancel</AlertDialogCancel>
-					<Button disabled={confirmName !== name} variant={"destructive"}>
+					<Button
+						disabled={confirmName !== name || isPending}
+						variant={"destructive"}
+						onClick={handleDelete}
+						className="flex items-center"
+					>
+						{isPending && <Loader className="w-5 h-5 mr-2 animate-spin" />}
 						Delete
 					</Button>
 				</AlertDialogFooter>
