@@ -5,7 +5,6 @@ import { updateEmployeeById } from "@hr-toolkit/supabase/user-mutations";
 import { revalidatePath } from "next/cache";
 
 export async function uploadProfileImg(
-
   formData: FormData,
 ) {
   const supabase = createServerClient();

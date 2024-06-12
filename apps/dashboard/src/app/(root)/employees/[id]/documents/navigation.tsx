@@ -7,7 +7,7 @@ import React, { useEffect, useMemo } from "react";
 import { cn } from "@hr-toolkit/ui/utils";
 import { Button, buttonVariants } from "@hr-toolkit/ui/button";
 import { usePathname } from "next/navigation";
-import { CloudUpload, FolderPlus, Search } from "lucide-react";
+import { CloudUpload, FolderPlus, Folders, Search } from "lucide-react";
 import { createClient } from "@hr-toolkit/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { getEmployeeById } from "@hr-toolkit/supabase/user-queries";
@@ -27,6 +27,8 @@ import { Skeleton } from "@hr-toolkit/ui/skeleton";
 import { Input } from "@hr-toolkit/ui/input";
 import CreateFolderDialog from "./components/dialogs/create-folder";
 import Folder from "./components/folder";
+import { getSegmentAfterDocuments } from "@/lib/utils";
+import { UploadFileDialog } from "./components/dialogs/upload-file";
 
 type Props = {
 	employeeId: string;
@@ -59,24 +61,30 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 	return (
 		<section className="w-full flex flex-col gap-4 ">
 			<div className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
-				<div className="flex items-center gap-2">
-					<Input
-						placeholder="Search for folder"
-						startIcon={Search}
-						value={searchedFolder}
-						onChange={(e) => setSearchedFolder(e.target.value)}
-					/>
-					<div className="flex items-center gap-2 sm:hidden">
+				<div className="flex items-center gap-2 ">
+					<div>
+						<Input
+							placeholder="Search for folder"
+							startIcon={Folders}
+							value={searchedFolder}
+							onChange={(e) => setSearchedFolder(e.target.value)}
+						/>
+					</div>
+
+					<div className="flex items-center gap-2 sm:hidden ">
 						<CreateFolderDialog
 							employeeId={employeeId}
 							folderPath={folderPath}
 						/>
-						<Button variant="outline">
-							<CloudUpload className="h-4 w-4 mr-2" />
-							Upload
-						</Button>
+						{!!folderPath && (
+							<UploadFileDialog
+								employeeId={employeeId}
+								folderPath={folderPath}
+							/>
+						)}
 					</div>
 				</div>
+
 				{!pathname.endsWith("documents") && (
 					<Breadcrumb>
 						<BreadcrumbList>
@@ -103,7 +111,9 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 												</Link>
 											</BreadcrumbLink>
 										</BreadcrumbItem>
-										<BreadcrumbSeparator key={`${folder}-${idx.toString()}`} />
+										<BreadcrumbSeparator
+											key={`${folder}-separator-${idx.toString()}`}
+										/>
 									</>
 								))}
 
@@ -118,10 +128,9 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 
 				<div className="sm:flex items-center gap-2 hidden">
 					<CreateFolderDialog employeeId={employeeId} folderPath={folderPath} />
-					<Button variant="outline">
-						<CloudUpload className="h-4 w-4 mr-2" />
-						Upload
-					</Button>
+					{!!folderPath && (
+						<UploadFileDialog employeeId={employeeId} folderPath={folderPath} />
+					)}
 				</div>
 			</div>
 			<div className="w-full flex items-center gap-4 ">
@@ -156,12 +165,4 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 			</div>
 		</section>
 	);
-}
-
-function getSegmentAfterDocuments(pathname: string) {
-	const pathSegments = pathname.split("/");
-	const documentsIndex = pathSegments.indexOf("documents");
-	return documentsIndex !== -1 && documentsIndex + 1 < pathSegments.length
-		? pathSegments.slice(documentsIndex + 1).join("/")
-		: "";
 }

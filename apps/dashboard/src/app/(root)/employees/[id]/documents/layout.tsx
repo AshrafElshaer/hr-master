@@ -10,7 +10,7 @@ type Props = {
 
 export default function EmployeeDocumentsLayout({ params, children }: Props) {
 	return (
-		<main className="flex flex-col items-center justify-start h-full p-4 ">
+		<main className="flex flex-col items-center justify-start h-full p-4 gap-2">
 			<DocumentsNavigation employeeId={params.id} />
 			{children}
 		</main>

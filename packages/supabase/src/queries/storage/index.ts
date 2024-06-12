@@ -1,6 +1,7 @@
 "use server";
 import { createServerClient } from "../../client/server";
 import { getEmployeeById } from "../user";
+import { QueryData } from "@supabase/supabase-js";
 
 export const getEmployeeFolders = async (
   employeeId: string,
@@ -22,5 +23,7 @@ export const getEmployeeFolders = async (
     throw error;
   }
 
+
   return data;
 };
+

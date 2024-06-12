@@ -8,6 +8,7 @@ import {
   deleteStorageFolder,
   renameStorageFolder,
 } from "@hr-toolkit/supabase/storage-mutations";
+import { getEmployeeById } from "@hr-toolkit/supabase/user-queries";
 import { z } from "zod";
 
 const newFolderSchema = z.object({
@@ -53,3 +54,30 @@ export const deleteFolder = action(
     return isDeleted;
   },
 );
+
+export async function uploadFile(
+  formData: FormData,
+) {
+  const supabase = createServerClient();
+  const file = formData.get("file") as File;
+  const employeeId = formData.get("employeeId") as string;
+  const folderPath = formData.get("folderPath") as string;
+
+  const employee = await getEmployeeById(supabase, employeeId);
+  const directoryPath = [
+    employee.organization_id,
+    employeeId,
+    folderPath,
+  ].filter(Boolean).join("/");
+  const { data, error } = await supabase.storage
+    .from("employee-documents")
+    .upload(`${directoryPath}/${file.name}`, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+  if (error) {
+    throw Error(error.message);
+  }
+
+  return data;
+}

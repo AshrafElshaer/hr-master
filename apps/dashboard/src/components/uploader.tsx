@@ -16,6 +16,18 @@ import { useControllableState } from "@/hooks/use-controllable-state";
 import { Button } from "@hr-toolkit/ui/button";
 import { Progress } from "@hr-toolkit/ui/progress";
 import { ScrollArea } from "@hr-toolkit/ui/scroll-area";
+import { Avatar, AvatarFallback, AvatarImage } from "@hr-toolkit/ui/avatar";
+import { FaRegFilePdf } from "react-icons/fa6";
+import { SiJpeg } from "react-icons/si";
+import { TbFileTypeDocx, TbFileTypeXls } from "react-icons/tb";
+import {
+	AudioLines,
+	AudioLinesIcon,
+	FileIcon,
+	FileText,
+	ImageIcon,
+	VideoIcon,
+} from "lucide-react";
 
 interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
 	/**
@@ -189,7 +201,7 @@ export function FileUploader(props: FileUploaderProps) {
 	const isDisabled = disabled || (files?.length ?? 0) >= maxFiles;
 
 	return (
-		<div className="relative flex flex-col gap-6 overflow-hidden">
+		<div className="relative flex flex-col gap-6 overflow-hidden w-full">
 			<Dropzone
 				onDrop={onDrop}
 				accept={accept}
@@ -281,14 +293,19 @@ function FileCard({ file, progress, onRemove }: FileCardProps) {
 		<div className="relative flex items-center space-x-4">
 			<div className="flex flex-1 space-x-4">
 				{isFileWithPreview(file) ? (
-					<Image
-						src={file.preview}
-						alt={file.name}
-						width={48}
-						height={48}
-						loading="lazy"
-						className="aspect-square shrink-0 rounded-md object-cover"
-					/>
+					<Avatar className="aspect-square shrink-0 rounded-md object-cover">
+						<AvatarImage
+							src={file.preview}
+							alt={file.name}
+							width={48}
+							height={48}
+							loading="lazy"
+							className="aspect-square shrink-0 rounded-md object-cover"
+						/>
+						<AvatarFallback className="aspect-square shrink-0 rounded-md object-cover bg-transparent">
+							{getFileIcon(file)}
+						</AvatarFallback>
+					</Avatar>
 				) : null}
 				<div className="flex w-full flex-col gap-2">
 					<div className="space-y-px">
@@ -320,4 +337,33 @@ function FileCard({ file, progress, onRemove }: FileCardProps) {
 
 function isFileWithPreview(file: File): file is File & { preview: string } {
 	return "preview" in file && typeof file.preview === "string";
+}
+
+function getFileIcon(file: File) {
+	const type = file.type.split("/")[0];
+	const ext = file.name.split(".").pop();
+
+	switch (ext) {
+		case "pdf":
+			return <FaRegFilePdf className="w-8 h-8" />;
+		case "doc":
+		case "docx":
+			return <TbFileTypeDocx className="w-6 h-6" />;
+		case "xls":
+		case "xlsx":
+			return <TbFileTypeXls className="w-6 h-6" />;
+	}
+
+	switch (type) {
+		case "image":
+			return <ImageIcon className="w-8 h-8" />;
+		case "audio":
+			return <AudioLines className="w-8 h-8" />;
+		case "video":
+			return <VideoIcon className="w-8 h-8" />;
+		case "text":
+			return <FileText className="w-8 h-8" />;
+		default:
+			return <FileIcon className="w-8 h-8" />;
+	}
 }

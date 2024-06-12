@@ -40,7 +40,7 @@ export const CountrySelector = ({
 	const countryName = options.find((x) => x.value === value)?.label;
 
 	return (
-		<Popover open={open} onOpenChange={setOpen}>
+		<Popover open={open} onOpenChange={setOpen} modal>
 			<PopoverTrigger asChild>
 				<Button
 					type="button"
@@ -57,7 +57,7 @@ export const CountrySelector = ({
 					<ChevronsUpDown className={`h-4 w-4 ${disabled ? "hidden" : ""}`} />
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className="w-[300px] p-0" align="end" sideOffset={12}>
+			<PopoverContentWithoutPortal className="w-[300px] p-0" align="end" sideOffset={12}>
 				<Command>
 					<CommandInput placeholder="Search country..." />
 					<CommandList>
@@ -90,7 +90,7 @@ export const CountrySelector = ({
 						</CommandGroup>
 					</CommandList>
 				</Command>
-			</PopoverContent>
+			</PopoverContentWithoutPortal>
 		</Popover>
 	);
 };
