@@ -6,6 +6,7 @@ import CreateFolderDialog from "./components/dialogs/create-folder";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { getEmployeeFolders } from "@hr-toolkit/supabase/storage-queries";
+import DocumentsNavigation from "./navigation";
 
 function EmployeeDocuments({ params }: { params: { id: string } }) {
 	const employeeId = params.id;
