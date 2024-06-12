@@ -18,7 +18,6 @@ function EmployeeDocuments({ params }: { params: { id: string } }) {
 	if (isLoading) {
 		return null;
 	}
-	console.log(data);
 
 	const isEmpty = data?.length === 0;
 	return (
