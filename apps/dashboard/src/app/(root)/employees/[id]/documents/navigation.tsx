@@ -75,6 +75,7 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 						<CreateFolderDialog
 							employeeId={employeeId}
 							folderPath={folderPath}
+							triggerSize="sm"
 						/>
 						{!!folderPath && (
 							<UploadFileDialog
@@ -127,13 +128,25 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 				)}
 
 				<div className="sm:flex items-center gap-2 hidden">
-					<CreateFolderDialog employeeId={employeeId} folderPath={folderPath} />
+					<CreateFolderDialog
+						employeeId={employeeId}
+						folderPath={folderPath}
+						triggerSize="sm"
+					/>
 					{!!folderPath && (
 						<UploadFileDialog employeeId={employeeId} folderPath={folderPath} />
 					)}
 				</div>
 			</div>
-			<div className="w-full flex items-center gap-4 ">
+			<div
+				className={cn(
+					"w-full flex items-center gap-4 ",
+
+					folderPath === ""
+						? "flex-wrap"
+						: "flex-nowrap overflow-scroll scrollbar-muted",
+				)}
+			>
 				{isLoading
 					? Array.from({ length: 5 }).map((_, idx) => (
 							<div
@@ -150,13 +163,11 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 							</div>
 						))
 					: (folders ?? []).map((folder) => {
-							const isActivePath = pathname.endsWith(folder);
 							return (
 								<Folder
 									key={folder}
 									folder={folder}
 									pathname={pathname}
-									isActivePath={isActivePath}
 									folderPath={folderPath}
 									employeeId={employeeId}
 								/>

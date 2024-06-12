@@ -23,14 +23,14 @@ import DeleteFolder from "./dialogs/delete-folder";
 type Props = {
 	folder: string;
 	pathname: string;
-	isActivePath: boolean;
+
 	folderPath: string;
 	employeeId: string;
 };
 
 export default function Folder({
 	folder,
-	isActivePath,
+
 	pathname,
 	folderPath,
 	employeeId,
@@ -57,8 +57,8 @@ export default function Folder({
 							buttonVariants({
 								variant: "ghost",
 							}),
-							"flex flex-col items-center hover:bg-background ",
-							isActivePath && "text-foreground",
+							"flex flex-col items-center hover:bg-background min-w-fit",
+
 						)}
 						href={`${pathname}/${folder}`}
 					>

@@ -13,17 +13,14 @@ export const getEmployeeFolders = async (
   const { data, error } = await supabase.storage
     .from("employee-documents")
     .list(`${employee.organization_id}/${employeeId}/${folder}`, {
-      sortBy: {
-        column: "name",
-        order: "desc",
-      },
+      // sortBy: {
+      //   column: "name",
+      // },
     });
 
   if (error) {
     throw error;
   }
 
-
   return data;
 };
-

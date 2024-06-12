@@ -21,7 +21,7 @@ export async function generateMetadata(
 export default function EmployeeDetailsLayout({ children, params }: Props) {
 	return (
 		<main className="flex flex-col h-full ">
-			<EmployeeNavigation employeeId={params.id} />
+			{/* <EmployeeNavigation employeeId={params.id} /> */}
 			{children}
 		</main>
 	);

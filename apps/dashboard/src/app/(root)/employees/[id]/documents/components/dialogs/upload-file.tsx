@@ -11,7 +11,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@hr-toolkit/ui/dialog";
-import { FileUploader } from "@/components/uploader";
+
 import UploadZone from "../files-table/upload-zone";
 import { CloudUpload } from "lucide-react";
 type Props = {

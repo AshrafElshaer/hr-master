@@ -27,9 +27,14 @@ import { folderNameSchema } from "./rename-folder";
 type Props = {
 	employeeId: string;
 	folderPath: string;
+	triggerSize?: "sm" | "default";
 };
 
-export default function CreateFolderDialog({ employeeId, folderPath }: Props) {
+export default function CreateFolderDialog({
+	employeeId,
+	folderPath,
+	triggerSize = "default",
+}: Props) {
 	const [open, setOpen] = React.useState(false);
 	const [folderName, setFolderName] = React.useState("");
 	const pathname = usePathname();
@@ -68,8 +73,13 @@ export default function CreateFolderDialog({ employeeId, folderPath }: Props) {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button variant="outline" size="icon">
-					<FolderPlus className="w-5 h-5" />
+				<Button
+					variant="outline"
+					className="gap-2 items-center"
+					size={triggerSize}
+				>
+					<FolderPlus className="w-5 h-5" />{" "}
+					{triggerSize === "default" && "Create Folder"}
 				</Button>
 			</DialogTrigger>
 			<DialogContent>
