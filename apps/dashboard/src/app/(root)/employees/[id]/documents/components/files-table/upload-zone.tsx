@@ -1,8 +1,9 @@
 "use client";
-import React from "react";
-import { FileUploader } from "@/components/uploader";
-import { uploadFile } from "../../actions";
+
 import { useRouter } from "next/navigation";
+import { uploadFile } from "../../actions";
+
+import { FileUploader } from "@/components/uploader";
 
 type Props = {
 	employeeId: string;

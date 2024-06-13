@@ -5,15 +5,6 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { MoreHorizontal } from "lucide-react";
 
-import { Button } from "@hr-toolkit/ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "@hr-toolkit/ui/dropdown-menu";
 import { formatBytes } from "@/lib/utils";
 
 export const columns: ColumnDef<StorageFile>[] = [

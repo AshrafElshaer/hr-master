@@ -1,14 +1,14 @@
+import { headers } from "next/headers";
+
 import { getSegmentAfterDocuments } from "@/lib/utils";
 import { getEmployeeFolders } from "@hr-toolkit/supabase/storage-queries";
-import { headers } from "next/headers";
-import React from "react";
+import { EMPTY_FOLDER_PLACEHOLDER_FILE_NAME } from "@hr-toolkit/supabase/storage-mutations";
+
 import { columns } from "../components/files-table/columns";
 import { DataTable } from "../components/files-table/table";
-import type { StorageFile } from "@hr-toolkit/supabase/types";
-import { EMPTY_FOLDER_PLACEHOLDER_FILE_NAME } from "@hr-toolkit/supabase/storage-mutations";
+
 import UploadZone from "../components/files-table/upload-zone";
-import { queryClient } from "@/lib/react-query";
-import DocumentsNavigation from "../navigation";
+import DocumentsNavigation from "../components/navigation";
 
 type Props = {
 	params: { id: string; folder: string };

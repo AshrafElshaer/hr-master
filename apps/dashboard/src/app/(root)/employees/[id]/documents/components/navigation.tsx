@@ -1,19 +1,15 @@
 "use client";
-import { DEFAULT_STORAGE_FOLDERS } from "@/constants/default-storage-files";
-import Link from "next/link";
-import { IoIosFolderOpen } from "react-icons/io";
-import { FaFolderPlus } from "react-icons/fa6";
-import React, { useEffect, useMemo } from "react";
-import { cn } from "@hr-toolkit/ui/utils";
-import { Button, buttonVariants } from "@hr-toolkit/ui/button";
-import { usePathname } from "next/navigation";
-import { CloudUpload, FolderPlus, Folders, Search } from "lucide-react";
-import { createClient } from "@hr-toolkit/supabase/client";
-import { useQuery } from "@tanstack/react-query";
-import { getEmployeeById } from "@hr-toolkit/supabase/user-queries";
-import { getEmployeeFolders } from "@hr-toolkit/supabase/storage-queries";
 
+import Link from "next/link";
+
+import React, { useEffect, useMemo } from "react";
+import { usePathname } from "next/navigation";
 import { capitalize } from "lodash";
+
+import { getSegmentAfterDocuments } from "@/lib/utils";
+import { cn } from "@hr-toolkit/ui/utils";
+
+import type { StorageFile } from "@hr-toolkit/supabase/types";
 
 import {
 	Breadcrumb,
@@ -23,13 +19,11 @@ import {
 	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@hr-toolkit/ui/breadcrumb";
-import { Skeleton } from "@hr-toolkit/ui/skeleton";
 import { Input } from "@hr-toolkit/ui/input";
-import CreateFolderDialog from "./components/dialogs/create-folder";
-import Folder from "./components/folder";
-import { getSegmentAfterDocuments } from "@/lib/utils";
-import { UploadFileDialog } from "./components/dialogs/upload-file";
-import type { StorageFile } from "@hr-toolkit/supabase/types";
+import { UploadFileDialog } from "./dialogs/upload-file";
+import { Folders } from "lucide-react";
+import CreateFolderDialog from "./dialogs/create-folder";
+import Folder from "./folder";
 
 type Props = {
 	employeeId: string;
@@ -49,11 +43,6 @@ export default function DocumentsNavigation({ employeeId, filesData }: Props) {
 	useEffect(() => {
 		setSearchedFolder("");
 	}, [pathname]);
-
-	// const { data, error, isLoading } = useQuery({
-	// 	queryKey: ["employee", "employee_folders", employeeId, pathname],
-	// 	queryFn: () => getEmployeeFolders(employeeId, folderPath),
-	// });
 
 	const folders = filesData
 		?.filter((folder) => Boolean(!folder.metadata))

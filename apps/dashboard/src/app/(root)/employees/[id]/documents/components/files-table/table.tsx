@@ -1,5 +1,6 @@
 "use client";
-
+import { useState } from "react";
+import { cn } from "@hr-toolkit/ui/utils";
 import {
 	type ColumnDef,
 	type ColumnFiltersState,
@@ -26,9 +27,8 @@ import {
 	TableRow,
 } from "@hr-toolkit/ui/table";
 import { Input } from "@hr-toolkit/ui/input";
-import { cn } from "@hr-toolkit/ui/utils";
-import { useState } from "react";
-import { Files, Search } from "lucide-react";
+
+import { Files } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -125,7 +125,7 @@ export function DataTable<TData, TValue>({
 				open={Boolean(selectedFile)}
 				onOpenChange={(evt) => evt === false && setSelectedFile(null)}
 			>
-				<SheetContent  side="right">
+				<SheetContent side="right">
 					<SheetHeader className="p-6">
 						<SheetTitle>Are you absolutely sure?</SheetTitle>
 						<SheetDescription>

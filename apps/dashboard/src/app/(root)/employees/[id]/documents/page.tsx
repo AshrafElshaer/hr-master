@@ -1,19 +1,12 @@
-import { createServerClient } from "@hr-toolkit/supabase/server";
-import React from "react";
+import { getEmployeeFolders } from "@hr-toolkit/supabase/storage-queries";
+
 import { IoIosFolderOpen } from "react-icons/io";
 import CreateFolderDialog from "./components/dialogs/create-folder";
-
-import { usePathname } from "next/navigation";
-import { getEmployeeFolders } from "@hr-toolkit/supabase/storage-queries";
-import DocumentsNavigation from "./navigation";
-import { StorageFile } from "@hr-toolkit/supabase/types";
-import { headers } from "next/headers";
+import DocumentsNavigation from "./components/navigation";
 
 async function EmployeeDocuments({ params }: { params: { id: string } }) {
 	const employeeId = params.id;
-	const pathname = headers().get("x-pathname") ?? "";
 	const data = await getEmployeeFolders(employeeId, "");
-
 	const isEmpty = data?.length === 1 || !data;
 
 	if (isEmpty)
