@@ -60,7 +60,7 @@ function FolderLoading() {
             </Button>
           </div>
         </div>
-        <div className={"w-full flex items-center gap-2  flex-wrap"}>
+        <div className={"w-full flex items-center gap-2  overflow-scroll srollbar-muted"}>
           {Array.from({ length: 5 }).map((_, idx) => (
             <div
               className={cn(
