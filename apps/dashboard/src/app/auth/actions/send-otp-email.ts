@@ -18,38 +18,32 @@ async function generateOtpCode({
   const supabase = createServerClient({
     isAdmin: true,
   });
-  return await supabase.auth.admin.generateLink(
-    {
-      email: email,
-      type: "magiclink",
-    },
-  );
+  return await supabase.auth.admin.generateLink({
+    email: email,
+    type: "magiclink",
+  });
 }
 
-export const sendOtpEmail = action(
-  otpEmailSchema,
-  async ({ email }) => {
-    const { data: otpResponse, error: otpError } = await generateOtpCode({
-      email,
-    });
-    if (otpError || !otpResponse?.properties?.email_otp) {
-      throw new Error(otpError?.message || "Failed to generate OTP code");
-    }
+export const sendOtpEmail = action(otpEmailSchema, async ({ email }) => {
+  const { data: otpResponse, error: otpError } = await generateOtpCode({
+    email,
+  });
+  if (otpError || !otpResponse?.properties?.email_otp) {
+    throw new Error(otpError?.message || "Failed to generate OTP code");
+  }
 
-    const { data: emailResponase, error: emailError } = await resend.emails
-      .send({
-        from: "HR Toolkit <onboarding@fxresearch.app>",
-        to: [email],
-        subject: "HR Toolkit OTP Access",
-        react: OtpEmail({
-          otpCode: otpResponse.properties.email_otp,
-        }),
-      });
+  const { data: emailResponase, error: emailError } = await resend.emails.send({
+    from: "HR Toolkit <onboarding@fxresearch.app>",
+    to: [email],
+    subject: "HR Toolkit OTP Access",
+    react: OtpEmail({
+      otpCode: otpResponse.properties.email_otp,
+    }),
+  });
 
-    if (emailError || !emailResponase?.id) {
-      throw new Error(emailError?.message || "Failed to send OTP email");
-    }
+  if (emailError || !emailResponase?.id) {
+    throw new Error(emailError?.message || "Failed to send OTP email");
+  }
 
-    return otpResponse;
-  },
-);
+  return otpResponse;
+});

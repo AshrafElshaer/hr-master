@@ -38,28 +38,22 @@ export const createNewDepartment = action(
   },
 );
 
-export const editDepartment = action(
-  departmentSchema,
-  async (data) => {
-    const supabase = createServerClient();
+export const editDepartment = action(departmentSchema, async (data) => {
+  const supabase = createServerClient();
 
-    const { data: departmentUpdated, error } = await updateDepartment(
-      supabase,
-      {
-        id: data.id,
-        name: data.departmentName,
-        description: data.departmentDescription,
-        person_in_charge_id: data.personInCharge,
-      },
-    );
+  const { data: departmentUpdated, error } = await updateDepartment(supabase, {
+    id: data.id,
+    name: data.departmentName,
+    description: data.departmentDescription,
+    person_in_charge_id: data.personInCharge,
+  });
 
-    if (error) {
-      throw error;
-    }
+  if (error) {
+    throw error;
+  }
 
-    return departmentUpdated;
-  },
-);
+  return departmentUpdated;
+});
 
 export const deleteDepartment = action(
   z.object({
@@ -69,10 +63,7 @@ export const deleteDepartment = action(
     const supabase = createServerClient();
 
     const { data: departmentDeleted, error } =
-      await deleteOrganizationDepartment(
-        supabase,
-        data.id,
-      );
+      await deleteOrganizationDepartment(supabase, data.id);
 
     if (error) {
       throw error;

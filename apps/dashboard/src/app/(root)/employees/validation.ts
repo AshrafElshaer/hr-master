@@ -28,7 +28,8 @@ export const employeeSchema = z.object({
     message: "Last name must be at least 3 characters long",
   }),
   organization_id: z.string().optional(),
-  phone_number: z.string()
+  phone_number: z
+    .string()
     .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
   position: z.string().min(3, {
     message: "Position must be at least 3 characters long",
@@ -45,7 +46,8 @@ export const employeeSchema = z.object({
   emergency_name: z.string().min(3, {
     message: "name must be at least 3 characters long",
   }),
-  emergency_phone_number: z.string()
+  emergency_phone_number: z
+    .string()
     .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
   emergency_relation: z.string().min(3, {
     message: "relationship must be at least 3 characters long",

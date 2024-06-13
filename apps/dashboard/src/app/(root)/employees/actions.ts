@@ -25,12 +25,12 @@ export const createNeweEmployee = action(employeeSchema, async (data) => {
     throw new Error("User not found");
   }
 
-  const newEmployee = await createEmployee(supabase, {
+  const newEmployee = (await createEmployee(supabase, {
     ...data,
     hire_date: data.hire_date.toString(),
     date_of_birth: data.date_of_birth.toString(),
     organization_id: user.organization_id,
-  }) as unknown as UserWithOrdanization;
+  })) as unknown as UserWithOrdanization;
 
   const { error: emailError } = await resend.emails.send({
     from: "HR Toolkit <support@fxresearch.app>",

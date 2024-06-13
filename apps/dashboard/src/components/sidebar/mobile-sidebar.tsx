@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
 import {
-	Sheet,
-	SheetTrigger,
-	SheetContent,
-	SheetHeader,
-	SheetTitle,
-	SheetDescription,
-	SheetClose,
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetClose,
 } from "@hr-toolkit/ui/sheet";
 import { PanelLeftOpen, X } from "lucide-react";
 import LogoSVG from "../logo-svg";
@@ -15,26 +15,26 @@ import MainSidebar from "./main-sidebar";
 import type { User } from "@hr-toolkit/supabase/types";
 
 export default function MobileSidebar({ currentUser }: { currentUser: User }) {
-	const [isOpen, setIsOpen] = React.useState(false);
-	return (
-		<Sheet open={isOpen} onOpenChange={setIsOpen}>
-			<SheetTrigger className="h-full">
-				<PanelLeftOpen size={20} />
-			</SheetTrigger>
-			<SheetContent side="left" className="w-[20rem]">
-				<SheetHeader className="mb-4 p-4">
-					<section className="flex justify-between items-center">
-						<SheetTitle className="flex items-center gap-2">
-							<LogoSVG className="fill-current w-6 h-6" />
-							<h1 className="text-lg font-semibold">HR Toolkit</h1>
-						</SheetTitle>
-						<SheetClose>
-							<X size={18} />
-						</SheetClose>
-					</section>
-				</SheetHeader>
-				<MainSidebar setIsMobileOpen={setIsOpen} currentUser={currentUser} />
-			</SheetContent>
-		</Sheet>
-	);
+  const [isOpen, setIsOpen] = React.useState(false);
+  return (
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <SheetTrigger className="h-full">
+        <PanelLeftOpen size={20} />
+      </SheetTrigger>
+      <SheetContent side="left" className="w-[20rem]">
+        <SheetHeader className="mb-4 p-4">
+          <section className="flex justify-between items-center">
+            <SheetTitle className="flex items-center gap-2">
+              <LogoSVG className="fill-current w-6 h-6" />
+              <h1 className="text-lg font-semibold">HR Toolkit</h1>
+            </SheetTitle>
+            <SheetClose>
+              <X size={18} />
+            </SheetClose>
+          </section>
+        </SheetHeader>
+        <MainSidebar setIsMobileOpen={setIsOpen} currentUser={currentUser} />
+      </SheetContent>
+    </Sheet>
+  );
 }

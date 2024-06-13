@@ -10,26 +10,23 @@ const otpCodeSchema = z.object({
   otpCode: z.string(),
 });
 
-export const verifyOtp = action(
-  otpCodeSchema,
-  async ({ otpCode, email }) => {
-    const supabase = createServerClient();
+export const verifyOtp = action(otpCodeSchema, async ({ otpCode, email }) => {
+  const supabase = createServerClient();
 
-    const { data, error } = await supabase.auth.verifyOtp({
-      email: email,
-      token: otpCode,
-      type: "magiclink",
-    });
-    if (error) {
-      throw new Error(error.message);
-    }
-    const { user } = await getUser(supabase);
-    const organizationId = user?.organization_id;
-    if (!organizationId) {
-      redirect("/onboarding");
-    }
-    if (data.session && user) {
-      redirect("/");
-    }
-  },
-);
+  const { data, error } = await supabase.auth.verifyOtp({
+    email: email,
+    token: otpCode,
+    type: "magiclink",
+  });
+  if (error) {
+    throw new Error(error.message);
+  }
+  const { user } = await getUser(supabase);
+  const organizationId = user?.organization_id;
+  if (!organizationId) {
+    redirect("/onboarding");
+  }
+  if (data.session && user) {
+    redirect("/");
+  }
+});

@@ -31,9 +31,7 @@ export const organizationFormSchema = z.object({
   organizationName: z.string().min(3, {
     message: "must be at least 3 characters.",
   }),
-  organizationType: z
-    .string()
-    .min(3, { message: "must select a type" }),
+  organizationType: z.string().min(3, { message: "must select a type" }),
   address: z.string().min(3, { message: "must be at least 3 characters." }),
   city: z.string().min(3, { message: "must be at least 3 characters." }),
   state: z.string().min(3, { message: "must be at least 3 characters." }),

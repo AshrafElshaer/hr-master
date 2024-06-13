@@ -5,12 +5,12 @@ import { createServerClient } from "@hr-toolkit/supabase/server";
 import { getDepartments } from "@hr-toolkit/supabase/departments-queries";
 
 async function DepartmentTable() {
-	const supabase = createServerClient();
-	const departments = await getDepartments(supabase);
+  const supabase = createServerClient();
+  const departments = await getDepartments(supabase);
 
-	return (
-		<DataTable columns={columns as DepartmentColumn[]} data={departments} />
-	);
+  return (
+    <DataTable columns={columns as DepartmentColumn[]} data={departments} />
+  );
 }
 
 export default DepartmentTable;

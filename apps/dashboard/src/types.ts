@@ -6,12 +6,12 @@ import type {
 import type React from "react";
 
 export type ReactSetState<T> = React.Dispatch<React.SetStateAction<T>>;
-export type EmailOtpConfirmation = {
-  properties: GenerateLinkProperties;
-  user: AuthUser;
-} | {
-  properties: null;
-  user: null;
-};
-
-
+export type EmailOtpConfirmation =
+  | {
+      properties: GenerateLinkProperties;
+      user: AuthUser;
+    }
+  | {
+      properties: null;
+      user: null;
+    };

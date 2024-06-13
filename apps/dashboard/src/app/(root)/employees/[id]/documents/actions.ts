@@ -34,47 +34,33 @@ const renameFolderSchema = z.object({
   newFolderName: z.string(),
 });
 
-export const renameFolder = action(
-  renameFolderSchema,
-  async (input) => {
-    const supabase = createServerClient();
-    const newFolder = await renameStorageFolder(supabase, input);
-    revalidatePath(
-      `employees/${input.employeeId}/documents/${input.folderPath}`,
-    );
+export const renameFolder = action(renameFolderSchema, async (input) => {
+  const supabase = createServerClient();
+  const newFolder = await renameStorageFolder(supabase, input);
+  revalidatePath(`employees/${input.employeeId}/documents/${input.folderPath}`);
 
-    return newFolder;
-  },
-);
+  return newFolder;
+});
 
-export const deleteFolder = action(
-  newFolderSchema,
-  async (input) => {
-    const supabase = createServerClient();
-    const isDeleted = await deleteStorageFolder(supabase, input);
+export const deleteFolder = action(newFolderSchema, async (input) => {
+  const supabase = createServerClient();
+  const isDeleted = await deleteStorageFolder(supabase, input);
 
-    revalidatePath(
-      `employees/${input.employeeId}/documents/${input.folderPath}`,
-    );
+  revalidatePath(`employees/${input.employeeId}/documents/${input.folderPath}`);
 
-    return isDeleted;
-  },
-);
+  return isDeleted;
+});
 
-export async function uploadFile(
-  formData: FormData,
-) {
+export async function uploadFile(formData: FormData) {
   const supabase = createServerClient();
   const file = formData.get("file") as File;
   const employeeId = formData.get("employeeId") as string;
   const folderPath = formData.get("folderPath") as string;
 
   const employee = await getEmployeeById(supabase, employeeId);
-  const directoryPath = [
-    employee.organization_id,
-    employeeId,
-    folderPath,
-  ].filter(Boolean).join("/");
+  const directoryPath = [employee.organization_id, employeeId, folderPath]
+    .filter(Boolean)
+    .join("/");
   const { data, error } = await supabase.storage
     .from("employee-documents")
     .upload(`${directoryPath}/${file.name}`, file, {

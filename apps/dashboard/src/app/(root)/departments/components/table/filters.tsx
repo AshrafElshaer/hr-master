@@ -5,24 +5,24 @@ import React from "react";
 import type { TData } from "./data-table";
 
 type Props = {
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	table: Table<any>;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  table: Table<any>;
 };
 
 function DepartmentFilters({ table }: Props) {
-	return (
-		<div className="flex items-center py-4">
-			<Input
-				placeholder="Filter Departments by name"
-				startIcon={Search}
-				value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-				onChange={(event) =>
-					table.getColumn("name")?.setFilterValue(event.target.value)
-				}
-				className="w-full sm:max-w-xs "
-			/>
-		</div>
-	);
+  return (
+    <div className="flex items-center py-4">
+      <Input
+        placeholder="Filter Departments by name"
+        startIcon={Search}
+        value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+        onChange={(event) =>
+          table.getColumn("name")?.setFilterValue(event.target.value)
+        }
+        className="w-full sm:max-w-xs "
+      />
+    </div>
+  );
 }
 
 export default DepartmentFilters;

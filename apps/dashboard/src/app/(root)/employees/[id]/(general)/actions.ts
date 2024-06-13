@@ -4,9 +4,7 @@ import { createServerClient } from "@hr-toolkit/supabase/server";
 import { updateEmployeeById } from "@hr-toolkit/supabase/user-mutations";
 import { revalidatePath } from "next/cache";
 
-export async function uploadProfileImg(
-  formData: FormData,
-) {
+export async function uploadProfileImg(formData: FormData) {
   const supabase = createServerClient();
   const file = formData.get("file") as File;
   const userId = formData.get("userId") as string;
@@ -25,7 +23,8 @@ export async function uploadProfileImg(
     throw error;
   }
 
-  const { data: urlResponse } = await supabase.storage.from("avatars")
+  const { data: urlResponse } = await supabase.storage
+    .from("avatars")
     .createSignedUrl(data.path, 60 * 60 * 24 * 365); // 365 days
 
   const updated = await updateEmployeeById(supabase, {

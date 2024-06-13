@@ -1,3 +1,6 @@
-export const DEFAULT_STORAGE_FOLDERS = ["personal", "employment", "tax", "bank"]
-
-
+export const DEFAULT_STORAGE_FOLDERS = [
+  "personal",
+  "employment",
+  "tax",
+  "bank",
+];
