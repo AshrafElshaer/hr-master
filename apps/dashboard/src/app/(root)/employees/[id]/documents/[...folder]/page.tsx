@@ -17,22 +17,18 @@ type Props = {
 export default async function FoldersPage(props: Props) {
 	const pathname = headers().get("x-pathname") ?? "";
 	const folderPath = getSegmentAfterDocuments(decodeURI(pathname));
-	const files = await getEmployeeFolders(props.params.id, folderPath)
-		.then((files) => files.filter((file) => Boolean(file.metadata)))
-		.then((files) =>
-			files.filter((file) => file.name !== EMPTY_FOLDER_PLACEHOLDER_FILE_NAME),
-		)
-		.then((files) => files);
 
-	queryClient.prefetchQuery({
-		queryKey: ["employee", "employee_folders", props.params.id, pathname],
-		queryFn: () => getEmployeeFolders(props.params.id, folderPath),
-	});
+	const filesData = await getEmployeeFolders(props.params.id, folderPath);
+
+	const files = filesData
+		.filter((file) => Boolean(file.metadata))
+		.filter((file) => file.name !== EMPTY_FOLDER_PLACEHOLDER_FILE_NAME);
 
 	return (
-		<section className="w-full flex flex-col h-full">
+		<section className="w-full flex flex-col h-full p-4">
+			<DocumentsNavigation employeeId={props.params.id} filesData={filesData} />
 			{files.length > 0 ? (
-				<DataTable columns={columns} data={files as unknown as StorageFile[]} />
+				<DataTable columns={columns} data={files} />
 			) : (
 				<UploadZone employeeId={props.params.id} folderPath={folderPath} />
 			)}

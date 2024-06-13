@@ -9,6 +9,7 @@ import {
   renameStorageFolder,
 } from "@hr-toolkit/supabase/storage-mutations";
 import { getEmployeeById } from "@hr-toolkit/supabase/user-queries";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 const newFolderSchema = z.object({
@@ -20,6 +21,8 @@ const newFolderSchema = z.object({
 export const createFolder = action(newFolderSchema, async (input) => {
   const supabase = createServerClient();
   const newFolder = await createStorageFolder(supabase, input);
+
+  revalidatePath(`employees/${input.employeeId}/documents/${input.folderPath}`);
 
   return newFolder;
 });
@@ -36,6 +39,9 @@ export const renameFolder = action(
   async (input) => {
     const supabase = createServerClient();
     const newFolder = await renameStorageFolder(supabase, input);
+    revalidatePath(
+      `employees/${input.employeeId}/documents/${input.folderPath}`,
+    );
 
     return newFolder;
   },
@@ -43,13 +49,13 @@ export const renameFolder = action(
 
 export const deleteFolder = action(
   newFolderSchema,
-  async ({ employeeId, folderPath, folderName }) => {
+  async (input) => {
     const supabase = createServerClient();
-    const isDeleted = await deleteStorageFolder(supabase, {
-      employeeId,
-      folderPath,
-      folderName,
-    });
+    const isDeleted = await deleteStorageFolder(supabase, input);
+
+    revalidatePath(
+      `employees/${input.employeeId}/documents/${input.folderPath}`,
+    );
 
     return isDeleted;
   },

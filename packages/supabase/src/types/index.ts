@@ -1,10 +1,9 @@
 import type { SupabaseClient as ClientType } from "@supabase/supabase-js";
-
+import { createServerClient } from "../client/server";
 import type { Database } from "./db";
+export * from "./db";
 
 export type SupabaseClient = ClientType<Database>;
-
-export * from "./db";
 
 export type User = Database["public"]["Tables"]["users"]["Row"];
 export type Department = Database["public"]["Tables"]["departments"]["Row"];
@@ -20,6 +19,13 @@ export interface UserWithDepartmentAndOrganization extends User {
   organization: Organization;
 }
 
+type StorageListFunction = SupabaseClient["storage"]["from"];
+type ListFunctionReturn = ReturnType<StorageListFunction>;
 
+type StorageFilePromise = Awaited<
+  ReturnType<ListFunctionReturn["list"]>
+>;
+type StorageFileType = Pick<StorageFilePromise, "data">["data"];
 
-export type StorageFile = Database["storage"]["Tables"]["objects"]["Row"];
+// extract the object out file FileObject[]
+export type StorageFile = NonNullable<StorageFileType>[number];

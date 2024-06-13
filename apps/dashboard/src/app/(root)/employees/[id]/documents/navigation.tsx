@@ -29,12 +29,14 @@ import CreateFolderDialog from "./components/dialogs/create-folder";
 import Folder from "./components/folder";
 import { getSegmentAfterDocuments } from "@/lib/utils";
 import { UploadFileDialog } from "./components/dialogs/upload-file";
+import type { StorageFile } from "@hr-toolkit/supabase/types";
 
 type Props = {
 	employeeId: string;
+	filesData: StorageFile[] | null;
 };
 
-export default function DocumentsNavigation({ employeeId }: Props) {
+export default function DocumentsNavigation({ employeeId, filesData }: Props) {
 	const pathname = usePathname();
 	const folderPath = useMemo(
 		() => getSegmentAfterDocuments(decodeURI(pathname)),
@@ -48,15 +50,15 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 		setSearchedFolder("");
 	}, [pathname]);
 
-	const { data, error, isLoading } = useQuery({
-		queryKey: ["employee", "employee_folders", employeeId, pathname],
-		queryFn: () => getEmployeeFolders(employeeId, folderPath),
-	});
+	// const { data, error, isLoading } = useQuery({
+	// 	queryKey: ["employee", "employee_folders", employeeId, pathname],
+	// 	queryFn: () => getEmployeeFolders(employeeId, folderPath),
+	// });
 
-	const folders = data
+	const folders = filesData
 		?.filter((folder) => Boolean(!folder.metadata))
 		.map((folder) => folder.name)
-		.filter((folder) => folder.includes(searchedFolder.toLowerCase()));
+		.filter((folder) => folder?.includes(searchedFolder.toLowerCase()));
 
 	return (
 		<section className="w-full flex flex-col gap-4 ">
@@ -147,32 +149,17 @@ export default function DocumentsNavigation({ employeeId }: Props) {
 						: "flex-nowrap overflow-scroll scrollbar-muted",
 				)}
 			>
-				{isLoading
-					? Array.from({ length: 5 }).map((_, idx) => (
-							<div
-								className={cn(
-									buttonVariants({
-										variant: "ghost",
-									}),
-									"flex flex-col items-center hover:bg-background",
-								)}
-								key={idx.toString()}
-							>
-								<IoIosFolderOpen className="w-10 h-10 sm:w-14 sm:h-14 animate-pulse rounded-md text-primary/10" />
-								<Skeleton className="w-3/4 mx-auto h-2" />
-							</div>
-						))
-					: (folders ?? []).map((folder) => {
-							return (
-								<Folder
-									key={folder}
-									folder={folder}
-									pathname={pathname}
-									folderPath={folderPath}
-									employeeId={employeeId}
-								/>
-							);
-						})}
+				{(folders ?? []).map((folder) => {
+					return (
+						<Folder
+							key={folder}
+							folder={folder ?? ""}
+							pathname={pathname}
+							folderPath={folderPath}
+							employeeId={employeeId}
+						/>
+					);
+				})}
 			</div>
 		</section>
 	);

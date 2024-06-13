@@ -1,29 +1,24 @@
-"use client";
 import { createServerClient } from "@hr-toolkit/supabase/server";
 import React from "react";
 import { IoIosFolderOpen } from "react-icons/io";
 import CreateFolderDialog from "./components/dialogs/create-folder";
-import { useQuery } from "@tanstack/react-query";
+
 import { usePathname } from "next/navigation";
 import { getEmployeeFolders } from "@hr-toolkit/supabase/storage-queries";
 import DocumentsNavigation from "./navigation";
+import { StorageFile } from "@hr-toolkit/supabase/types";
+import { headers } from "next/headers";
 
-function EmployeeDocuments({ params }: { params: { id: string } }) {
+async function EmployeeDocuments({ params }: { params: { id: string } }) {
 	const employeeId = params.id;
-	const pathname = usePathname();
-	const { data, error, isLoading } = useQuery({
-		queryKey: ["employee", "employee_folders", employeeId, pathname],
-		queryFn: () => getEmployeeFolders(employeeId, ""),
-	});
+	const pathname = headers().get("x-pathname") ?? "";
+	const data = await getEmployeeFolders(employeeId, "");
 
-	if (isLoading) {
-		return null;
-	}
+	const isEmpty = data?.length === 1 || !data;
 
-	const isEmpty = data?.length === 0;
-	return (
-		<main className="flex flex-col items-center justify-center h-full p-4 ">
-			{isEmpty ? (
+	if (isEmpty)
+		return (
+			<main className="flex flex-col items-center justify-center h-full p-4 ">
 				<div className="flex flex-col gap-4 items-center max-w-md">
 					<IoIosFolderOpen className="h-52 w-52 text-muted-foreground" />
 					<h1 className="text-xl font-bold text-muted-foreground">
@@ -36,7 +31,11 @@ function EmployeeDocuments({ params }: { params: { id: string } }) {
 					</p>
 					<CreateFolderDialog employeeId={params.id} folderPath="" />
 				</div>
-			) : null}
+			</main>
+		);
+	return (
+		<main className="flex flex-col items-center justify-start w-full h-full p-4 ">
+			<DocumentsNavigation employeeId={employeeId} filesData={data} />
 		</main>
 	);
 }
