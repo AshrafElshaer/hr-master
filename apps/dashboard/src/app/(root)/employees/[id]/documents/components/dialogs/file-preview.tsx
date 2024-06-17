@@ -113,7 +113,7 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 								<div className=" w-[280px] aspect-[5/7] overflow-y-scroll scrollbar-muted">
 									<Page pageNumber={currentPage} width={265} />
 									{totalPages > 1 && (
-										<div className="absolute hidden group-hover:flex items-center bottom-2 right-1/2 translate-x-1/2 bg-[#121212] text-[#FAFAFA] rounded shadow-md  p-2 text-xs z-10 gap-2">
+										<div className="absolute opacity-0 flex group-hover:opacity-100 transition-all items-center bottom-2 right-1/2 translate-x-1/2 bg-[#121212] text-[#FAFAFA] rounded shadow-md  p-2 text-xs z-10 gap-2">
 											<button
 												type="button"
 												onClick={() =>
