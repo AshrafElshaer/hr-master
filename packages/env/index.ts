@@ -16,6 +16,7 @@ export const env = createEnv({
     NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(),
     NEXT_PUBLIC_SUPABASR_SERVICE_ROLE_KEY: z.string(),
     NEXT_PUBLIC_RESEND_API_KEY: z.string(),
+    NEXT_PUBLIC_NODE_ENV: z.string(),
   },
 
   /**
@@ -23,6 +24,7 @@ export const env = createEnv({
    * `process.env` or `import.meta.env`.
    */
   runtimeEnv: {
+    NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV,
     // SUPABASE
     NEXT_PUBLIC_SUPABASR_SERVICE_ROLE_KEY:
       process.env.NEXT_PUBLIC_SUPABASR_SERVICE_ROLE_KEY,
