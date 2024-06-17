@@ -11,6 +11,7 @@ import {
 	SheetTitle,
 } from "@hr-toolkit/ui/sheet";
 import { format } from "date-fns";
+import { FaRegImages } from "react-icons/fa6";
 import { ChevronLeft, Share2, X } from "lucide-react";
 import React, { useEffect } from "react";
 import { LuDownloadCloud } from "react-icons/lu";
@@ -37,13 +38,7 @@ import type { OnDocumentLoadSuccess } from "node_modules/react-pdf/dist/esm/shar
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
-const imageMimeTypes = [
-	"image/png",
-	"image/jpeg",
-	"image/jpg",
-	"image/gif",
-	"image/svg+xml",
-];
+
 
 type Props = {
 	selectedFile: StorageFile | null;
@@ -53,9 +48,10 @@ type Props = {
 export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 	const [totalPages, setTotalPages] = React.useState(0);
 	const [currentPage, setCurrentPage] = React.useState(1);
-	const [isFileLoaded, setIsFileLoaded] = React.useState(false);
+
 	const pathname = usePathname();
 	const folderPath = getSegmentAfterDocuments(pathname);
+
 	const { data: previewUrl, isLoading: isPreviewLoading } = useQuery({
 		queryKey: ["employee-documents", folderPath, selectedFile?.name],
 		queryFn: async () => {
@@ -72,10 +68,17 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 		enabled: Boolean(selectedFile),
 	});
 
+
+
+	const fileType:string |null = selectedFile?.metadata.mimetype;
+	const isPDF = fileType === "application/pdf";
+	const isImage = fileType?.startsWith("image/");
+
 	const onDocumentLoadSuccess: OnDocumentLoadSuccess = (document) => {
 		setTotalPages(document.numPages);
-		setIsFileLoaded(true);
+		
 	};
+
 
 	return (
 		<Sheet
@@ -87,67 +90,72 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 					<X className="h-4 w-4" />
 				</SheetClose>
 				<div className=" p-4">
-					{isPreviewLoading ? (
+					{isPreviewLoading && isPDF && (
+						<Skeleton className="mx-auto w-[280px] aspect-[5/7]" />
+					)}
+
+					{isPreviewLoading && isImage && (
 						<Skeleton className="mx-auto w-3/4 aspect-square" />
-					) : imageMimeTypes.includes(
-							selectedFile?.metadata.mimetype as string,
-						) ? (
+					)} 
+					
+					{previewUrl && isImage && (
 						<div className="w-3/4 aspect-square border rounded flex justify-center items-center mx-auto">
 							<Avatar className="rounded w-3/4 h-3/4 aspect-square">
 								<AvatarImage src={previewUrl} />
 								<AvatarFallback className="bg-transparent">
-									<FaFile className="h-32 w-32 text-muted-foreground" />
-								</AvatarFallback>
-							</Avatar>
-						</div>
-					) : selectedFile?.metadata.mimetype === "application/pdf" ? (
-						<div className="w-3/4 flex justify-center items-center mx-auto relative">
-							<Document
-								file={previewUrl}
-								onLoadSuccess={onDocumentLoadSuccess}
-								className={"group"}
-								loading={
-									<Skeleton className="mx-auto w-[280px] aspect-[5/7]" />
-								}
-							>
-								<div className=" w-[280px] aspect-[5/7] overflow-y-scroll scrollbar-muted">
-									<Page pageNumber={currentPage} width={265} />
-									{totalPages > 1 && (
-										<div className="absolute opacity-0 flex group-hover:opacity-100 transition-all items-center bottom-2 right-1/2 translate-x-1/2 bg-[#121212] text-[#FAFAFA] rounded shadow-md  p-2 text-xs z-10 gap-2">
-											<button
-												type="button"
-												onClick={() =>
-													setCurrentPage((prev) => Math.max(prev - 1, 1))
-												}
-											>
-												<ChevronLeft size={16} />
-											</button>
-											{currentPage} of {totalPages}
-											<button
-												type="button"
-												onClick={() =>
-													setCurrentPage((prev) =>
-														Math.min(prev + 1, totalPages),
-													)
-												}
-											>
-												<ChevronLeft size={16} className="transform rotate-180" />
-											</button>
-										</div>
-									)}
-								</div>
-							</Document>
-						</div>
-					) : (
-						<div className="w-3/4 aspect-square border rounded flex justify-center items-center mx-auto">
-							<Avatar className="rounded w-3/4 h-3/4 aspect-square">
-								<AvatarImage src={previewUrl} />
-								<AvatarFallback className="bg-transparent">
-									<FaFile className="h-32 w-32 text-muted-foreground" />
+									<FaRegImages className="h-32 w-32 text-muted-foreground" />
 								</AvatarFallback>
 							</Avatar>
 						</div>
 					)}
+					
+					{previewUrl && isPDF && (
+						<div className="w-3/4 flex justify-center items-center mx-auto relative">
+						<Document
+							file={previewUrl}
+							onLoadSuccess={onDocumentLoadSuccess}
+							className={"group"}
+							loading={
+								<Skeleton className="mx-auto w-[280px] aspect-[5/7]" />
+							}
+							error={
+								<div className="mx-auto w-[280px] aspect-[5/7] flex justify-center items-center">
+									<FaFile className="h-32 w-32 text-muted-foreground" />
+								</div>
+							}
+						>
+							<div className=" w-[280px] aspect-[5/7] overflow-y-scroll scrollbar-muted">
+								<Page pageNumber={currentPage} width={265} />
+								{totalPages > 1 && (
+									<div className="absolute opacity-0 flex group-hover:opacity-100 transition-all items-center bottom-2 right-1/2 translate-x-1/2 bg-[#121212] text-[#FAFAFA] rounded shadow-md  p-2 text-xs z-10 gap-2">
+										<button
+											type="button"
+											onClick={() =>
+												setCurrentPage((prev) => Math.max(prev - 1, 1))
+											}
+										>
+											<ChevronLeft size={16} />
+										</button>
+										{currentPage} of {totalPages}
+										<button
+											type="button"
+											onClick={() =>
+												setCurrentPage((prev) =>
+													Math.min(prev + 1, totalPages),
+												)
+											}
+										>
+											<ChevronLeft size={16} className="transform rotate-180" />
+										</button>
+									</div>
+								)}
+							</div>
+						</Document>
+					</div>
+					)}
+					
+					
+					
 				</div>
 				<SheetHeader className="p-4">
 					<SheetTitle>{selectedFile?.name}</SheetTitle>
