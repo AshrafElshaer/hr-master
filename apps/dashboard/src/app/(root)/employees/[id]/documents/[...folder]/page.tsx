@@ -9,29 +9,35 @@ import { DataTable } from "../components/files-table/table";
 
 import UploadZone from "../components/files-table/upload-zone";
 import DocumentsNavigation from "../components/navigation";
+import { createServerClient } from "@hr-toolkit/supabase/server";
 
 type Props = {
-  params: { id: string; folder: string };
+	params: { id: string; folder: string };
 };
 
 export default async function FoldersPage(props: Props) {
-  const pathname = headers().get("x-pathname") ?? "";
-  const folderPath = getSegmentAfterDocuments(decodeURI(pathname));
+	const supabase = createServerClient();
+	const pathname = headers().get("x-pathname") ?? "";
+	const folderPath = getSegmentAfterDocuments(decodeURI(pathname));
 
-  const filesData = await getEmployeeFolders(props.params.id, folderPath);
+	const filesData = await getEmployeeFolders(
+		supabase,
+		props.params.id,
+		folderPath,
+	);
 
-  const files = filesData
-    .filter((file) => Boolean(file.metadata))
-    .filter((file) => file.name !== EMPTY_FOLDER_PLACEHOLDER_FILE_NAME);
+	const files = filesData
+		.filter((file) => Boolean(file.metadata))
+		.filter((file) => file.name !== EMPTY_FOLDER_PLACEHOLDER_FILE_NAME);
 
-  return (
-    <section className="w-full flex flex-col h-full p-4">
-      <DocumentsNavigation employeeId={props.params.id} filesData={filesData} />
-      {files.length > 0 ? (
-        <DataTable columns={columns} data={files} />
-      ) : (
-        <UploadZone employeeId={props.params.id} folderPath={folderPath} />
-      )}
-    </section>
-  );
+	return (
+		<section className="w-full flex flex-col h-full p-4">
+			<DocumentsNavigation employeeId={props.params.id} filesData={filesData} />
+			{files.length > 0 ? (
+				<DataTable columns={columns} data={files} />
+			) : (
+				<UploadZone employeeId={props.params.id} folderPath={folderPath} />
+			)}
+		</section>
+	);
 }
