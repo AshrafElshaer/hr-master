@@ -53,12 +53,12 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 	const supabase = createClient();
 	const pathname = usePathname();
 	const folderPath = getSegmentAfterDocuments(pathname);
+	const employeeId = pathname.split("/")[2];
 
 	const { data: previewUrl, isLoading: isPreviewLoading } = useQuery({
 		queryKey: ["employee-documents", folderPath, selectedFile?.name],
 		queryFn: async () => {
 			const { user } = await getUser(supabase);
-			const employeeId = pathname.split("/")[2];
 			const filePath = `/${user?.organization_id}/${employeeId}/${folderPath}/${selectedFile?.name}`;
 			const { signedUrl } = await getSignedUrl(supabase, {
 				filePath,
@@ -73,7 +73,6 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 	const isPDF = fileType === "application/pdf";
 	const isImage = fileType?.startsWith("image/");
 
-	const employeeId = pathname.split("/")[2];
 	const onDocumentLoadSuccess: OnDocumentLoadSuccess = (document) => {
 		setTotalPages(document.numPages);
 	};
@@ -88,6 +87,17 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 				error: "Failed to download",
 			},
 		);
+	}
+
+	async function generateShareLink(expiresIn: number) {
+		const { user } = await getUser(supabase);
+		const filePath = `/${user?.organization_id}/${employeeId}/${folderPath}/${selectedFile?.name}`;
+		const { signedUrl } = await getSignedUrl(supabase, {
+			filePath,
+			expiresIn,
+		});
+		await navigator.clipboard.writeText(signedUrl);
+		toast("Link copied to clipboard");
 	}
 
 	return (
@@ -204,9 +214,21 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent side="top">
-							<DropdownMenuItem>Expire in 1 week</DropdownMenuItem>
-							<DropdownMenuItem>Expire in 1 month</DropdownMenuItem>
-							<DropdownMenuItem>Expire in 1 year</DropdownMenuItem>
+							<DropdownMenuItem
+								onClick={() => generateShareLink(60 * 60 * 24 * 7)}
+							>
+								Expire in 1 week
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								onClick={() => generateShareLink(60 * 60 * 24 * 30)}
+							>
+								Expire in 1 month
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								onClick={() => generateShareLink(60 * 60 * 24 * 365)}
+							>
+								Expire in 1 year
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 
