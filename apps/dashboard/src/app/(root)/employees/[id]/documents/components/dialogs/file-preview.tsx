@@ -24,7 +24,7 @@ import {
 	DropdownMenuTrigger,
 } from "@hr-toolkit/ui/dropdown-menu";
 import { createClient } from "@hr-toolkit/supabase/client";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { getEmployeeById, getUser } from "@hr-toolkit/supabase/user-queries";
 import { useQuery } from "@tanstack/react-query";
 import { getSignedUrl } from "@hr-toolkit/supabase/storage-queries";
@@ -52,6 +52,7 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 
 	const supabase = createClient();
 	const pathname = usePathname();
+	const router = useRouter();
 	const folderPath = getSegmentAfterDocuments(pathname);
 	const employeeId = pathname.split("/")[2];
 
@@ -87,6 +88,15 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 				error: "Failed to download",
 			},
 		);
+	}
+
+	async function handleDelete() {
+		const { user } = await getUser(supabase);
+		const filePath = `/${user?.organization_id}/${employeeId}/${folderPath}/${selectedFile?.name}`;
+		await supabase.storage.from("employee-documents").remove([filePath]);
+		toast("File deleted successfully");
+		setSelectedFile(null);
+		router.refresh();
 	}
 
 	async function generateShareLink(expiresIn: number) {
