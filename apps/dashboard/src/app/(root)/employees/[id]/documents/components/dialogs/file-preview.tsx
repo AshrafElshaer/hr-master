@@ -93,21 +93,37 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 	async function handleDelete() {
 		const { user } = await getUser(supabase);
 		const filePath = `/${user?.organization_id}/${employeeId}/${folderPath}/${selectedFile?.name}`;
-		await supabase.storage.from("employee-documents").remove([filePath]);
-		toast("File deleted successfully");
-		setSelectedFile(null);
-		router.refresh();
+		toast.promise(
+			supabase.storage.from("employee-documents").remove([filePath]),
+			{
+				loading: "Deleting file...",
+				success: "File deleted successfully",
+				error: "Failed to delete file",
+				finally: () => {
+					setSelectedFile(null);
+					router.refresh();
+				},
+			},
+		);
 	}
 
 	async function generateShareLink(expiresIn: number) {
 		const { user } = await getUser(supabase);
 		const filePath = `/${user?.organization_id}/${employeeId}/${folderPath}/${selectedFile?.name}`;
-		const { signedUrl } = await getSignedUrl(supabase, {
-			filePath,
-			expiresIn,
-		});
-		await navigator.clipboard.writeText(signedUrl);
-		toast("Link copied to clipboard");
+		toast.promise(
+			getSignedUrl(supabase, {
+				filePath,
+				expiresIn,
+			}),
+			{
+				loading: "Generating link...",
+				success: (data) => {
+					navigator.clipboard.writeText(data.signedUrl);
+					return "Link copied to clipboard";
+				},
+				error: "Failed to generate link",
+			},
+		);
 	}
 
 	return (
