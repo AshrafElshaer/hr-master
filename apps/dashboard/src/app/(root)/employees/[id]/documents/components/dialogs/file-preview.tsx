@@ -242,7 +242,11 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 						</DropdownMenuContent>
 					</DropdownMenu>
 
-					<Button variant={"destructive"} className="ml-auto">
+					<Button
+						variant={"destructive"}
+						className="ml-auto"
+						onClick={handleDelete}
+					>
 						<FaTrash className="h-3 w-3 mr-2" />
 						Delete
 					</Button>
