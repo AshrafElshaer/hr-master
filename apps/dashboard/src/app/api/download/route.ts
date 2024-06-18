@@ -7,6 +7,7 @@ export async function GET(req: Request, res: Response) {
   const path = requestUrl.searchParams.get("path");
   const filename = requestUrl.searchParams.get("filename");
   const employeeId = requestUrl.searchParams.get("employeeId");
+  const organizationId = requestUrl.searchParams.get("organizationId");
 
   if (!path || !filename || !employeeId) {
     return new Response("Missing required parameters", {
@@ -14,9 +15,7 @@ export async function GET(req: Request, res: Response) {
     });
   }
 
-  const employee = await getEmployeeById(supabase, employeeId);
-  const filePath =
-    `/${employee.organization_id}/${employeeId}/${path}/${filename}`;
+  const filePath = `${organizationId}/${employeeId}/${path}/${filename}`;
 
   const { data } = await supabase.storage.from("employee-documents").download(
     filePath,

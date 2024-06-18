@@ -4,14 +4,13 @@ import { getEmployeeById, getUser } from "../user";
 
 export const getEmployeeFolders = async (
   supabase: SupabaseClient,
+  organizationId: string,
   employeeId: string,
   folder: string,
 ) => {
-  const employee = await getEmployeeById(supabase, employeeId);
-
   const { data, error } = await supabase.storage
     .from("employee-documents")
-    .list(`${employee.organization_id}/${employeeId}/${folder}`, {});
+    .list(`${organizationId}/${employeeId}/${folder}`, {});
 
   if (error) {
     throw error;

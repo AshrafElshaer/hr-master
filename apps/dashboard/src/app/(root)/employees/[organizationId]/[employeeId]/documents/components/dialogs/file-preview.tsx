@@ -56,7 +56,8 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 	const pathname = usePathname();
 	const router = useRouter();
 	const folderPath = getSegmentAfterDocuments(pathname);
-	const employeeId = pathname.split("/")[2];
+	const organizationId = pathname.split("/")[2];
+	const employeeId = pathname.split("/")[3];
 
 	const fileType: string | null = selectedFile?.metadata.mimetype;
 	const isPDF = fileType === "application/pdf";
@@ -65,8 +66,7 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 	const { data: previewUrl, isLoading: isPreviewLoading } = useQuery({
 		queryKey: ["employee-documents", folderPath, selectedFile?.name],
 		queryFn: async () => {
-			const { user } = await getUser(supabase);
-			const filePath = `${user?.organization_id}/${employeeId}/${folderPath}/${selectedFile?.name}`;
+			const filePath = `${organizationId}/${employeeId}/${folderPath}/${selectedFile?.name}`;
 			const { signedUrl } = await getSignedUrl(supabase, {
 				filePath,
 				expiresIn: 60 * 2, // 2 minutes
@@ -82,7 +82,7 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 	async function handleDownload() {
 		toast.promise(
 			fetch(
-				`/api/download?employeeId=${employeeId}&path=${folderPath}&filename=${selectedFile?.name}`,
+				`/api/download?organizationId=${organizationId}&employeeId=${employeeId}&path=${folderPath}&filename=${selectedFile?.name}`,
 			),
 			{
 				loading: "Downloading...",
@@ -93,8 +93,7 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 	}
 
 	async function handleDelete() {
-		const { user } = await getUser(supabase);
-		const filePath = `${user?.organization_id}/${employeeId}/${folderPath}/${selectedFile?.name}`;
+		const filePath = `${organizationId}/${employeeId}/${folderPath}/${selectedFile?.name}`;
 		toast.promise(
 			supabase.storage.from("employee-documents").remove([filePath]),
 			{
@@ -231,7 +230,7 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 				</div>
 				<div className="flex p-4 items-center gap-2">
 					<Link
-						href={`/api/download?employeeId=${employeeId}&path=${folderPath}&filename=${selectedFile?.name}`}
+						href={`/api/download?organizationId=${organizationId}&employeeId=${employeeId}&path=${folderPath}&filename=${selectedFile?.name}`}
 						target="_blank"
 						download
 					>

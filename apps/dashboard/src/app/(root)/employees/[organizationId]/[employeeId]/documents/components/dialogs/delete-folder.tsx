@@ -24,10 +24,12 @@ type Props = {
   isDelete: boolean;
   setIsDelete: (value: boolean) => void;
   folderPath: string;
+  organizationId: string;
   employeeId: string;
   name: string;
 };
 function DeleteFolder({
+  organizationId,
   employeeId,
   folderPath,
   isDelete,
@@ -47,6 +49,7 @@ function DeleteFolder({
 
   async function handleDelete() {
     const { data, serverError } = await mutateAsync({
+      organizationId,
       employeeId,
       folderPath,
       folderName: name,

@@ -13,6 +13,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 const newFolderSchema = z.object({
+  organizationId: z.string(),
   employeeId: z.string(),
   folderName: z.string(),
   folderPath: z.string(),
@@ -28,6 +29,7 @@ export const createFolder = action(newFolderSchema, async (input) => {
 });
 
 const renameFolderSchema = z.object({
+  organizationId: z.string(),
   employeeId: z.string(),
   folderPath: z.string(),
   folderName: z.string(),
@@ -37,7 +39,9 @@ const renameFolderSchema = z.object({
 export const renameFolder = action(renameFolderSchema, async (input) => {
   const supabase = createServerClient();
   const newFolder = await renameStorageFolder(supabase, input);
-  revalidatePath(`employees/${input.employeeId}/documents/${input.folderPath}`);
+  revalidatePath(
+    `employees/${input.organizationId}/${input.employeeId}/documents/${input.folderPath}`,
+  );
 
   return newFolder;
 });
@@ -46,7 +50,7 @@ export const deleteFolder = action(newFolderSchema, async (input) => {
   const supabase = createServerClient();
   const isDeleted = await deleteStorageFolder(supabase, input);
 
-  revalidatePath(`employees/${input.employeeId}/documents/${input.folderPath}`);
+  revalidatePath(`employees/${input.organizationId}/${input.employeeId}/documents/${input.folderPath}`);
 
   return isDeleted;
 });
@@ -54,11 +58,11 @@ export const deleteFolder = action(newFolderSchema, async (input) => {
 export async function uploadFile(formData: FormData) {
   const supabase = createServerClient();
   const file = formData.get("file") as File;
+  const organizationId = formData.get("organizationId") as string;
   const employeeId = formData.get("employeeId") as string;
   const folderPath = formData.get("folderPath") as string;
 
-  const employee = await getEmployeeById(supabase, employeeId);
-  const directoryPath = [employee.organization_id, employeeId, folderPath]
+  const directoryPath = [organizationId, employeeId, folderPath]
     .filter(Boolean)
     .join("/");
   const { data, error } = await supabase.storage

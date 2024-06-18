@@ -6,17 +6,16 @@ export const EMPTY_FOLDER_PLACEHOLDER_FILE_NAME = ".emptyFolderPlaceholder";
 
 export async function createStorageFolder(
   supabase: SupabaseClient,
-  { employeeId, folderName, folderPath }: {
+  { employeeId, folderName, folderPath, organizationId }: {
+    organizationId: string;
     employeeId: string;
     folderName: string;
     folderPath: string;
   },
 ) {
-  const employee = await getEmployeeById(supabase, employeeId);
-
   const fullPath = decodeURIComponent(
     [
-      employee.organization_id,
+      organizationId,
       employeeId,
       folderPath,
       folderName,
@@ -79,16 +78,17 @@ export async function renameStorageFolder(
 }
 
 export async function deleteStorageFolder(supabase: SupabaseClient, {
+  organizationId,
   employeeId,
   folderPath,
   folderName,
 }: {
+  organizationId: string;
   employeeId: string;
   folderPath: string;
   folderName: string;
 }) {
-  const employee = await getEmployeeById(supabase, employeeId);
-  const rootDirectory = [employee.organization_id, employeeId].join("/");
+  const rootDirectory = [organizationId, employeeId].join("/");
   const directoryPath = folderPath
     ? [rootDirectory, folderPath, folderName].join("/")
     : [rootDirectory, folderName].join("/");
