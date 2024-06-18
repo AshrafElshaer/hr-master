@@ -38,6 +38,7 @@ import "react-pdf/dist/esm/Page/TextLayer.css";
 import type { OnDocumentLoadSuccess } from "node_modules/react-pdf/dist/esm/shared/types";
 import { toast } from "sonner";
 import Link from "next/link";
+import { useMediaQuery } from "usehooks-ts";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -47,6 +48,7 @@ type Props = {
 };
 
 export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
+	const isMobile = useMediaQuery("only screen and (max-width : 768px)");
 	const [totalPages, setTotalPages] = React.useState(0);
 	const [currentPage, setCurrentPage] = React.useState(1);
 
@@ -55,6 +57,10 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 	const router = useRouter();
 	const folderPath = getSegmentAfterDocuments(pathname);
 	const employeeId = pathname.split("/")[2];
+
+	const fileType: string | null = selectedFile?.metadata.mimetype;
+	const isPDF = fileType === "application/pdf";
+	const isImage = fileType?.startsWith("image/");
 
 	const { data: previewUrl, isLoading: isPreviewLoading } = useQuery({
 		queryKey: ["employee-documents", folderPath, selectedFile?.name],
@@ -67,12 +73,8 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 			});
 			return signedUrl;
 		},
-		enabled: Boolean(selectedFile),
+		enabled: Boolean(selectedFile) && ((isPDF && !isMobile) || isImage),
 	});
-
-	const fileType: string | null = selectedFile?.metadata.mimetype;
-	const isPDF = fileType === "application/pdf";
-	const isImage = fileType?.startsWith("image/");
 
 	const onDocumentLoadSuccess: OnDocumentLoadSuccess = (document) => {
 		setTotalPages(document.numPages);
@@ -155,7 +157,7 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 						</div>
 					)}
 
-					{previewUrl && isPDF && (
+					{!isMobile && previewUrl && isPDF && (
 						<div className="w-3/4 flex justify-center items-center mx-auto relative">
 							<Document
 								file={previewUrl}
@@ -199,6 +201,12 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 									)}
 								</div>
 							</Document>
+						</div>
+					)}
+
+					{isMobile && isPDF && (
+						<div className="mx-auto w-[280px] aspect-[5/7] flex justify-center items-center">
+							<FaFile className="h-32 w-32 text-muted-foreground" />
 						</div>
 					)}
 				</div>
