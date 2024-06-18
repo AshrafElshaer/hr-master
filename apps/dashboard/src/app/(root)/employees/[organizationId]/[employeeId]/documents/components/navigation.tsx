@@ -102,7 +102,7 @@ export default function DocumentsNavigation({
 										<BreadcrumbItem key={`${folder}-${idx.toString()}`}>
 											<BreadcrumbLink>
 												<Link
-													href={`/employees/${employeeId}/documents/${folderPath
+													href={`/employees/${organizationId}/${employeeId}/documents/${folderPath
 														.split("/")
 														.slice(0, idx + 1)
 														.join("/")}`}
