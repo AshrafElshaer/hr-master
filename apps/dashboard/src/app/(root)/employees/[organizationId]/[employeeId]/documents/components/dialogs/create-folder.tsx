@@ -42,11 +42,6 @@ export default function CreateFolderDialog({
 	const pathname = usePathname();
 	const { mutateAsync, isPending, error } = useMutation({
 		mutationFn: createFolder,
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: ["employee", "employee_folders", employeeId, pathname],
-			});
-		},
 	});
 
 	async function createNewFolder(e: React.FormEvent<HTMLFormElement>) {

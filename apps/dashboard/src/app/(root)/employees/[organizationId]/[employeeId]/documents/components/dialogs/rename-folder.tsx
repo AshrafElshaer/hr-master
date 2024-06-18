@@ -56,11 +56,6 @@ export default function RenameFolder({
 	const pathname = usePathname();
 	const { mutateAsync, isPending } = useMutation({
 		mutationFn: renameFolder,
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: ["employee", "employee_folders", employeeId, pathname],
-			});
-		},
 	});
 
 	async function rename(e: React.FormEvent<HTMLFormElement>) {
