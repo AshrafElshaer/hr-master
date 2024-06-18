@@ -90,7 +90,11 @@ export default function DocumentsNavigation({
 						<BreadcrumbList>
 							<BreadcrumbItem>
 								<BreadcrumbLink>
-									<Link href={`/employees/${employeeId}/documents`}>All</Link>
+									<Link
+										href={`/employees/${organizationId}/${employeeId}/documents`}
+									>
+										Root
+									</Link>
 								</BreadcrumbLink>
 							</BreadcrumbItem>
 							<BreadcrumbSeparator />
