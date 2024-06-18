@@ -17,7 +17,8 @@ async function EmployeeDocuments({
 		employeeId,
 		"",
 	);
-	const isEmpty = data?.length === 1 || !data;
+
+	const isEmpty = data?.length === 0 || !data;
 
 	if (isEmpty) {
 		return (
