@@ -50,7 +50,9 @@ export const deleteFolder = action(newFolderSchema, async (input) => {
   const supabase = createServerClient();
   const isDeleted = await deleteStorageFolder(supabase, input);
 
-  revalidatePath(`employees/${input.organizationId}/${input.employeeId}/documents/${input.folderPath}`);
+  revalidatePath(
+    `employees/${input.organizationId}/${input.employeeId}/documents/${input.folderPath}`,
+  );
 
   return isDeleted;
 });

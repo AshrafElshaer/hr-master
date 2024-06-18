@@ -21,14 +21,21 @@ import {
 } from "@hr-toolkit/ui/breadcrumb";
 import { Input } from "@hr-toolkit/ui/input";
 import { UploadFileDialog } from "./dialogs/upload-file";
-import { Folders } from "lucide-react";
+import { FolderPlus, Folders } from "lucide-react";
 import CreateFolderDialog from "./dialogs/create-folder";
 import Folder from "./folder";
+import { Button } from "@hr-toolkit/ui/button";
 
 type Props = {
 	organizationId: string;
 	employeeId: string;
 	filesData: StorageFile[] | null;
+};
+
+export type FolderProps = {
+	name: string;
+	isNew: boolean;
+	isCreated: boolean;
 };
 
 export default function DocumentsNavigation({
@@ -43,16 +50,23 @@ export default function DocumentsNavigation({
 	);
 
 	const [searchedFolder, setSearchedFolder] = React.useState("");
+	const [folders, setFolders] = React.useState<FolderProps[]>(
+		filesData
+			?.filter((folder) => Boolean(!folder.metadata))
+			.map((folder) => ({
+				name: folder.name,
+				isNew: false,
+				isCreated: true,
+			}))
+			.filter((folder) =>
+				folder?.name.includes(searchedFolder.toLowerCase()),
+			) ?? [],
+	);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: set search when pathname changes
 	useEffect(() => {
 		setSearchedFolder("");
 	}, [pathname]);
-
-	const folders = filesData
-		?.filter((folder) => Boolean(!folder.metadata))
-		.map((folder) => folder.name)
-		.filter((folder) => folder?.includes(searchedFolder.toLowerCase()));
 
 	return (
 		<section className="w-full flex flex-col gap-4 ">
@@ -69,12 +83,23 @@ export default function DocumentsNavigation({
 					</div>
 
 					<div className="flex items-center gap-2 sm:hidden ">
-						<CreateFolderDialog
-							organizationId={organizationId}
-							employeeId={employeeId}
-							folderPath={folderPath}
-							triggerSize="sm"
-						/>
+						<Button
+							variant="outline"
+							className="gap-2 items-center"
+							size={"icon"}
+							onClick={() =>
+								setFolders((prev) => [
+									...prev,
+									{
+										name: "",
+										isNew: true,
+										isCreated: false,
+									},
+								])
+							}
+						>
+							<FolderPlus className="w-5 h-5" />{" "}
+						</Button>
 						{!!folderPath && (
 							<UploadFileDialog
 								organizationId={organizationId}
@@ -131,12 +156,23 @@ export default function DocumentsNavigation({
 				)}
 
 				<div className="sm:flex items-center gap-2 hidden">
-					<CreateFolderDialog
-						organizationId={organizationId}
-						employeeId={employeeId}
-						folderPath={folderPath}
-						triggerSize="sm"
-					/>
+					<Button
+							variant="outline"
+							className="gap-2 items-center"
+							size={"icon"}
+							onClick={() =>
+								setFolders((prev) => [
+									...prev,
+									{
+										name: "",
+										isNew: true,
+										isCreated: false,
+									},
+								])
+							}
+						>
+							<FolderPlus className="w-5 h-5" />{" "}
+						</Button>
 					{!!folderPath && (
 						<UploadFileDialog
 							organizationId={organizationId}
@@ -158,9 +194,10 @@ export default function DocumentsNavigation({
 				{(folders ?? []).map((folder) => {
 					return (
 						<Folder
-							key={folder}
+							key={folder.name}
 							organizationId={organizationId}
 							folder={folder ?? ""}
+							setFolders={setFolders}
 							pathname={pathname}
 							folderPath={folderPath}
 							employeeId={employeeId}

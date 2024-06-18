@@ -19,17 +19,40 @@ import { Trash } from "lucide-react";
 import { CiEdit } from "react-icons/ci";
 import RenameFolder from "./dialogs/rename-folder";
 import DeleteFolder from "./dialogs/delete-folder";
+import type { FolderProps } from "./navigation";
+import type { ReactSetState } from "@/types";
+import { useForm } from "react-hook-form";
+
+import { z } from "zod";
+import { Form, FormControl, FormField, FormItem } from "@hr-toolkit/ui/form";
+import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
+import { createFolder } from "../actions";
+import { queryClient } from "@/lib/react-query";
 
 type Props = {
-	folder: string;
+	folder: FolderProps;
+	setFolders: ReactSetState<FolderProps[]>;
 	pathname: string;
 	organizationId: string;
 	folderPath: string;
 	employeeId: string;
 };
 
+const formSchema = z.object({
+	name: z
+		.string()
+		.min(3, {
+			message: "Folder name must be at least 3 characters",
+		})
+		.refine((value) => !/[/\\]/.test(value), {
+			message: "Folder name cannot contain / or \\",
+		}),
+});
+
 export default function Folder({
 	folder,
+	setFolders,
 	organizationId,
 	pathname,
 	folderPath,
@@ -47,22 +70,98 @@ export default function Folder({
 		setValue: setIsDelete,
 		setTrue: setIsDeleteTrue,
 	} = useBoolean(false);
+	const { mutateAsync } = useMutation({
+		mutationFn: createFolder,
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["employee", "employee_folders", employeeId, pathname],
+			});
+		},
+	});
+
+	const form = useForm<z.infer<typeof formSchema>>({
+		defaultValues: {
+			name: "",
+		},
+	});
+	async function onSubmit(values: z.infer<typeof formSchema>) {
+		const { data: input, error } = formSchema.safeParse(values);
+
+		if (error) {
+			return toast.error(error.errors[0].message);
+		}
+		const { data, serverError } = await mutateAsync({
+			organizationId,
+			employeeId,
+			folderName: input.name.toLowerCase(),
+			folderPath,
+		});
+		if (serverError) {
+			return toast.error(serverError);
+		}
+
+		if (data) {
+			toast.success("Folder created successfully");
+			setFolders((prev) => {
+				const newFolders = [...prev];
+				newFolders.pop();
+				return [
+					...newFolders,
+					{
+						name: input.name,
+						isNew: false,
+						isCreated: true,
+					},
+				];
+			});
+		}
+	}
+	if (folder.isNew) {
+		return (
+			<Form {...form}>
+				<form
+					onSubmit={form.handleSubmit(onSubmit)}
+					className={cn(
+						"flex flex-col justify-center items-center ",
+						form.formState.isSubmitting ? "animate-pulse opacity-50" : "",
+					)}
+				>
+					<IoIosFolderOpen className="w-10 h-10 sm:w-14 sm:h-14" />
+					<FormField
+						control={form.control}
+						name="name"
+						render={({ field }) => (
+							<FormItem>
+								<FormControl>
+									<input
+										placeholder="Folder Name"
+										className="w-24 rounded text-base sm:text-sm text-center focus:outline-none"
+										disabled={form.formState.isSubmitting}
+										{...field}
+									/>
+								</FormControl>
+							</FormItem>
+						)}
+					/>
+				</form>
+			</Form>
+		);
+	}
 	return (
 		<>
 			<ContextMenu>
 				<ContextMenuTrigger asChild>
 					<Link
-						key={folder}
 						className={cn(
 							buttonVariants({
 								variant: "ghost",
 							}),
 							"flex flex-col items-center hover:bg-background min-w-fit",
 						)}
-						href={`${pathname}/${folder}`}
+						href={`${pathname}/${folder.name}`}
 					>
 						<IoIosFolderOpen className="w-10 h-10 sm:w-14 sm:h-14" />
-						{capitalize(folder)}
+						{capitalize(folder.name)}
 					</Link>
 				</ContextMenuTrigger>
 
@@ -85,7 +184,7 @@ export default function Folder({
 				folderPath={folderPath}
 				open={isEdit}
 				setOpen={setIsEdit}
-				name={folder}
+				name={folder.name}
 				setIsEditFalse={setIsEditFalse}
 				employeeId={employeeId}
 			/>
@@ -95,7 +194,7 @@ export default function Folder({
 				setIsDelete={setIsDelete}
 				folderPath={folderPath}
 				employeeId={employeeId}
-				name={folder}
+				name={folder.name}
 			/>
 		</>
 	);

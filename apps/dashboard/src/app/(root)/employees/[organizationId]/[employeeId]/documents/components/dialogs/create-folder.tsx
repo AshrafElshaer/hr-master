@@ -58,7 +58,7 @@ export default function CreateFolderDialog({
 		}
 
 		const { data, serverError } = await mutateAsync({
-      organizationId,
+			organizationId,
 			employeeId,
 			folderName: input.toLowerCase(),
 			folderPath,
