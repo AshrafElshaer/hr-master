@@ -60,7 +60,7 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 		queryKey: ["employee-documents", folderPath, selectedFile?.name],
 		queryFn: async () => {
 			const { user } = await getUser(supabase);
-			const filePath = `/${user?.organization_id}/${employeeId}/${folderPath}/${selectedFile?.name}`;
+			const filePath = `${user?.organization_id}/${employeeId}/${folderPath}/${selectedFile?.name}`;
 			const { signedUrl } = await getSignedUrl(supabase, {
 				filePath,
 				expiresIn: 60 * 2, // 2 minutes
@@ -92,7 +92,7 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 
 	async function handleDelete() {
 		const { user } = await getUser(supabase);
-		const filePath = `/${user?.organization_id}/${employeeId}/${folderPath}/${selectedFile?.name}`;
+		const filePath = `${user?.organization_id}/${employeeId}/${folderPath}/${selectedFile?.name}`;
 		toast.promise(
 			supabase.storage.from("employee-documents").remove([filePath]),
 			{
@@ -109,7 +109,7 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 
 	async function generateShareLink(expiresIn: number) {
 		const { user } = await getUser(supabase);
-		const filePath = `/${user?.organization_id}/${employeeId}/${folderPath}/${selectedFile?.name}`;
+		const filePath = `${user?.organization_id}/${employeeId}/${folderPath}/${selectedFile?.name}`;
 		toast.promise(
 			getSignedUrl(supabase, {
 				filePath,
