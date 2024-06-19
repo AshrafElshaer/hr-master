@@ -23,25 +23,16 @@ export const createFolder = action(newFolderSchema, async (input) => {
   const supabase = createServerClient();
   const newFolder = await createStorageFolder(supabase, input);
 
-  revalidatePath(`employees/${input.employeeId}/documents/${input.folderPath}`);
-
   return newFolder;
 });
 
-const renameFolderSchema = z.object({
-  organizationId: z.string(),
-  employeeId: z.string(),
-  folderPath: z.string(),
-  folderName: z.string(),
+const renameFolderSchema = newFolderSchema.extend({
   newFolderName: z.string(),
 });
 
 export const renameFolder = action(renameFolderSchema, async (input) => {
   const supabase = createServerClient();
   const renamed = await renameStorageFolder(supabase, input);
-  revalidatePath(
-    `employees/${input.organizationId}/${input.employeeId}/documents/${input.folderPath}`,
-  );
 
   return renamed;
 });
@@ -49,10 +40,6 @@ export const renameFolder = action(renameFolderSchema, async (input) => {
 export const deleteFolder = action(newFolderSchema, async (input) => {
   const supabase = createServerClient();
   const isDeleted = await deleteStorageFolder(supabase, input);
-
-  revalidatePath(
-    `employees/${input.organizationId}/${input.employeeId}/documents/${input.folderPath}`,
-  );
 
   return isDeleted;
 });
@@ -79,3 +66,6 @@ export async function uploadFile(formData: FormData) {
 
   return data;
 }
+
+// /employees/daebb6bb-b1ce-4b91-a867-d06e423b412e/9b64a013-b071-451a-8f15-8d0daf5f681a/documents/
+// /employees/daebb6bb-b1ce-4b91-a867-d06e423b412e/9b64a013-b071-451a-8f15-8d0daf5f681a/documents

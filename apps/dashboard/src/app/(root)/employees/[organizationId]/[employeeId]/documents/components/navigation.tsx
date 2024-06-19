@@ -25,6 +25,9 @@ import { FolderPlus, Folders } from "lucide-react";
 import CreateFolderDialog from "./dialogs/create-folder";
 import Folder from "./folder";
 import { Button } from "@hr-toolkit/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { getEmployeeFolders } from "@hr-toolkit/supabase/storage-queries";
+import { createClient } from "@hr-toolkit/supabase/client";
 
 type Props = {
 	organizationId: string;
@@ -44,29 +47,36 @@ export default function DocumentsNavigation({
 	filesData,
 }: Props) {
 	const pathname = usePathname();
+	const supabase = createClient();
 	const folderPath = useMemo(
 		() => getSegmentAfterDocuments(decodeURI(pathname)),
 		[pathname],
 	);
 
 	const [searchedFolder, setSearchedFolder] = React.useState("");
+	const { data } = useQuery({
+		queryKey: ["employee", "employee_folders", employeeId, pathname],
+		queryFn: async () =>
+			await getEmployeeFolders(
+				supabase,
+				organizationId,
+				employeeId,
+				folderPath,
+			),
+		initialData: filesData,
+	});
+
 	const [folders, setFolders] = React.useState<FolderProps[]>(
-		filesData
-			?.filter((folder) => Boolean(!folder.metadata))
-			.map((folder) => ({
-				name: folder.name,
-				isNew: false,
-				isCreated: true,
-			}))
-			.filter((folder) =>
-				folder?.name.includes(searchedFolder.toLowerCase()),
-			) ?? [],
+		filterFolders(data, searchedFolder),
 	);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: set search when pathname changes
 	useEffect(() => {
 		setSearchedFolder("");
 	}, [pathname]);
+	useEffect(() => {
+		setFolders(filterFolders(data, searchedFolder));
+	}, [data, searchedFolder]);
 
 	return (
 		<section className="w-full flex flex-col gap-4 ">
@@ -157,22 +167,22 @@ export default function DocumentsNavigation({
 
 				<div className="sm:flex items-center gap-2 hidden">
 					<Button
-							variant="outline"
-							className="gap-2 items-center"
-							size={"icon"}
-							onClick={() =>
-								setFolders((prev) => [
-									...prev,
-									{
-										name: "",
-										isNew: true,
-										isCreated: false,
-									},
-								])
-							}
-						>
-							<FolderPlus className="w-5 h-5" />{" "}
-						</Button>
+						variant="outline"
+						className="gap-2 items-center"
+						size={"icon"}
+						onClick={() =>
+							setFolders((prev) => [
+								...prev,
+								{
+									name: "",
+									isNew: true,
+									isCreated: false,
+								},
+							])
+						}
+					>
+						<FolderPlus className="w-5 h-5" />{" "}
+					</Button>
 					{!!folderPath && (
 						<UploadFileDialog
 							organizationId={organizationId}
@@ -206,5 +216,23 @@ export default function DocumentsNavigation({
 				})}
 			</div>
 		</section>
+	);
+}
+
+function filterFolders(
+	data: StorageFile[] | null,
+	searchedFolder: string,
+): FolderProps[] {
+	return (
+		data
+			?.filter((folder) => Boolean(!folder.metadata))
+			.map((folder) => ({
+				name: folder.name,
+				isNew: false,
+				isCreated: true,
+			}))
+			.filter((folder) =>
+				folder?.name.includes(searchedFolder.toLowerCase()),
+			) ?? []
 	);
 }

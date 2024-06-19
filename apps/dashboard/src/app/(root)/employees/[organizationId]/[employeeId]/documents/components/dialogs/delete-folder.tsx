@@ -1,15 +1,13 @@
 import {
 	AlertDialog,
-	AlertDialogAction,
 	AlertDialogCancel,
 	AlertDialogContent,
 	AlertDialogDescription,
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
-	AlertDialogTrigger,
 } from "@hr-toolkit/ui/alert-dialog";
-import { Button, buttonVariants } from "@hr-toolkit/ui/button";
+import { Button } from "@hr-toolkit/ui/button";
 import { Input } from "@hr-toolkit/ui/input";
 import { capitalize } from "lodash";
 
@@ -17,7 +15,7 @@ import React from "react";
 import { deleteFolder } from "../../actions";
 import { toast } from "sonner";
 import { queryClient } from "@/lib/react-query";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 type Props = {
@@ -36,12 +34,14 @@ function DeleteFolder({
 	name,
 	setIsDelete,
 }: Props) {
-	const router = useRouter();
+	const pathname = usePathname();
 	const [confirmName, setConfirmName] = React.useState("");
 	const { mutateAsync, isPending } = useMutation({
 		mutationFn: deleteFolder,
 		onSuccess: () => {
-			router.refresh();
+			queryClient.invalidateQueries({
+				queryKey: ["employee", "employee_folders", employeeId, pathname],
+			});
 		},
 	});
 
@@ -104,3 +104,5 @@ function DeleteFolder({
 }
 
 export default DeleteFolder;
+
+// Lakshmi Deepthi
