@@ -5,8 +5,8 @@ export function useDocumentPathname() {
   const pathname = usePathname();
   const paths = pathname.split("/");
   const folderPath = getSegmentAfterDocuments(decodeURI(pathname));
-  const organizationId = paths[1];
-  const employeeId = paths[2];
+  const organizationId = paths[2];
+  const employeeId = paths[3];
 
   return {
     organizationId,
