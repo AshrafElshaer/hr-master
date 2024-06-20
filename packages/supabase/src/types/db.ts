@@ -9,6 +9,60 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      attendance: {
+        Row: {
+          check_in: string
+          check_out: string | null
+          created_at: string | null
+          id: string
+          note: string | null
+          organization_id: string
+          status: string
+          total_time: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          check_in: string
+          check_out?: string | null
+          created_at?: string | null
+          id?: string
+          note?: string | null
+          organization_id: string
+          status: string
+          total_time?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          check_in?: string
+          check_out?: string | null
+          created_at?: string | null
+          id?: string
+          note?: string | null
+          organization_id?: string
+          status?: string
+          total_time?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       departments: {
         Row: {
           description: string | null
@@ -511,6 +565,10 @@ export type Database = {
           metadata: Json
           updated_at: string
         }[]
+      }
+      operation: {
+        Args: Record<PropertyKey, never>
+        Returns: string
       }
       search: {
         Args: {
