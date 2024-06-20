@@ -33,11 +33,7 @@ async function EmployeeDocuments({
 						<br />
 						Create a folder to start uploading documents.
 					</p>
-					<CreateFolderDialog
-						organizationId={organizationId}
-						employeeId={employeeId}
-						folderPath=""
-					/>
+					<CreateFolderDialog />
 				</div>
 			</main>
 		);
@@ -45,11 +41,7 @@ async function EmployeeDocuments({
 
 	return (
 		<main className="flex flex-col items-center justify-start w-full h-full p-4 ">
-			<DocumentsNavigation
-				organizationId={organizationId}
-				employeeId={employeeId}
-				filesData={data}
-			/>
+			<DocumentsNavigation filesData={data} />
 		</main>
 	);
 }
