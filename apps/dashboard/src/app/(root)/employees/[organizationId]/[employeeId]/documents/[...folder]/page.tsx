@@ -33,19 +33,11 @@ export default async function FoldersPage(props: Props) {
 
 	return (
 		<section className="w-full flex flex-col h-full p-4">
-			<DocumentsNavigation
-				organizationId={props.params.organizationId}
-				employeeId={props.params.employeeId}
-				filesData={filesData}
-			/>
+			<DocumentsNavigation filesData={filesData} />
 			{files.length > 0 ? (
 				<DataTable columns={columns} data={files} />
 			) : (
-				<UploadZone
-					organizationId={props.params.organizationId}
-					employeeId={props.params.employeeId}
-					folderPath={folderPath}
-				/>
+				<UploadZone />
 			)}
 		</section>
 	);

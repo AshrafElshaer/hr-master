@@ -28,10 +28,9 @@ import { Button } from "@hr-toolkit/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { getEmployeeFolders } from "@hr-toolkit/supabase/storage-queries";
 import { createClient } from "@hr-toolkit/supabase/client";
+import { useDocumentPathname } from "@/hooks/useDocumentPathname";
 
 type Props = {
-	organizationId: string;
-	employeeId: string;
 	filesData: StorageFile[] | null;
 };
 
@@ -41,17 +40,11 @@ export type FolderProps = {
 	isCreated: boolean;
 };
 
-export default function DocumentsNavigation({
-	organizationId,
-	employeeId,
-	filesData,
-}: Props) {
-	const pathname = usePathname();
+export default function DocumentsNavigation({ filesData }: Props) {
+	const { organizationId, employeeId, folderPath, pathname } =
+		useDocumentPathname();
+
 	const supabase = createClient();
-	const folderPath = useMemo(
-		() => getSegmentAfterDocuments(decodeURI(pathname)),
-		[pathname],
-	);
 
 	const [searchedFolder, setSearchedFolder] = React.useState("");
 	const { data } = useQuery({
@@ -110,13 +103,7 @@ export default function DocumentsNavigation({
 						>
 							<FolderPlus className="w-5 h-5" />{" "}
 						</Button>
-						{!!folderPath && (
-							<UploadFileDialog
-								organizationId={organizationId}
-								employeeId={employeeId}
-								folderPath={folderPath}
-							/>
-						)}
+						{!!folderPath && <UploadFileDialog />}
 					</div>
 				</div>
 
@@ -183,13 +170,7 @@ export default function DocumentsNavigation({
 					>
 						<FolderPlus className="w-5 h-5" />{" "}
 					</Button>
-					{!!folderPath && (
-						<UploadFileDialog
-							organizationId={organizationId}
-							employeeId={employeeId}
-							folderPath={folderPath}
-						/>
-					)}
+					{!!folderPath && <UploadFileDialog />}
 				</div>
 			</div>
 			<div
@@ -205,12 +186,8 @@ export default function DocumentsNavigation({
 					return (
 						<Folder
 							key={folder.name}
-							organizationId={organizationId}
 							folder={folder ?? ""}
 							setFolders={setFolders}
-							pathname={pathname}
-							folderPath={folderPath}
-							employeeId={employeeId}
 						/>
 					);
 				})}

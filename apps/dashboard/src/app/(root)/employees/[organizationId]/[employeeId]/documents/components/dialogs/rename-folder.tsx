@@ -22,11 +22,9 @@ import { FolderPen, Loader } from "lucide-react";
 
 import { Input } from "@hr-toolkit/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
+import { useDocumentPathname } from "@/hooks/useDocumentPathname";
 
 type Props = {
-	employeeId: string;
-	organizationId: string;
-	folderPath: string;
 	name: string;
 	open: boolean;
 	setOpen: (open: boolean) => void;
@@ -44,24 +42,22 @@ export const folderNameSchema = z
 	});
 
 export default function RenameFolder({
-	employeeId,
-	organizationId,
-	folderPath,
 	name,
 	open,
 	setOpen,
 	setIsEditFalse,
 }: Props) {
 	const [folderName, setFolderName] = React.useState(name);
-	const pathname = usePathname();
+
+	const { organizationId, employeeId, folderPath, pathname } =
+		useDocumentPathname();
+
 	const { mutateAsync, isPending } = useMutation({
 		mutationFn: renameFolder,
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({
 				queryKey: ["employee", "employee_folders", employeeId, pathname],
 			});
-
-
 		},
 	});
 

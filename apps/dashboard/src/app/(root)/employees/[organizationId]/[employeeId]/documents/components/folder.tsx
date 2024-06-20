@@ -29,14 +29,11 @@ import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { createFolder } from "../actions";
 import { queryClient } from "@/lib/react-query";
+import { useDocumentPathname } from "@/hooks/useDocumentPathname";
 
 type Props = {
 	folder: FolderProps;
 	setFolders: ReactSetState<FolderProps[]>;
-	pathname: string;
-	organizationId: string;
-	folderPath: string;
-	employeeId: string;
 };
 
 const formSchema = z.object({
@@ -50,14 +47,9 @@ const formSchema = z.object({
 		}),
 });
 
-export default function Folder({
-	folder,
-	setFolders,
-	organizationId,
-	pathname,
-	folderPath,
-	employeeId,
-}: Props) {
+export default function Folder({ folder, setFolders }: Props) {
+	const { organizationId, employeeId, folderPath, pathname } =
+		useDocumentPathname();
 	const {
 		value: isEdit,
 		setFalse: setIsEditFalse,
@@ -187,20 +179,14 @@ export default function Folder({
 				</ContextMenuContent>
 			</ContextMenu>
 			<RenameFolder
-				organizationId={organizationId}
-				folderPath={folderPath}
 				open={isEdit}
 				setOpen={setIsEdit}
 				name={folder.name}
 				setIsEditFalse={setIsEditFalse}
-				employeeId={employeeId}
 			/>
 			<DeleteFolder
-				organizationId={organizationId}
 				isDelete={isDelete}
 				setIsDelete={setIsDelete}
-				folderPath={folderPath}
-				employeeId={employeeId}
 				name={folder.name}
 			/>
 		</>

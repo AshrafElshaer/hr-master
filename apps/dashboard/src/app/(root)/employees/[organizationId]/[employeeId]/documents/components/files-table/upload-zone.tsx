@@ -4,21 +4,15 @@ import { useRouter } from "next/navigation";
 import { uploadFile } from "../../actions";
 
 import { FileUploader } from "@/components/uploader";
+import { useDocumentPathname } from "@/hooks/useDocumentPathname";
 
 type Props = {
-	organizationId: string;
-	employeeId: string;
-	folderPath: string;
 	setOpen?: (open: boolean) => void;
 };
 
-function UploadZone({
-	organizationId,
-	employeeId,
-	folderPath,
-	setOpen,
-}: Props) {
+function UploadZone({ setOpen }: Props) {
 	const router = useRouter();
+	const { organizationId, employeeId, folderPath } = useDocumentPathname();
 
 	async function onUpload(files: File[]) {
 		const promises = files.map((file) => {

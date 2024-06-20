@@ -18,23 +18,15 @@ import { queryClient } from "@/lib/react-query";
 import { usePathname } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
+import { useDocumentPathname } from "@/hooks/useDocumentPathname";
 type Props = {
 	isDelete: boolean;
 	setIsDelete: (value: boolean) => void;
-	folderPath: string;
-	organizationId: string;
-	employeeId: string;
 	name: string;
 };
-function DeleteFolder({
-	organizationId,
-	employeeId,
-	folderPath,
-	isDelete,
-	name,
-	setIsDelete,
-}: Props) {
-	const pathname = usePathname();
+function DeleteFolder({ isDelete, name, setIsDelete }: Props) {
+	const { organizationId, employeeId, folderPath, pathname } =
+		useDocumentPathname();
 	const [confirmName, setConfirmName] = React.useState("");
 	const { mutateAsync, isPending } = useMutation({
 		mutationFn: deleteFolder,

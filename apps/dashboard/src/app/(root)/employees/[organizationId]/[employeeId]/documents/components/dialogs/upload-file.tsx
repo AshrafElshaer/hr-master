@@ -14,17 +14,8 @@ import {
 
 import UploadZone from "../files-table/upload-zone";
 import { CloudUpload } from "lucide-react";
-type Props = {
-	organizationId: string;
-	employeeId: string;
-	folderPath: string;
-};
 
-export function UploadFileDialog({
-	organizationId,
-	employeeId,
-	folderPath,
-}: Props) {
+export function UploadFileDialog() {
 	const [open, setOpen] = React.useState(false);
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -41,12 +32,7 @@ export function UploadFileDialog({
 						Drag and drop your files here or click to browse.
 					</DialogDescription>
 				</DialogHeader>
-				<UploadZone
-					organizationId={organizationId}
-					employeeId={employeeId}
-					folderPath={folderPath}
-					setOpen={setOpen}
-				/>
+				<UploadZone setOpen={setOpen} />
 			</DialogContent>
 		</Dialog>
 	);

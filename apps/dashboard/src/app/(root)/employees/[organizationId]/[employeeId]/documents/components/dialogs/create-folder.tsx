@@ -23,23 +23,17 @@ import { FolderPlus, Loader } from "lucide-react";
 import { Input } from "@hr-toolkit/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { folderNameSchema } from "./rename-folder";
+import { useDocumentPathname } from "@/hooks/useDocumentPathname";
 
 type Props = {
-	organizationId: string;
-	employeeId: string;
-	folderPath: string;
 	triggerSize?: "sm" | "default";
 };
 
-export default function CreateFolderDialog({
-	organizationId,
-	employeeId,
-	folderPath,
-	triggerSize = "default",
-}: Props) {
+export default function CreateFolderDialog({ triggerSize = "default" }: Props) {
 	const [open, setOpen] = React.useState(false);
 	const [folderName, setFolderName] = React.useState("");
-	const pathname = usePathname();
+	const { organizationId, employeeId, folderPath, pathname } =
+		useDocumentPathname();
 	const { mutateAsync, isPending, error } = useMutation({
 		mutationFn: createFolder,
 		onSuccess: () => {

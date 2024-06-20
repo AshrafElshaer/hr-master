@@ -39,6 +39,7 @@ import type { OnDocumentLoadSuccess } from "node_modules/react-pdf/dist/esm/shar
 import { toast } from "sonner";
 import Link from "next/link";
 import { useMediaQuery } from "usehooks-ts";
+import { useDocumentPathname } from "@/hooks/useDocumentPathname";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -51,13 +52,10 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 	const isMobile = useMediaQuery("only screen and (max-width : 768px)");
 	const [totalPages, setTotalPages] = React.useState(0);
 	const [currentPage, setCurrentPage] = React.useState(1);
-
+	const { organizationId, employeeId, folderPath } = useDocumentPathname();
 	const supabase = createClient();
-	const pathname = usePathname();
+
 	const router = useRouter();
-	const folderPath = getSegmentAfterDocuments(pathname);
-	const organizationId = pathname.split("/")[2];
-	const employeeId = pathname.split("/")[3];
 
 	const fileType: string | null = selectedFile?.metadata.mimetype;
 	const isPDF = fileType === "application/pdf";
