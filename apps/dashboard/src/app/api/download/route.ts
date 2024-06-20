@@ -17,9 +17,9 @@ export async function GET(req: Request, res: Response) {
 
   const filePath = `${organizationId}/${employeeId}/${path}/${filename}`;
 
-  const { data } = await supabase.storage.from("employee-documents").download(
-    filePath,
-  );
+  const { data } = await supabase.storage
+    .from("employee-documents")
+    .download(filePath);
 
   const responseHeaders = new Headers(res.headers);
 
