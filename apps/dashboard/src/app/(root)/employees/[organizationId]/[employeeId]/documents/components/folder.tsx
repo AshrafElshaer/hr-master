@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useBoolean } from "usehooks-ts";
 
 import { capitalize } from "lodash";
@@ -116,6 +116,13 @@ export default function Folder({
 			});
 		}
 	}
+
+	useEffect(() => {
+		if (folder.isNew) {
+			form.setFocus("name");
+		}
+	}, [folder.isNew, form.setFocus]);
+
 	if (folder.isNew) {
 		return (
 			<Form {...form}>
@@ -123,7 +130,7 @@ export default function Folder({
 					onSubmit={form.handleSubmit(onSubmit)}
 					className={cn(
 						"flex flex-col justify-center items-center ",
-						form.formState.isSubmitting ? "animate-pulse opacity-50" : "",
+						form.formState.isSubmitting && "animate-pulse opacity-50",
 					)}
 				>
 					<IoIosFolderOpen className="w-10 h-10 sm:w-14 sm:h-14" />
@@ -134,8 +141,8 @@ export default function Folder({
 							<FormItem>
 								<FormControl>
 									<input
-										placeholder="Folder Name"
-										className="w-24 rounded text-base sm:text-sm text-center focus:outline-none"
+										placeholder="Untitled folder"
+										className="w-24 rounded text-base sm:text-sm text-center focus:outline-none bg-transparent placeholder:text-foreground/30"
 										disabled={form.formState.isSubmitting}
 										{...field}
 									/>
