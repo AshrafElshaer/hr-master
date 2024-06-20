@@ -30,7 +30,7 @@ function MainSidebar({
 
 					return (
 						<>
-							{idx === 7 && (
+							{idx === 6 && (
 								<Separator
 									key={`${route.path}-seperatr`}
 									className="w-full my-4"
