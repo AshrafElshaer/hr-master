@@ -136,7 +136,7 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 				</SheetClose>
 				<div className=" p-4">
 					{isPreviewLoading && isPDF && (
-						<Skeleton className="mx-auto w-[280px] aspect-[5/7]" />
+						<Skeleton className="mx-auto w-[280px] aspect-[5/6.15]" />
 					)}
 
 					{isPreviewLoading && isImage && (
@@ -161,15 +161,15 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 								onLoadSuccess={onDocumentLoadSuccess}
 								className={"group"}
 								loading={
-									<Skeleton className="mx-auto w-[280px] aspect-[5/7]" />
+									<Skeleton className="mx-auto w-[280px] aspect-[5/6.15]" />
 								}
 								error={
-									<div className="mx-auto w-[280px] aspect-[5/7] flex justify-center items-center">
+									<div className="mx-auto w-[280px] aspect-[5/6.15] flex justify-center items-center">
 										<FaFile className="h-32 w-32 text-muted-foreground" />
 									</div>
 								}
 							>
-								<div className=" w-[280px] aspect-[5/7] overflow-y-scroll scrollbar-muted">
+								<div className=" w-[280px] aspect-[5/6.15] overflow-y-scroll scrollbar-muted">
 									<Page pageNumber={currentPage} width={265} />
 									{totalPages > 1 && (
 										<div className="absolute opacity-0 flex group-hover:opacity-100 transition-all items-center bottom-2 right-1/2 translate-x-1/2 bg-[#121212] text-[#FAFAFA] rounded shadow-md   text-xs z-10 gap-2">
@@ -202,7 +202,7 @@ export default function FilePreview({ selectedFile, setSelectedFile }: Props) {
 					)}
 
 					{isMobile && isPDF && (
-						<div className="mx-auto w-[280px] aspect-[5/7] flex justify-center items-center">
+						<div className="mx-auto w-[280px] aspect-[5/6.15] flex justify-center items-center">
 							<FaFile className="h-32 w-32 text-muted-foreground" />
 						</div>
 					)}
