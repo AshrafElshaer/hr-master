@@ -15,36 +15,34 @@ type Props = {
 
 export default function EmployeeNavigation({ params }: Props) {
 	const pathname = usePathname();
-  const employeeId = params.employeeId;
-  const organizationId = params.organizationId;
+	const employeeId = params.employeeId;
+	const organizationId = params.organizationId;
 
 	return (
 		<section className=" w-full flex items-center gap-2 overflow-x-scroll overflow-y-clip scrollbar-hide py-3 px-4">
 			<BackButton />
 			{employeeDetailsNavigation.map((route) => {
-        const isActivePath =
-          pathname === `/employees/${organizationId}/${employeeId}${route.path}` ||
-          route.subRoutes?.some(
-            (subRoute) =>
-              pathname ===
-              `/employees/${organizationId}/${employeeId}${route.path}${subRoute.path}`,
-          );
-        return (
-          <Link
-            href={`/employees/${organizationId}/${employeeId}${route.path}`}
-            key={`/employees/${organizationId}/${employeeId}${route.path}`}
-            className={cn(
-              buttonVariants({
-                variant: isActivePath ? "secondary" : "ghost",
-                className: "gap-2",
-              }),
-            )}
-          >
-            {route.icon}
-            {route.title}
-          </Link>
-        );
-      })}
+				const isActivePath =
+					(route.path === "/" &&
+						pathname === `/employees/${organizationId}/${employeeId}`) ||
+					(route.path !== "/" && pathname.includes(route.path));
+
+				return (
+					<Link
+						href={`/employees/${organizationId}/${employeeId}${route.path}`}
+						key={`/employees/${organizationId}/${employeeId}${route.path}`}
+						className={cn(
+							buttonVariants({
+								variant: isActivePath ? "secondary" : "ghost",
+								className: "gap-2",
+							}),
+						)}
+					>
+						{route.icon}
+						{route.title}
+					</Link>
+				);
+			})}
 		</section>
 	);
 }
@@ -52,7 +50,7 @@ export default function EmployeeNavigation({ params }: Props) {
 const employeeDetailsNavigation = [
 	{
 		title: "General",
-		path: "",
+		path: "/",
 		icon: <NotebookTabs className="w-4 h-4" />,
 	},
 	{
@@ -69,23 +67,5 @@ const employeeDetailsNavigation = [
 		title: "Documents",
 		path: "/documents",
 		icon: <FileText className="w-4 h-4" />,
-		subRoutes: [
-			{
-				name: "Personal",
-				path: "/personal",
-			},
-			{
-				name: "Employment",
-				path: "/employment",
-			},
-			{
-				name: "Tax",
-				path: "/tax",
-			},
-			{
-				name: "Bank",
-				path: "/bank",
-			},
-		],
 	},
 ];
