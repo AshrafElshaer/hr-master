@@ -14,7 +14,10 @@ export default async function ClockInOut() {
 			<div className="flex items-center justify-between">
 				<h3 className="text-foreground/70 font-semibold">Clock In/Out</h3>
 				{isClockIn && (
-					<p className="text-sm">In - {format(new Date("6/21/2024, 10:33:51 AM"), "hh:mm a")}</p>
+					<p className="text-sm">
+						In -{" "}
+						{format(new Date(currentAttendance?.clock_in ?? ""), "hh:mm a")}
+					</p>
 				)}
 			</div>
 			<Timer currentAttendance={currentAttendance} />
