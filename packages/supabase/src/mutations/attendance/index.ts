@@ -2,7 +2,7 @@ import { AttendanceStatus, type SupabaseClient } from "../../types";
 import { getUser } from "../../queries/user";
 import { getCurrentAttendanceByUserId } from "../../queries/attendance";
 
-export async function clockIn(supabase: SupabaseClient) {
+export async function clockIn(supabase: SupabaseClient, clockedInAt: string) {
   const { user } = await getUser(supabase);
 
   if (!user || !user.id || !user.organization_id) {
@@ -14,12 +14,14 @@ export async function clockIn(supabase: SupabaseClient) {
       {
         user_id: user.id,
         organization_id: user.organization_id,
-        clock_in: new Date().toString(),
+        clock_in: clockedInAt,
         status: "clocked_in",
-        created_at: new Date().toString(),
+        created_at: clockedInAt,
       },
     ],
-  ).select("*").single();
+  )
+    .select("*")
+    .single();
 
   if (error) {
     throw Error(error.message);
@@ -28,8 +30,8 @@ export async function clockIn(supabase: SupabaseClient) {
   return data;
 }
 
-export async function clockOut(supabase: SupabaseClient) {
-  const now = new Date().toString();
+export async function clockOut(supabase: SupabaseClient, clockedOutAt: string) {
+  const now = clockedOutAt;
   const { user } = await getUser(supabase);
 
   if (!user || !user.id) {
@@ -56,6 +58,7 @@ export async function clockOut(supabase: SupabaseClient) {
       clock_out: now,
       status: AttendanceStatus.PENDING,
       updated_at: now,
+      total_time: totalTime,
     })
     .eq("user_id", user.id)
     .eq("status", "clocked_in")

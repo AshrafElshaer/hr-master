@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { clockInAction, clockOutAction } from "../../actions";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import ToastDescription from "@/components/toast-description";
 
 type TimerProps = {
 	currentAttendance: Attendance | undefined;
@@ -25,28 +26,36 @@ export default function Timer({ currentAttendance }: TimerProps) {
 	});
 
 	async function handleClockIn() {
-		const { data, serverError } = await clockInMutation.mutateAsync(null);
+		const now = new Date().toString();
+		const { data, serverError } = await clockInMutation.mutateAsync({
+			clockedInAt: now,
+		});
+
 		if (serverError) {
 			toast.error(serverError, {
 				description: "Please try again",
 			});
 			return;
 		}
-		toast.success("You are clocked in", {
-			description: ` at ${format(new Date(data?.clock_in ?? ""), "hh:mm a")}`,
-		});
+		toast.success(
+			`You are clocked in at ${format(new Date(data?.clock_in ?? ""), "hh:mm a")}`,
+		);
 	}
 	async function handleClockOut() {
-		const { data, serverError } = await clockInOutMutation.mutateAsync(null);
+		const now = new Date().toString();
+		const { data, serverError } = await clockInOutMutation.mutateAsync({
+			clockedOutAt: now,
+		});
 		if (serverError) {
 			toast.error(serverError, {
 				description: "Please try again",
 			});
 			return;
 		}
-		toast.success("You are clocked out", {
-			description: ` at ${format(new Date(data?.clock_out ?? ""), "hh:mm a")}`,
-		});
+
+		toast.success(
+			`You are clocked out at ${format(new Date(data?.clock_out ?? ""), "hh:mm a")}`,
+		);
 	}
 	return (
 		<div className="flex items-center justify-between">

@@ -18,20 +18,30 @@ export const getCurrentAttendance = action(z.null(), async () => {
   return await getCurrentAttendanceByUserId(supabase, user.id);
 });
 
-export const clockInAction = action(z.null(), async () => {
-  const supabase = createServerClient();
-
-  const attendance = await clockIn(supabase);
-  revalidatePath("/");
-
-  return attendance;
-});
-
-export const clockOutAction = action(z.null(), async () => {
+export const clockInAction = action(
+  z.object({
+    clockedInAt: z.string(),
+  }),
+  async ({clockedInAt}) => {
     const supabase = createServerClient();
-    
-    const attendance = await clockOut(supabase);
+
+    const attendance = await clockIn(supabase,clockedInAt);
     revalidatePath("/");
-    
+
     return attendance;
-});
+  },
+);
+
+export const clockOutAction = action(
+  z.object({
+    clockedOutAt: z.string(),
+  }),
+  async ({ clockedOutAt }) => {
+    const supabase = createServerClient();
+
+    const attendance = await clockOut(supabase, clockedOutAt);
+    revalidatePath("/");
+
+    return attendance;
+  },
+);
