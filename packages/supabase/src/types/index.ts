@@ -21,11 +21,24 @@ export interface UserWithDepartmentAndOrganization extends User {
 
 type StorageListFunction = SupabaseClient["storage"]["from"];
 type ListFunctionReturn = ReturnType<StorageListFunction>;
-
 type StorageFilePromise = Awaited<
   ReturnType<ListFunctionReturn["list"]>
 >;
 type StorageFileType = Pick<StorageFilePromise, "data">["data"];
-
-// extract the object out file FileObject[]
 export type StorageFile = NonNullable<StorageFileType>[number];
+
+export type Attendance = Database["public"]["Tables"]["attendance"]["Row"];
+export interface AttendanceWithUser extends Attendance {
+  user: User;
+}
+export interface AttendanceWithOrganization extends Attendance {
+  organization: Organization;
+}
+
+export enum AttendanceStatus {
+  CLOCKED_IN = "clocked_in",
+  PENDING = "pending",
+  CLOCKED_OUT = "clocked_out",
+  APPROVED = "approved",
+  REJECTED = "rejected",
+}

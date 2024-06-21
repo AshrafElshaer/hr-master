@@ -11,8 +11,8 @@ export type Database = {
     Tables: {
       attendance: {
         Row: {
-          check_in: string
-          check_out: string | null
+          clock_in: string
+          clock_out: string | null
           created_at: string | null
           id: string
           note: string | null
@@ -23,8 +23,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          check_in: string
-          check_out?: string | null
+          clock_in: string
+          clock_out?: string | null
           created_at?: string | null
           id?: string
           note?: string | null
@@ -35,8 +35,8 @@ export type Database = {
           user_id: string
         }
         Update: {
-          check_in?: string
-          check_out?: string | null
+          clock_in?: string
+          clock_out?: string | null
           created_at?: string | null
           id?: string
           note?: string | null

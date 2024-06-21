@@ -27,6 +27,8 @@
 		"./departments-mutations": "./src/mutations/departments/index.ts",
 		"./departments-queries": "./src/queries/departments/index.ts",
 		"./storage-queries": "./src/queries/storage/index.ts",
-		"./storage-mutations": "./src/mutations/storage/index.ts"
+		"./storage-mutations": "./src/mutations/storage/index.ts",
+		"./attendance-queries": "./src/queries/attendance/index.ts",
+		"./attendance-mutations": "./src/mutations/attendance/index.ts"
 	}
 }
