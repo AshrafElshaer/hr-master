@@ -101,6 +101,7 @@ export type Database = {
       }
       events: {
         Row: {
+          created_at: string | null
           department_id: string | null
           event_date: string
           event_description: string | null
@@ -114,8 +115,10 @@ export type Database = {
           recurrence_pattern:
             | Database["public"]["Enums"]["recurrence_pattern_enum"]
             | null
+          updated_at: string | null
         }
         Insert: {
+          created_at?: string | null
           department_id?: string | null
           event_date: string
           event_description?: string | null
@@ -129,8 +132,10 @@ export type Database = {
           recurrence_pattern?:
             | Database["public"]["Enums"]["recurrence_pattern_enum"]
             | null
+          updated_at?: string | null
         }
         Update: {
+          created_at?: string | null
           department_id?: string | null
           event_date?: string
           event_description?: string | null
@@ -144,6 +149,7 @@ export type Database = {
           recurrence_pattern?:
             | Database["public"]["Enums"]["recurrence_pattern_enum"]
             | null
+          updated_at?: string | null
         }
         Relationships: [
           {

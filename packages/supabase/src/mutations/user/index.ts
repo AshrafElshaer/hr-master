@@ -1,5 +1,11 @@
 import { getUser } from "../../queries/user";
-import type { Database, SupabaseClient, UserWithDepartment } from "../../types";
+import type {
+  Database,
+  Event,
+  EventInsert,
+  SupabaseClient,
+  UserWithDepartment,
+} from "../../types";
 
 type PersonalInfo = Database["public"]["Tables"]["users"]["Update"];
 
@@ -72,6 +78,29 @@ export async function createEmployee(
   if (updateError) {
     throw updateError;
   }
+
+  const newEvents: EventInsert[] = [
+    {
+      event_name:
+        `${newUserUpdates.first_name} ${newUserUpdates.last_name} birthday`,
+      event_type: "birthday",
+      event_date: new Date(newUserUpdates.date_of_birth ?? "").toDateString(),
+      is_recurring: true,
+      organization_id: currentUser.organization_id as string,
+      organizer_id: currentUser.id,
+      recurrence_pattern: "yearly",
+    },
+    {
+      event_name:
+        `${newUserUpdates.first_name} ${newUserUpdates.last_name} anniversary`,
+      event_type: "anniversary",
+      event_date: new Date(newUserUpdates.hire_date ?? "").toDateString(),
+      is_recurring: false,
+      organization_id: currentUser.organization_id as string,
+      organizer_id: currentUser.id,
+    },
+  ];
+  await supabase.from("events").insert(newEvents);
 
   return newUserUpdates;
 }
