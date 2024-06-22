@@ -15,7 +15,6 @@ export type Database = {
           clock_out: string | null
           created_at: string | null
           id: string
-          note: string | null
           organization_id: string
           status: string
           total_time: number | null
@@ -27,7 +26,6 @@ export type Database = {
           clock_out?: string | null
           created_at?: string | null
           id?: string
-          note?: string | null
           organization_id: string
           status: string
           total_time?: number | null
@@ -39,7 +37,6 @@ export type Database = {
           clock_out?: string | null
           created_at?: string | null
           id?: string
-          note?: string | null
           organization_id?: string
           status?: string
           total_time?: number | null
@@ -96,6 +93,76 @@ export type Database = {
           {
             foreignKeyName: "departments_person_in_charge_id_fkey"
             columns: ["person_in_charge_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          department_id: string | null
+          event_date: string
+          event_description: string | null
+          event_name: string
+          event_type: Database["public"]["Enums"]["event_type_enum"]
+          id: string
+          is_recurring: boolean | null
+          location: string | null
+          organization_id: string
+          organizer_id: string
+          recurrence_pattern:
+            | Database["public"]["Enums"]["recurrence_pattern_enum"]
+            | null
+        }
+        Insert: {
+          department_id?: string | null
+          event_date: string
+          event_description?: string | null
+          event_name: string
+          event_type: Database["public"]["Enums"]["event_type_enum"]
+          id?: string
+          is_recurring?: boolean | null
+          location?: string | null
+          organization_id: string
+          organizer_id: string
+          recurrence_pattern?:
+            | Database["public"]["Enums"]["recurrence_pattern_enum"]
+            | null
+        }
+        Update: {
+          department_id?: string | null
+          event_date?: string
+          event_description?: string | null
+          event_name?: string
+          event_type?: Database["public"]["Enums"]["event_type_enum"]
+          id?: string
+          is_recurring?: boolean | null
+          location?: string | null
+          organization_id?: string
+          organizer_id?: string
+          recurrence_pattern?:
+            | Database["public"]["Enums"]["recurrence_pattern_enum"]
+            | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_organizer_id_fkey"
+            columns: ["organizer_id"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
@@ -283,6 +350,8 @@ export type Database = {
       }
     }
     Enums: {
+      event_type_enum: "meeting" | "birthday" | "anniversary" | "conference"
+      recurrence_pattern_enum: "daily" | "weekly" | "monthly" | "yearly"
       role_enum: "owner" | "manager" | "employee"
     }
     CompositeTypes: {
