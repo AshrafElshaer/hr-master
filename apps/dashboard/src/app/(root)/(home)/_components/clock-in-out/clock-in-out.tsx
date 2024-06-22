@@ -74,7 +74,7 @@ export default function ClockInOut({ currentAttendance }: TimerProps) {
 					<Button
 						className="w-full"
 						onClick={handleClockIn}
-						disabled={clockInMutation.isPending}
+						disabled={clockInMutation.isPending || clockInMutation.isSuccess}
 					>
 						Clock In at {hoursAndMinutes}
 					</Button>
@@ -83,7 +83,9 @@ export default function ClockInOut({ currentAttendance }: TimerProps) {
 						className="w-full"
 						variant={"destructive"}
 						onClick={handleClockOut}
-						disabled={clockInOutMutation.isPending}
+						disabled={
+							clockInOutMutation.isPending || clockInOutMutation.isSuccess
+						}
 					>
 						Clock Out {hours ? `${hours}h : ` : null}
 						{minutes ? `${minutes}m :` : null} {`${seconds}s`}
