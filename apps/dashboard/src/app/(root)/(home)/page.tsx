@@ -1,4 +1,4 @@
-import ClockInOut from "./_components/clock-in-out/clock-in-out";
+import ClockInOut from "./_components/clock-in-out";
 
 export default function IndexPage() {
 	return (
