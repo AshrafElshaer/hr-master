@@ -2,13 +2,12 @@ create table public.attendance (
   id uuid primary key default uuid_generate_v4 (),
   user_id uuid not null,
   organization_id uuid not null,
-  created_at timestamp with time zone default current_timestamp,
-  updated_at timestamp with time zone default current_timestamp,
-  clock_in timestamp with time zone not null,
-  clock_out timestamp with time zone,
+  created_at text not null,
+  updated_at text,
+  clock_in text not null,
+  clock_out text,
   total_time double precision,
   status text not null,
-  note text,
   constraint attendance_user_id_fkey foreign key (user_id) references public.users (id) on delete cascade,
   constraint attendance_organization_id_fkey foreign key (organization_id) references public.organizations (id) on delete cascade
 ) tablespace pg_default;
