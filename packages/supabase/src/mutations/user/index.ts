@@ -87,6 +87,8 @@ export async function createEmployee(
       event_date: getNextEventDate(
         new Date(newUserUpdates.date_of_birth ?? ""),
       ).toDateString(),
+      start_time: "00:00",
+      end_time: "23:59",
 
       organization_id: currentUser.organization_id as string,
       organizer_id: currentUser.id,
@@ -98,6 +100,8 @@ export async function createEmployee(
       event_date: getNextEventDate(
         new Date(newUserUpdates.hire_date ?? ""),
       ).toDateString(),
+      start_time: "00:00",
+      end_time: "23:59",
 
       organization_id: currentUser.organization_id as string,
       organizer_id: currentUser.id,
