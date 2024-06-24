@@ -2,14 +2,17 @@ import { Suspense } from "react";
 import ClockInOut from "./_components/clock-in-out";
 import { Skeleton } from "@hr-toolkit/ui/skeleton";
 import { Card } from "@hr-toolkit/ui/card";
+import UpcomingEvents from "./_components/events";
 
 export default function IndexPage() {
 	return (
 		<main className="flex flex-col gap-4 h-full p-4">
-			<h2 className="md:text-xl">Dashboard</h2>
-			<Suspense fallback={<ClockInOutSkeleton />}>
-				<ClockInOut />
-			</Suspense>
+			<div className="flex gap-4">
+				<UpcomingEvents />
+				<Suspense fallback={<ClockInOutSkeleton />}>
+					<ClockInOutSkeleton />
+				</Suspense>
+			</div>
 		</main>
 	);
 }

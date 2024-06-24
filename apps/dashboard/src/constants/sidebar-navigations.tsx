@@ -42,8 +42,8 @@ export const sidebarNavigations = [
     icon: <PiKanban size={18} />,
   },
   {
-    title: "Chat",
-    path: "/chat",
+    title: "Messages",
+    path: "/messages",
     icon: <IoChatbubblesOutline size={18} />,
   },
 ];

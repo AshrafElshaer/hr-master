@@ -59,7 +59,7 @@ export default function ClockInOut({ currentAttendance }: TimerProps) {
 		);
 	}
 	return (
-		<Card className=" ml-auto flex flex-col p-4 gap-4 w-full sm:w-80 ">
+		<Card className=" ml-auto flex flex-col h-fit p-4 gap-4 w-full sm:w-80 ">
 			<div className="flex items-center justify-between">
 				<h3 className="text-foreground/70 font-semibold">Clock In/Out</h3>
 				{isClockIn && (
