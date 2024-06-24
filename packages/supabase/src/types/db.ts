@@ -108,13 +108,9 @@ export type Database = {
           event_name: string
           event_type: Database["public"]["Enums"]["event_type_enum"]
           id: string
-          is_recurring: boolean | null
           location: string | null
           organization_id: string
           organizer_id: string
-          recurrence_pattern:
-            | Database["public"]["Enums"]["recurrence_pattern_enum"]
-            | null
           updated_at: string | null
         }
         Insert: {
@@ -125,13 +121,9 @@ export type Database = {
           event_name: string
           event_type: Database["public"]["Enums"]["event_type_enum"]
           id?: string
-          is_recurring?: boolean | null
           location?: string | null
           organization_id: string
           organizer_id: string
-          recurrence_pattern?:
-            | Database["public"]["Enums"]["recurrence_pattern_enum"]
-            | null
           updated_at?: string | null
         }
         Update: {
@@ -142,13 +134,9 @@ export type Database = {
           event_name?: string
           event_type?: Database["public"]["Enums"]["event_type_enum"]
           id?: string
-          is_recurring?: boolean | null
           location?: string | null
           organization_id?: string
           organizer_id?: string
-          recurrence_pattern?:
-            | Database["public"]["Enums"]["recurrence_pattern_enum"]
-            | null
           updated_at?: string | null
         }
         Relationships: [

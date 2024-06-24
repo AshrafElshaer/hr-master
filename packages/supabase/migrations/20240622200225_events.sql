@@ -1,23 +1,23 @@
 CREATE TYPE event_type_enum AS ENUM(
     'meeting',
+    'conference',
     'birthday',
-    'anniversary',
-    'conference'
+    'anniversary'
 );
 
 CREATE TYPE recurrence_pattern_enum AS ENUM('daily', 'weekly', 'monthly', 'yearly');
 
 CREATE TABLE public.events (
     id uuid primary key default uuid_generate_v4 (),
-    event_name TEXT NOT NULL,
-    event_date text NOT NULL,
-    event_description TEXT NULL,
-    event_type event_type_enum NOT NULL,
-    is_recurring BOOLEAN DEFAULT FALSE,
-    recurrence_pattern recurrence_pattern_enum null,
-    location TEXT NULL,
+    event_name text not null,
+    event_date text not null,
+    start_time text not null,
+    end_time text not null,
+    event_description text null,
+    event_type event_type_enum not null,
+    location text null,
     organizer_id UUID not null,
-    organization_id UUID NOT NULL,
+    organization_id UUID not null,
     department_id uuid null,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,

@@ -84,18 +84,21 @@ export async function createEmployee(
       event_name:
         `${newUserUpdates.first_name} ${newUserUpdates.last_name} birthday`,
       event_type: "birthday",
-      event_date: new Date(newUserUpdates.date_of_birth ?? "").toDateString(),
-      is_recurring: true,
+      event_date: getNextEventDate(
+        new Date(newUserUpdates.date_of_birth ?? ""),
+      ).toDateString(),
+
       organization_id: currentUser.organization_id as string,
       organizer_id: currentUser.id,
-      recurrence_pattern: "yearly",
     },
     {
       event_name:
         `${newUserUpdates.first_name} ${newUserUpdates.last_name} anniversary`,
       event_type: "anniversary",
-      event_date: new Date(newUserUpdates.hire_date ?? "").toDateString(),
-      is_recurring: false,
+      event_date: getNextEventDate(
+        new Date(newUserUpdates.hire_date ?? ""),
+      ).toDateString(),
+
       organization_id: currentUser.organization_id as string,
       organizer_id: currentUser.id,
     },
@@ -128,4 +131,17 @@ export async function updateEmployeeById(
     throw error;
   }
   return updated;
+}
+
+function getNextEventDate(
+  event_date: Date,
+): Date {
+  const currentDate = new Date();
+  const eventDate = new Date(event_date);
+  if (eventDate < currentDate) {
+    const nextEventDate = new Date(eventDate);
+    nextEventDate.setFullYear(currentDate.getFullYear() + 1);
+    return nextEventDate;
+  }
+  return eventDate;
 }
