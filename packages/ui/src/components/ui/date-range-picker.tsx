@@ -14,9 +14,11 @@ export function DatePickerWithRange({
 	className,
 	date,
 	onSelect,
+	numberOfMonths = 2,
 }: React.HTMLAttributes<HTMLDivElement> & {
 	date: DateRange;
 	onSelect: SelectRangeEventHandler;
+	numberOfMonths?: number;
 }) {
 	return (
 		<div className={cn("grid gap-2 w-[300px]", className)}>
@@ -52,7 +54,7 @@ export function DatePickerWithRange({
 						defaultMonth={date?.from}
 						selected={date}
 						onSelect={onSelect}
-						numberOfMonths={2}
+						numberOfMonths={numberOfMonths}
 						max={7}
 						min={0}
 					/>

@@ -103,6 +103,7 @@ export type Database = {
         Row: {
           created_at: string | null
           department_id: string | null
+          end_time: string
           event_date: string
           event_description: string | null
           event_name: string
@@ -111,11 +112,13 @@ export type Database = {
           location: string | null
           organization_id: string
           organizer_id: string
+          start_time: string
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
           department_id?: string | null
+          end_time: string
           event_date: string
           event_description?: string | null
           event_name: string
@@ -124,11 +127,13 @@ export type Database = {
           location?: string | null
           organization_id: string
           organizer_id: string
+          start_time: string
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
           department_id?: string | null
+          end_time?: string
           event_date?: string
           event_description?: string | null
           event_name?: string
@@ -137,6 +142,7 @@ export type Database = {
           location?: string | null
           organization_id?: string
           organizer_id?: string
+          start_time?: string
           updated_at?: string | null
         }
         Relationships: [

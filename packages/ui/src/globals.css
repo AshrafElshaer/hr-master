@@ -78,9 +78,10 @@
     /* width of the entire scrollbar */
    }
 
-    .scrollbar-muted::-webkit-scrollbar-track {
-      background: transparent;
+   .scrollbar-muted::-webkit-scrollbar-track {
+    background: transparent;
     /* color of the tracking area */
+
    }
 
     .scrollbar-muted::-webkit-scrollbar-thumb {
