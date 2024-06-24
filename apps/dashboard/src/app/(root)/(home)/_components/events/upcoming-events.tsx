@@ -23,18 +23,22 @@ export default function UpcomingEvents() {
 
 	return (
 		<Card className="p-4 w-full flex flex-col gap-4">
-			<div className="flex items-center gap-4">
-				<h3 className="text-foreground/70 font-semibold">Upcoming Events</h3>
-				<DatePickerWithRange
-					date={date}
-					onSelect={(date) => setDate(date as DateRange)}
-					numberOfMonths={1}
-					className="ml-auto w-64"
-				/>
-				<Separator orientation="vertical" className="" />
-				<Button size="icon" variant={"outline"}>
-					<CalendarPlus className="h-4 w-4" />
-				</Button>
+			<div className="flex items-center justify-start gap-4 flex-col sm:flex-row">
+				<h3 className="text-foreground/70 font-semibold mr-auto">
+					Upcoming Events
+				</h3>
+				<div className="flex items-center gap-4">
+					<DatePickerWithRange
+						date={date}
+						onSelect={(date) => setDate(date as DateRange)}
+						numberOfMonths={1}
+						className=" w-64"
+					/>
+					<Separator orientation="vertical" className="" />
+					<Button size="icon" variant={"outline"}>
+						<CalendarPlus className="h-4 w-4" />
+					</Button>
+				</div>
 			</div>
 			<ScrollArea className="w-full border rounded-md whitespace-nowrap">
 				<div className="flex w-full h-[140px] ">
