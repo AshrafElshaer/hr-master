@@ -23,7 +23,7 @@ export default function UpcomingEvents() {
 
 	return (
 		<Card className="p-4 w-full flex flex-col gap-4">
-			<div className="flex items-center justify-start gap-4 flex-col sm:flex-row">
+			<div className="flex sm:items-center items-start gap-4 flex-col sm:flex-row">
 				<h3 className="text-foreground/70 font-semibold mr-auto">
 					Upcoming Events
 				</h3>
