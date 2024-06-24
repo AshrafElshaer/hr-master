@@ -6,11 +6,11 @@ import UpcomingEvents from "./_components/events";
 
 export default function IndexPage() {
 	return (
-		<main className="flex flex-col gap-4 h-full p-4">
-			<div className="flex gap-4">
+		<main className="flex flex-col gap-4 h-full p-4 ">
+			<div className="flex gap-4 flex-col-reverse md:flex">
 				<UpcomingEvents />
 				<Suspense fallback={<ClockInOutSkeleton />}>
-					<ClockInOutSkeleton />
+					<UpcomingEvents />
 				</Suspense>
 			</div>
 		</main>
