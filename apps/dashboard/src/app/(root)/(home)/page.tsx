@@ -9,8 +9,8 @@ export default function IndexPage() {
 		<main className="flex flex-col gap-4 h-full p-4 ">
 			<div className="flex gap-4 flex-col lg:flex-row">
 				<Suspense fallback={<ClockInOutSkeleton />}>
-					<ClockInOutSkeleton />
-					{/* <ClockInOut /> */}
+					{/* <ClockInOutSkeleton /> */}
+					<ClockInOut />
 				</Suspense>
 			</div>
 			<UpcomingEvents />
