@@ -28,8 +28,14 @@ export default function UpcomingEvents({ events }: Props) {
 	const handleSearch = (date: DateRange) => {
 		const params = new URLSearchParams(searchParams);
 		if (date) {
-			params.set("events-from", date.from?.toString() ?? "");
-			params.set("events-to", date.to?.toString() ?? "");
+			params.set(
+				"events-from",
+				format(new Date(date.from ?? ""), "yyy-MM-dd") ?? "",
+			);
+			params.set(
+				"events-to",
+				format(new Date(date.to ?? ""), "yyyy-MM-dd") ?? "",
+			);
 		} else {
 			params.delete("events-from");
 			params.delete("events-to");
