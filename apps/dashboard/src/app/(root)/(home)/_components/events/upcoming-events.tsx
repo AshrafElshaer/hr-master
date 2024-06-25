@@ -45,14 +45,6 @@ export default function UpcomingEvents({ events }: Props) {
 	};
 
 	const groupedEvents = groupedEventsByDate((events as Event[]) ?? []);
-	
-	useEffect(() => {
-		const from = searchParams.get("events-from");
-		const to = searchParams.get("events-to");
-		if (from && to) {
-			setDate({ from: startOfDay(new Date(from)), to: endOfDay(new Date(to)) });
-		}
-	}, [searchParams]);
 
 	return (
 		<Card className="p-4 w-full flex flex-col gap-4">
