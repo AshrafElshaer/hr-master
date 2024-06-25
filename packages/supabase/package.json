@@ -29,6 +29,8 @@
 		"./storage-queries": "./src/queries/storage/index.ts",
 		"./storage-mutations": "./src/mutations/storage/index.ts",
 		"./attendance-queries": "./src/queries/attendance/index.ts",
-		"./attendance-mutations": "./src/mutations/attendance/index.ts"
+		"./attendance-mutations": "./src/mutations/attendance/index.ts",
+		"./events-queries": "./src/queries/events/index.ts",
+		"./events-mutations": "./src/mutations/events/index.ts"
 	}
 }

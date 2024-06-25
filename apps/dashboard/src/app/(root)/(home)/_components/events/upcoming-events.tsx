@@ -1,15 +1,17 @@
 "use client";
 import React from "react";
+import { addDays, endOfDay, format, startOfDay } from "date-fns";
+
+import type { DateRange } from "react-day-picker";
+import type { Event } from "@hr-toolkit/supabase/types";
+
 import { Card } from "@hr-toolkit/ui/card";
 import { DatePickerWithRange } from "@hr-toolkit/ui/date-range-picker";
-import { addDays, endOfDay, format, startOfDay } from "date-fns";
 import { Separator } from "@hr-toolkit/ui/separator";
-import { CalendarPlus } from "lucide-react";
-import { Button } from "@hr-toolkit/ui/button";
-import type { DateRange } from "react-day-picker";
 import { ScrollArea, ScrollBar } from "@hr-toolkit/ui/scroll-area";
-import type { Event } from "@hr-toolkit/supabase/types";
-import { Avatar, AvatarFallback } from "@hr-toolkit/ui/avatar";
+
+import CreateEvent from "./create-events";
+import { amPm } from "@/lib/date";
 
 // type Props = {}
 
@@ -27,7 +29,7 @@ export default function UpcomingEvents() {
 				<h3 className="text-foreground/70 font-semibold mr-auto">
 					Upcoming Events
 				</h3>
-				<div className="flex items-center gap-4">
+				<div className="flex items-center h-full gap-4">
 					<DatePickerWithRange
 						date={date}
 						onSelect={(date) => setDate(date as DateRange)}
@@ -35,9 +37,7 @@ export default function UpcomingEvents() {
 						className=" w-64"
 					/>
 					<Separator orientation="vertical" className="" />
-					<Button size="icon" variant={"outline"}>
-						<CalendarPlus className="h-4 w-4" />
-					</Button>
+					<CreateEvent />
 				</div>
 			</div>
 			<ScrollArea className="w-full border rounded-md whitespace-nowrap">
@@ -108,13 +108,7 @@ function groupedEventsByDate(events: Event[]) {
 	return groupedEvents;
 }
 
-function amPm(time: string) {
-	const [hours, minutes] = time.split(":");
-	const hoursInt = Number(hours);
-	const amPm = hoursInt >= 12 ? "PM" : "AM";
-	const hours12 = hoursInt % 12 || 12;
-	return `${hours12}:${minutes} ${amPm}`;
-}
+
 
 const demoEvents = [
 	{
