@@ -55,20 +55,20 @@ function CreateEvent() {
 			start_time: "",
 			end_time: "",
 			location: "",
-			department_id: "",
+			department_id: null,
 		},
 	});
 
 	async function onSubmit(values: z.infer<typeof createEventSchema>) {
-		toast.promise(createEventAction(values), {
-			loading: "Creating event...",
-			success: () => {
-				form.reset();
-				setOpen(false);
-				return "Event created successfully";
-			},
-			error: (error) => `Failed to create event: ${error.message}`,
-		});
+		const { serverError } = await createEventAction(values);
+
+		if (serverError) {
+			toast.error(serverError);
+		} else {
+			toast.success("Event created successfully");
+			form.reset();
+			setOpen(false);
+		}
 	}
 
 	return (
@@ -270,8 +270,8 @@ function CreateEvent() {
 							<DialogClose asChild>
 								<Button variant="outline">Cancel</Button>
 							</DialogClose>
-							<Button type="submit" disabled={form.formState.isLoading}>
-								{form.formState.isLoading ? (
+							<Button type="submit" disabled={form.formState.isSubmitting}>
+								{form.formState.isSubmitting ? (
 									<Loader className=" mr-2 h-4 w-4 animate-spin" />
 								) : null}
 								Create

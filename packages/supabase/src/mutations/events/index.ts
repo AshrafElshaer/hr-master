@@ -1,5 +1,6 @@
 import { getUser } from "../../queries/user";
 import type { EventInsert, SupabaseClient } from "../../types";
+import { format } from "date-fns";
 
 export async function createEvent(
   supabase: SupabaseClient,
@@ -11,8 +12,10 @@ export async function createEvent(
   }
   const newEvent: EventInsert = {
     ...event,
+    event_date: format(new Date(event.event_date), "yyyy-MM-dd"),
     organization_id: user.organization_id,
     organizer_id: user.id,
   };
+
   return await supabase.from("events").insert([newEvent]).select().single();
 }

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { addDays, endOfDay, format, startOfDay } from "date-fns";
 
 import type { DateRange } from "react-day-picker";
@@ -12,16 +12,40 @@ import { ScrollArea, ScrollBar } from "@hr-toolkit/ui/scroll-area";
 
 import CreateEvent from "./create-events";
 import { amPm } from "@/lib/date";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-// type Props = {}
+type Props = { events: Event[] | never[] | null };
 
-export default function UpcomingEvents() {
+export default function UpcomingEvents({ events }: Props) {
+	const router = useRouter();
 	const [date, setDate] = React.useState<DateRange>({
 		from: new Date(),
 		to: addDays(new Date(), 6),
 	});
+	const searchParams = useSearchParams();
+	const pathname = usePathname();
 
-	const groupedEvents = groupedEventsByDate(demoEvents as Event[]);
+	const handleSearch = (date: DateRange) => {
+		const params = new URLSearchParams(searchParams);
+		if (date) {
+			params.set("events-from", date.from?.toString() ?? "");
+			params.set("events-to", date.to?.toString() ?? "");
+		} else {
+			params.delete("events-from");
+			params.delete("events-to");
+		}
+
+		router.replace(`${pathname}?${params.toString()}`);
+	};
+
+	const groupedEvents = groupedEventsByDate((events as Event[]) ?? []);
+	useEffect(() => {
+		const from = searchParams.get("events-from");
+		const to = searchParams.get("events-to");
+		if (from && to) {
+			setDate({ from: new Date(from), to: new Date(to) });
+		}
+	}, [searchParams]);
 
 	return (
 		<Card className="p-4 w-full flex flex-col gap-4">
@@ -32,7 +56,10 @@ export default function UpcomingEvents() {
 				<div className="flex items-center h-full gap-4">
 					<DatePickerWithRange
 						date={date}
-						onSelect={(date) => setDate(date as DateRange)}
+						onSelect={(date) => {
+							setDate(date as DateRange);
+							handleSearch(date as DateRange);
+						}}
 						numberOfMonths={1}
 						className=" w-64"
 					/>
@@ -86,10 +113,12 @@ function getDateRangeDifference(dateRange: DateRange) {
 }
 
 function groupedEventsByDate(events: Event[]) {
+	if (!events.length) {
+		return {};
+	}
 	const groupedEvents: { [key: string]: Event[] } = events.reduce(
 		(acc, event) => {
-			const eventDate = new Date(event.event_date);
-			const key = format(eventDate, "yyyy-MM-dd");
+			const key = event.event_date;
 			if (!acc[key as string]) {
 				acc[key as string] = [];
 			}
@@ -107,8 +136,6 @@ function groupedEventsByDate(events: Event[]) {
 
 	return groupedEvents;
 }
-
-
 
 const demoEvents = [
 	{

@@ -10,5 +10,7 @@ export const createEventSchema = z.object({
   location: z.string().min(3),
   organizer_id: z.string().default(""),
   organization_id: z.string().default(""),
-  department_id: z.string().default(""),
+  department_id: z.nullable(
+    z.string().min(1),
+  ),
 });
