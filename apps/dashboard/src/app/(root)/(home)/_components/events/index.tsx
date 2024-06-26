@@ -22,14 +22,19 @@ export default async function Events({
 }) {
 	const supabase = createServerClient();
 
-	const fromDate = new Date(searchParams?.["events-from"] || Date.now());
+	const fromDate = new Date(
+		addDays(new Date(searchParams?.["events-from"] ?? ""), 1) || new Date(),
+	);
 	const date = {
 		from: fromDate,
-		to: new Date(searchParams?.["events-to"] || addDays(fromDate, 6)),
+		to: new Date(
+			addDays(new Date(searchParams?.["events-to"] ?? ""), 1) ||
+				addDays(fromDate, 6),
+		),
 	};
 	const { data, error } = await getEventsByDate(supabase, date);
 
-	const groupedEvents = groupedEventsByDate(
+	const groupedEvents = groupeEventsByDate(
 		(data as EventWithOrganizerAndDepartment[]) ?? [],
 	);
 
@@ -72,21 +77,22 @@ function getDateRangeDifference(dateRange: DateRange) {
 	return Math.round(diffInDays);
 }
 
-function groupedEventsByDate(events: EventWithOrganizerAndDepartment[]) {
+function groupeEventsByDate(events: EventWithOrganizerAndDepartment[]) {
 	if (!events.length) {
 		return {};
 	}
-	const groupedEvents: { [key: string]: EventWithOrganizerAndDepartment[] } = events.reduce(
-		(acc, event) => {
-			const key = event.event_date;
-			if (!acc[key as string]) {
-				acc[key as string] = [];
-			}
-			acc[key].push(event);
-			return acc;
-		},
-		{} as { [key: string]: EventWithOrganizerAndDepartment[] },
-	);
+	const groupedEvents: { [key: string]: EventWithOrganizerAndDepartment[] } =
+		events.reduce(
+			(acc, event) => {
+				const key = event.event_date;
+				if (!acc[key as string]) {
+					acc[key as string] = [];
+				}
+				acc[key].push(event);
+				return acc;
+			},
+			{} as { [key: string]: EventWithOrganizerAndDepartment[] },
+		);
 
 	for (const key in groupedEvents) {
 		groupedEvents[key].sort((a, b) => {

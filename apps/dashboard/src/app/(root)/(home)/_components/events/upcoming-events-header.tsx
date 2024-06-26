@@ -38,6 +38,7 @@ export default function UpcomingEventsHeader() {
 
 		router.replace(`${pathname}?${params.toString()}`);
 	};
+
 	return (
 		<div className="flex sm:items-center items-start gap-4 flex-col sm:flex-row">
 			<h3 className="text-foreground/70 font-semibold mr-auto">
