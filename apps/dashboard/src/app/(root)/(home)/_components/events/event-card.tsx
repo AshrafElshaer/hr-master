@@ -48,7 +48,10 @@ export default function EventCard({ event }: Props) {
 					<div className="px-4 text-base flex items-center justify-between">
 						<p>{capitalize(event.event_type)}</p>
 						{event.organizer.id === data?.user?.id ? (
-							<button type="button">
+							<button
+								type="button"
+								className="ml-auto text-accent-foreground/70 hover:text-accent-foreground transition-colors"
+							>
 								<Pencil className="w-4 h-4" />
 							</button>
 						) : null}
