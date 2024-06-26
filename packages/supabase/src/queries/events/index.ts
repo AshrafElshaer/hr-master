@@ -18,7 +18,7 @@ export async function getEventsByDate(supabase: SupabaseClient, date: {
 
   return await supabase
     .from("events")
-    .select("*")
+    .select("*, organizer:organizer_id(*),department:department_id(*)")
     .gte("event_date", from)
     .lte(
       "event_date",

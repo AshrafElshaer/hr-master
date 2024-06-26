@@ -45,5 +45,7 @@ export enum AttendanceStatus {
 export type Event = Database["public"]["Tables"]["events"]["Row"];
 export type EventInsert = Database["public"]["Tables"]["events"]["Insert"];
 export type EventTypeEnum = Database["public"]["Enums"]["event_type_enum"];
-export type EventRecurrenceEnum =
-  Database["public"]["Enums"]["recurrence_pattern_enum"];
+export type EventWithOrganizerAndDepartment = Event & {
+  organizer: User;
+  department: Department;
+};
