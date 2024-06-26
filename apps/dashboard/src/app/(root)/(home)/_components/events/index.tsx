@@ -22,14 +22,16 @@ export default async function Events({
 }) {
 	const supabase = createServerClient();
 
-	const fromDate = new Date(
-		addDays(new Date(searchParams?.["events-from"] ?? ""), 1) || new Date(),
-	);
+	const from = searchParams?.["events-from"]
+		? addDays(new Date(searchParams["events-from"]), 1)
+		: new Date(Date.now());
+
 	const date = {
-		from: fromDate,
+		from,
 		to: new Date(
-			addDays(new Date(searchParams?.["events-to"] ?? ""), 1) ||
-				addDays(fromDate, 6),
+			searchParams?.["events-to"]
+				? addDays(new Date(searchParams["events-to"]), 1)
+				: addDays(from, 6),
 		),
 	};
 	const { data, error } = await getEventsByDate(supabase, date);

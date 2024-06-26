@@ -13,7 +13,6 @@ type Props = {
 };
 
 export default function EventsList({ events, index, date }: Props) {
-	console.log("date", date);
 	return (
 		<div className="flex flex-col flex-1 min-w-40 gap-2  border-r last:border-none ">
 			<p className="text-foreground/80 p-2 font-semibold text-sm text-center bg-accent w-full">

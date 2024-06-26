@@ -30,9 +30,15 @@ type Props = {
 
 export default function EventCard({ event }: Props) {
 	const supabase = createClient();
-	const { data } = useQuery({
+	const { data: user } = useQuery({
 		queryKey: ["user"],
-		queryFn: () => getUser(supabase),
+		queryFn: async () => {
+			const { error, user } = await getUser(supabase);
+			if (error) {
+				throw Error(error.message);
+			}
+			return user;
+		},
 	});
 	return (
 		<HoverCard key={event.id} openDelay={0} closeDelay={0}>
@@ -47,7 +53,7 @@ export default function EventCard({ event }: Props) {
 				<div className="flex flex-col gap-2 ">
 					<div className="px-4 text-base flex items-center justify-between">
 						<p>{capitalize(event.event_type)}</p>
-						{event.organizer.id === data?.user?.id ? (
+						{event.organizer.id === user?.id ? (
 							<button
 								type="button"
 								className="ml-auto text-accent-foreground/70 hover:text-accent-foreground transition-colors"
