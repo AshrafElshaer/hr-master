@@ -25,7 +25,7 @@ export default async function Events({
 	const fromDate = new Date(searchParams?.["events-from"] || Date.now());
 	const date = {
 		from: fromDate,
-		to: new Date(searchParams?.["events-to"] || addDays(fromDate, 7)),
+		to: new Date(searchParams?.["events-to"] || addDays(fromDate, 6)),
 	};
 	const { data, error } = await getEventsByDate(supabase, date);
 
