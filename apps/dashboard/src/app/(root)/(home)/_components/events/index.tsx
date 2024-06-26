@@ -1,15 +1,9 @@
-import React from "react";
-import { createServerClient } from "@hr-toolkit/supabase/server";
-import { getEventsByDate } from "@hr-toolkit/supabase/events-queries";
-import { addDays, endOfDay, format, startOfDay } from "date-fns";
+import React, { Suspense } from "react";
 
-import type { EventWithOrganizerAndDepartment } from "@hr-toolkit/supabase/types";
-import type { DateRange } from "react-day-picker";
-
-import UpcomingEventsHeader from "./upcoming-events-header";
-import EventsList from "./events-list";
 import { Card } from "@hr-toolkit/ui/card";
-import { ScrollArea, ScrollBar } from "@hr-toolkit/ui/scroll-area";
+import UpcomingEventsHeader from "./upcoming-events-header";
+import CalendarView from "./calendar-view";
+import { Skeleton } from "@hr-toolkit/ui/skeleton";
 
 type SearchParams = {
 	[key in "events-from" | "events-to"]?: string | undefined;
@@ -20,87 +14,32 @@ export default async function Events({
 }: {
 	searchParams?: SearchParams;
 }) {
-	const supabase = createServerClient();
-
-	const from = searchParams?.["events-from"]
-		? addDays(new Date(searchParams["events-from"]), 1)
-		: new Date(Date.now());
-
-	const date = {
-		from,
-		to: new Date(
-			searchParams?.["events-to"]
-				? addDays(new Date(searchParams["events-to"]), 1)
-				: addDays(from, 6),
-		),
-	};
-	const { data, error } = await getEventsByDate(supabase, date);
-
-	const groupedEvents = groupeEventsByDate(
-		(data as EventWithOrganizerAndDepartment[]) ?? [],
-	);
-
 	return (
 		<Card className="p-4 w-full flex flex-col gap-4">
 			<UpcomingEventsHeader />
-			<ScrollArea className="w-full border rounded-md whitespace-nowrap">
-				<div className="flex w-full h-[140px] ">
-					{Array.from({
-						length:
-							getDateRangeDifference(date) > 0
-								? getDateRangeDifference(date)
-								: 7,
-					}).map((_, index) => (
-						<EventsList
-							key={(index + 1).toString()}
-							date={date.from}
-							index={index}
-							events={
-								groupedEvents[
-									format(addDays(date?.from ?? new Date(), index), "yyyy-MM-dd")
-								]
-							}
-						/>
-					))}
-				</div>
-				<ScrollBar orientation="horizontal" />
-			</ScrollArea>
+			<Suspense fallback={<CalendarSkeleton />}>
+				<CalendarView searchParams={searchParams} />
+			</Suspense>
 		</Card>
 	);
 }
 
-function getDateRangeDifference(dateRange: DateRange) {
-	if (!dateRange?.from || !dateRange?.to) {
-		return 0;
-	}
-	const diff =
-		endOfDay(dateRange.to).getTime() - startOfDay(dateRange.from).getTime();
-	const diffInDays = diff / (1000 * 3600 * 24);
-	return Math.round(diffInDays);
-}
-
-function groupeEventsByDate(events: EventWithOrganizerAndDepartment[]) {
-	if (!events.length) {
-		return {};
-	}
-	const groupedEvents: { [key: string]: EventWithOrganizerAndDepartment[] } =
-		events.reduce(
-			(acc, event) => {
-				const key = event.event_date;
-				if (!acc[key as string]) {
-					acc[key as string] = [];
-				}
-				acc[key].push(event);
-				return acc;
-			},
-			{} as { [key: string]: EventWithOrganizerAndDepartment[] },
-		);
-
-	for (const key in groupedEvents) {
-		groupedEvents[key].sort((a, b) => {
-			return a.start_time.localeCompare(b.start_time);
-		});
-	}
-
-	return groupedEvents;
+export function CalendarSkeleton() {
+	return (
+		<div className="w-full flex h-[140px] border rounded-md overflow-hidden">
+			{Array.from({ length: 7 }).map((_, index) => (
+				<div
+					key={index.toString()}
+					className="flex flex-col flex-1 min-w-40 gap-2  border-r last:border-none "
+				>
+					<Skeleton className="h-10 w-full rounded-none" />
+					<div className="h-full flex flex-col gap-3 justify-start items-center">
+						<Skeleton className="h-3 w-3/5" />
+						<Skeleton className="h-3 w-3/5" />
+						<Skeleton className="h-3 w-3/5" />
+					</div>
+				</div>
+			))}
+		</div>
+	);
 }
