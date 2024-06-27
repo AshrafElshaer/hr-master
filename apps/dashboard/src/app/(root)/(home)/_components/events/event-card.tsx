@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { useMediaQuery } from "usehooks-ts";
 import type { EventWithOrganizerAndDepartment } from "@hr-toolkit/supabase/types";
 import {
 	HoverCard,
@@ -23,12 +24,16 @@ import { createClient } from "@hr-toolkit/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { getUser } from "@hr-toolkit/supabase/user-queries";
 import { CiGrid31 } from "react-icons/ci";
+import EditEvent from "./edit-event";
 
 type Props = {
 	event: EventWithOrganizerAndDepartment;
 };
 
 export default function EventCard({ event }: Props) {
+	const [open, setOpen] = React.useState(false);
+	const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+	const isMobile = useMediaQuery("(max-width: 640px)");
 	const supabase = createClient();
 	const { data: user } = useQuery({
 		queryKey: ["user"],
@@ -41,25 +46,31 @@ export default function EventCard({ event }: Props) {
 		},
 	});
 	return (
-		<HoverCard key={event.id} openDelay={0} closeDelay={0}>
+		<HoverCard
+			key={event.id}
+			openDelay={0}
+			closeDelay={0}
+			open={open}
+			onOpenChange={(bol) => isDialogOpen || setOpen(bol)}
+		>
 			<HoverCardTrigger className=" text-sm text-center py-1 mx-auto">
 				{amPm(event.start_time)} - {amPm(event.end_time)}
 			</HoverCardTrigger>
 			<HoverCardContent
-				side="right"
-				align="start"
 				className="text-sm px-0 py-2 min-w-72"
+				side={isMobile ? "top" : "right"}
+				align={isMobile ? "center" : "start"}
+				sideOffset={isMobile ? 16 : 8}
 			>
 				<div className="flex flex-col gap-2 ">
 					<div className="px-4 text-base flex items-center justify-between">
 						<p>{capitalize(event.event_type)}</p>
 						{event.organizer.id === user?.id ? (
-							<button
-								type="button"
-								className="ml-auto text-accent-foreground/70 hover:text-accent-foreground transition-colors"
-							>
-								<Pencil className="w-4 h-4" />
-							</button>
+							<EditEvent
+								event={event}
+								open={isDialogOpen}
+								setOpen={setIsDialogOpen}
+							/>
 						) : null}
 					</div>
 					<Separator className="w-full my-1" />

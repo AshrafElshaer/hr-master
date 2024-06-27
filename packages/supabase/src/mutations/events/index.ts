@@ -1,5 +1,5 @@
 import { getUser } from "../../queries/user";
-import type { EventInsert, SupabaseClient } from "../../types";
+import type { EventInsert, EventUpdate, SupabaseClient } from "../../types";
 import { format } from "date-fns";
 
 export async function createEvent(
@@ -18,4 +18,15 @@ export async function createEvent(
   };
 
   return await supabase.from("events").insert([newEvent]).select().single();
+}
+
+export async function updateEvent(
+  supabase: SupabaseClient,
+  event: EventUpdate,
+) {
+  return await supabase
+    .from("events")
+    .update(event)
+    .eq("id", event.id as string)
+    .select();
 }

@@ -5,7 +5,10 @@ import { createServerClient } from "@hr-toolkit/supabase/server";
 import { getUser } from "@hr-toolkit/supabase/user-queries";
 import { getCurrentAttendanceByUserId } from "@hr-toolkit/supabase/attendance-queries";
 import { clockIn, clockOut } from "@hr-toolkit/supabase/attendance-mutations";
-import { createEvent } from "@hr-toolkit/supabase/events-mutations";
+import {
+  createEvent,
+  updateEvent,
+} from "@hr-toolkit/supabase/events-mutations";
 
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
@@ -57,6 +60,23 @@ export const createEventAction = action(
 
     if (error) {
       throw new Error(error.message);
+    }
+    revalidatePath("/");
+    return data;
+  },
+);
+
+export const updateEventAction = action(
+  createEventSchema.extend({
+    id: z.string().min(1),
+  }),
+  async (payload) => {
+    const supabase = createServerClient();
+
+    const { data, error } = await updateEvent(supabase, payload);
+
+    if (error) {
+      throw Error(error.message);
     }
     revalidatePath("/");
     return data;
