@@ -100,7 +100,7 @@ export default function EventCard({ event }: Props) {
 					<div className="flex items-center gap-2 px-4">
 						<Avatar className="h-4 w-4">
 							<AvatarImage src={event.organizer.avatar_url ?? ""} />
-							<AvatarFallback>
+							<AvatarFallback className="text-xs">
 								{event?.organizer?.first_name?.at(0)}{" "}
 								{event?.organizer?.last_name?.at(0)}
 							</AvatarFallback>
