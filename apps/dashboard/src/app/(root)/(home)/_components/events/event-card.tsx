@@ -76,7 +76,7 @@ export default function EventCard({ event }: Props) {
 					<Separator className="w-full my-1" />
 					<p className=" px-4 flex items-center gap-2">
 						<Calendar className="w-4 h-4" />
-						{format(addDays(event.event_date, 1), "EEEE , MMMM dd")}
+						{format(event.event_date, "EEEE , MMMM dd")}
 					</p>
 					<p className=" px-4 flex items-center gap-2  ">
 						<AlarmClock className="w-4 h-4" />
