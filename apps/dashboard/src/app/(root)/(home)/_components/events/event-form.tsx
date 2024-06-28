@@ -249,7 +249,10 @@ function EventForm({ event, onSubmit }: Props) {
 					<DialogClose asChild>
 						<Button variant="outline">Cancel</Button>
 					</DialogClose>
-					<Button type="submit" disabled={form.formState.isSubmitting}>
+					<Button
+						type="submit"
+						disabled={form.formState.isSubmitting || !form.formState.isDirty}
+					>
 						{form.formState.isSubmitting ? (
 							<Loader className=" mr-2 h-4 w-4 animate-spin" />
 						) : null}
