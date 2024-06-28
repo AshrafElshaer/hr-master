@@ -9,10 +9,10 @@ import WelcomeMessage from "./_components/welcome";
 export default async function IndexPage({
 	params,
 	searchParams,
-  }: {
+}: {
 	params: { slug: string };
 	searchParams?: { [key: string]: string | string[] | undefined };
-  }) {
+}) {
 	return (
 		<main className="flex flex-col gap-4 h-full p-4 ">
 			<div className="flex gap-4 flex-col lg:flex-row">
