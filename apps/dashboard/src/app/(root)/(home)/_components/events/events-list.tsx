@@ -9,14 +9,14 @@ import EventCard from "./event-card";
 type Props = {
 	events: EventWithOrganizerAndDepartment[] | never[] | null;
 	index: number;
-	date: Date | undefined;
+	date: string;
 };
 
 export default function EventsList({ events, index, date }: Props) {
 	return (
 		<div className="flex flex-col flex-1 min-w-40 gap-2  border-r last:border-none ">
 			<p className="text-foreground/80 p-2 font-semibold text-sm text-center bg-accent w-full">
-				{format(addDays(date ?? new Date(), index), "MMM dd")}
+				{date}
 			</p>
 			<div className="overflow-scroll scrollbar-muted h-full flex flex-col">
 				{events?.map((event) => (
