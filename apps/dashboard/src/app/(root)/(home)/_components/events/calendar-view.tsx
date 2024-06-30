@@ -43,19 +43,9 @@ export default async function CalendarView({
 				}).map((_, index) => (
 					<EventsList
 						key={(index + 1).toString()}
-						date={format(
-							addDays(date.from ?? new Date(), index + 1),
-							"EEEE , MMMM dd",
-						)}
+						date={format(from, "EEEE , MMMM dd")}
 						index={index}
-						events={
-							groupedEvents[
-								format(
-									addDays(date.from ?? new Date(), index + 1),
-									"yyyy-MM-dd",
-								)
-							]
-						}
+						events={groupedEvents[from]}
 					/>
 				))}
 			</div>
