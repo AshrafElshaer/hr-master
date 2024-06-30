@@ -20,14 +20,13 @@ export default async function CalendarView({
 	const supabase = createServerClient();
 
 	const from =
-		searchParams?.["events-from"] ??
-		format(startOfDay(new Date()), "yyyy-MM-dd");
+		searchParams?.["events-from"] ?? format(new Date(), "yyyy-MM-dd");
 
 	const date = {
 		from,
 		to:
 			searchParams?.["events-to"] ??
-			format(endOfDay(addDays(new Date(from), 7)), "yyyy-MM-dd"),
+			format(endOfDay(addDays(new Date(from), 6)), "yyyy-MM-dd"),
 	};
 	const { data, error } = await getEventsByDate(supabase, date);
 
