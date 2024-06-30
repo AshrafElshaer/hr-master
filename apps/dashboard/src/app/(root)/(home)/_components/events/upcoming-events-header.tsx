@@ -13,6 +13,9 @@ import { useQuery } from "@tanstack/react-query";
 import { getUser } from "@hr-toolkit/supabase/user-queries";
 
 export default function UpcomingEventsHeader() {
+	const router = useRouter();
+	const searchParams = useSearchParams();
+	const pathname = usePathname();
 	const { data: user } = useQuery({
 		queryKey: ["user"],
 		queryFn: async () => {
@@ -24,13 +27,18 @@ export default function UpcomingEventsHeader() {
 			return user;
 		},
 	});
-	const router = useRouter();
+
+	const from = searchParams.get("events-from");
+	const to = searchParams.get("events-to");
+
 	const [date, setDate] = React.useState<DateRange>({
-		from: new Date(),
-		to: addDays(new Date(), 6),
+		from: from ? addDays(new Date(from), 1) : new Date(),
+		to: to
+			? addDays(new Date(to), 1)
+			: from
+				? undefined
+				: addDays(new Date(), 6),
 	});
-	const searchParams = useSearchParams();
-	const pathname = usePathname();
 
 	const handleSearch = (date: DateRange) => {
 		const params = new URLSearchParams(searchParams);

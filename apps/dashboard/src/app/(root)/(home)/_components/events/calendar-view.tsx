@@ -2,7 +2,7 @@ import { ScrollArea, ScrollBar } from "@hr-toolkit/ui/scroll-area";
 import React from "react";
 import EventsList from "./events-list";
 import { addDays, endOfDay, format, startOfDay } from "date-fns";
-import type { DateRange } from "react-day-picker";
+
 import { createServerClient } from "@hr-toolkit/supabase/server";
 import { getEventsByDate } from "@hr-toolkit/supabase/events-queries";
 import type { EventWithOrganizerAndDepartment } from "@hr-toolkit/supabase/types";
@@ -11,6 +11,7 @@ type SearchParams = {
 	[key in "events-from" | "events-to"]?: string | undefined;
 };
 
+// TODO: REBUILD THIS COMPONENT
 export default async function CalendarView({
 	searchParams,
 }: {
@@ -18,37 +19,41 @@ export default async function CalendarView({
 }) {
 	const supabase = createServerClient();
 
-	const from = searchParams?.["events-from"]
-		? addDays(new Date(searchParams["events-from"]), 1)
-		: new Date(Date.now());
+	const from =
+		searchParams?.["events-from"] ??
+		format(startOfDay(new Date()), "yyyy-MM-dd");
 
 	const date = {
 		from,
-		to: new Date(
-			searchParams?.["events-to"]
-				? addDays(new Date(searchParams["events-to"]), 1)
-				: addDays(from, 6),
-		),
+		to:
+			searchParams?.["events-to"] ??
+			format(endOfDay(addDays(new Date(from), 7)), "yyyy-MM-dd"),
 	};
 	const { data, error } = await getEventsByDate(supabase, date);
 
 	const groupedEvents = groupeEventsByDate(
 		(data as EventWithOrganizerAndDepartment[]) ?? [],
 	);
+
 	return (
 		<ScrollArea className="w-full border rounded-md whitespace-nowrap">
 			<div className="flex w-full h-[140px] ">
 				{Array.from({
-					length:
-						getDateRangeDifference(date) > 0 ? getDateRangeDifference(date) : 7,
+					length: getDaysCount(date) > 0 ? getDaysCount(date) : 7,
 				}).map((_, index) => (
 					<EventsList
 						key={(index + 1).toString()}
-						date={format(addDays(date.from ?? new Date(), index), "yyyy-MM-dd")}
+						date={format(
+							addDays(date.from ?? new Date(), index + 1),
+							"EEEE , MMMM dd",
+						)}
 						index={index}
 						events={
 							groupedEvents[
-								format(addDays(date.from ?? new Date(), index), "yyyy-MM-dd")
+								format(
+									addDays(date.from ?? new Date(), index + 1),
+									"yyyy-MM-dd",
+								)
 							]
 						}
 					/>
@@ -59,13 +64,16 @@ export default async function CalendarView({
 	);
 }
 
-function getDateRangeDifference(dateRange: DateRange) {
+function getDaysCount(dateRange: { from: string; to: string }) {
 	if (!dateRange?.from || !dateRange?.to) {
 		return 0;
 	}
-	const diff =
-		endOfDay(dateRange.to).getTime() - startOfDay(dateRange.from).getTime();
-	const diffInDays = diff / (1000 * 3600 * 24);
+
+	const start = startOfDay(dateRange.from).getTime();
+	const end = endOfDay(dateRange.to).getTime();
+	const diffInMilliseconds = end - start;
+	const diffInDays = diffInMilliseconds / (1000 * 3600 * 24);
+
 	return Math.round(diffInDays);
 }
 
