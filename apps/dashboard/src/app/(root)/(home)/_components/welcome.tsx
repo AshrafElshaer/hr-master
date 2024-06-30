@@ -1,14 +1,15 @@
 import { getEventsByDate } from "@hr-toolkit/supabase/events-queries";
 import { createServerClient } from "@hr-toolkit/supabase/server";
 import { getUser } from "@hr-toolkit/supabase/user-queries";
+import { format } from "date-fns";
 import React from "react";
 
 export default async function WelcomeMessage() {
 	const supabase = createServerClient();
 	const userPromise = getUser(supabase);
 	const eventsPromise = getEventsByDate(supabase, {
-		from: new Date(),
-		to: new Date(),
+		from: format(new Date(), "yyyy-MM-dd"),
+		to:  format(new Date(), "yyyy-MM-dd"),
 	});
 
 	const [{ user }, { data: events }] = await Promise.all([
