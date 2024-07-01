@@ -7,6 +7,7 @@ import { getCurrentAttendanceByUserId } from "@hr-toolkit/supabase/attendance-qu
 import { clockIn, clockOut } from "@hr-toolkit/supabase/attendance-mutations";
 import {
   createEvent,
+  deleteEvent,
   updateEvent,
 } from "@hr-toolkit/supabase/events-mutations";
 
@@ -80,5 +81,19 @@ export const updateEventAction = action(
     }
     revalidatePath("/");
     return data;
+  },
+);
+
+export const deleteEventAction = action(
+  z.string().min(1),
+  async (id) => {
+    const supabase = createServerClient();
+
+    const { error } = await deleteEvent(supabase, id);
+
+    if (error) {
+      throw Error(error.message);
+    }
+    revalidatePath("/");
   },
 );

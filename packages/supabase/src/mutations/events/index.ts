@@ -30,3 +30,7 @@ export async function updateEvent(
     .eq("id", event.id as string)
     .select();
 }
+
+export async function deleteEvent(supabase: SupabaseClient, id: string) {
+  return await supabase.from("events").delete().eq("id", id);
+}

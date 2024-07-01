@@ -25,6 +25,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getUser } from "@hr-toolkit/supabase/user-queries";
 import { CiGrid31 } from "react-icons/ci";
 import EditEvent from "./edit-event";
+import DeleteEvent from "./delete-event";
 
 type Props = {
 	event: EventWithOrganizerAndDepartment;
@@ -67,11 +68,14 @@ export default function EventCard({ event }: Props) {
 					<div className="px-4 text-base flex items-center justify-between">
 						<p>{capitalize(event.event_type)}</p>
 						{event.organizer.id === user?.id ? (
-							<EditEvent
-								event={event}
-								open={isDialogOpen}
-								setOpen={setIsDialogOpen}
-							/>
+							<div className="flex items-center gap-2">
+								<EditEvent
+									event={event}
+									open={isDialogOpen}
+									setOpen={setIsDialogOpen}
+								/>
+								<DeleteEvent event={event} />
+							</div>
 						) : null}
 					</div>
 					<Separator className="w-full my-1" />
