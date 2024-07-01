@@ -45,5 +45,5 @@ export const sendOtpEmail = action(otpEmailSchema, async ({ email }) => {
     throw new Error(emailError?.message || "Failed to send OTP email");
   }
 
-  return otpResponse;
+  return otpResponse.user.email;
 });
