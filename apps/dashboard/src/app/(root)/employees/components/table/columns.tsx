@@ -40,7 +40,7 @@ export const columns: ColumnDef<Employee>[] = [
   },
   {
     accessorKey: "position",
-    header: () => <div className="min-w-32 "> Job Tilte</div>,
+    header: () => <div className="min-w-32 "> Job Title</div>,
   },
   {
     accessorKey: "role",
