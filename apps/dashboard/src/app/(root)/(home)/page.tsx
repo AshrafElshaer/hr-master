@@ -32,6 +32,12 @@ export default async function IndexPage({
 				</Suspense>
 			</div>
 			<UpcomingEvents searchParams={searchParams} />
+			<div>
+				<Card className="flex flex-col p-4 gap-4 w-full sm:w-80 h-fit ">
+					<h3 className="text-foreground/70 font-semibold">Todo</h3>
+					<Skeleton className="h-8 w-full " />
+				</Card>
+			</div>
 		</main>
 	);
 }

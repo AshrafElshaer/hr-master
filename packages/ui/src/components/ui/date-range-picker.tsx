@@ -3,23 +3,43 @@
 import * as React from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-import type { DateRange, SelectRangeEventHandler } from "react-day-picker";
+import type {
+	DateRange,
+	SelectRangeEventHandler,
+	DayPickerRangeProps,
+} from "react-day-picker";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "./select";
+
+type DateRangeOption = {
+	title: string;
+	range: { from: Date; to: Date };
+};
 
 export function DatePickerWithRange({
 	className,
 	date,
 	onSelect,
 	numberOfMonths = 2,
-}: React.HTMLAttributes<HTMLDivElement> & {
-	date: DateRange;
-	onSelect: SelectRangeEventHandler;
-	numberOfMonths?: number;
-}) {
+	dateRangeOptions,
+	...props
+}: Omit<DayPickerRangeProps, "mode"> &
+	React.HTMLAttributes<HTMLDivElement> & {
+		date: DateRange;
+		onSelect: (dateRange: DateRange) => void;
+		numberOfMonths?: number;
+		dateRangeOptions?: DateRangeOption[];
+	}) {
 	return (
 		<div className={cn("grid gap-2 w-[300px]", className)}>
 			<Popover>
@@ -48,15 +68,45 @@ export function DatePickerWithRange({
 					</Button>
 				</PopoverTrigger>
 				<PopoverContent className="w-auto p-0" align="center">
+					{dateRangeOptions && dateRangeOptions.length > 0 ? (
+						<div className="px-4 py-2">
+							<Select
+								onValueChange={(value) =>
+									onSelect(
+										dateRangeOptions.find((option) => option.title === value)
+											?.range || { from: new Date(), to: new Date() },
+									)
+								}
+								defaultValue={
+									dateRangeOptions?.find(
+										(option) =>
+											option.range.from === date.from &&
+											option.range.to === date.to,
+									)?.title || ""
+								}
+							>
+								<SelectTrigger>
+									<SelectValue placeholder="Select a range option" />
+								</SelectTrigger>
+								<SelectContent position="popper">
+									{dateRangeOptions.map((option) => (
+										<SelectItem key={option.title} value={option.title}>
+											{option.title}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+						</div>
+					) : null}
+
 					<Calendar
 						initialFocus
 						mode="range"
 						defaultMonth={date?.from}
 						selected={date}
-						onSelect={onSelect}
+						onSelect={onSelect as SelectRangeEventHandler}
 						numberOfMonths={numberOfMonths}
-						max={7}
-						min={0}
+						{...props}
 					/>
 				</PopoverContent>
 			</Popover>
