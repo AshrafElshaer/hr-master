@@ -1,15 +1,16 @@
 create table public.attendance (
-  id uuid primary key default uuid_generate_v4 (),
+  id uuid not null default uuid_generate_v4 (),
   user_id uuid not null,
   organization_id uuid not null,
-  created_at text not null,
-  updated_at text,
+  created_at date null,
+  updated_at text null,
   clock_in text not null,
-  clock_out text,
-  total_time double precision,
+  clock_out text null,
+  total_time double precision null,
   status text not null,
-  constraint attendance_user_id_fkey foreign key (user_id) references public.users (id) on delete cascade,
-  constraint attendance_organization_id_fkey foreign key (organization_id) references public.organizations (id) on delete cascade
+  constraint attendance_pkey primary key (id),
+  constraint attendance_organization_id_fkey foreign key (organization_id) references organizations (id) on delete cascade,
+  constraint attendance_user_id_fkey foreign key (user_id) references users (id) on delete cascade
 ) tablespace pg_default;
 
 create policy select_attendance_policy on public.attendance for

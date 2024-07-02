@@ -11,7 +11,6 @@ export default async function OnboardingLayout({
 
 	if (user?.organization_id) {
 		redirect("/");
-		return null;
 	}
 	return <>{children}</>;
 }

@@ -1,6 +1,7 @@
 import { AttendanceStatus, type SupabaseClient } from "../../types";
 import { getUser } from "../../queries/user";
 import { getCurrentAttendanceByUserId } from "../../queries/attendance";
+import { format } from "date-fns";
 
 export async function clockIn(supabase: SupabaseClient, clockedInAt: string) {
   const { user } = await getUser(supabase);
@@ -16,7 +17,7 @@ export async function clockIn(supabase: SupabaseClient, clockedInAt: string) {
         organization_id: user.organization_id,
         clock_in: clockedInAt,
         status: "clocked_in",
-        created_at: clockedInAt,
+        created_at: format(clockedInAt, "yyyy-MM-dd"),
       },
     ],
   )

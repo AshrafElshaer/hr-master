@@ -7,28 +7,26 @@ CREATE TYPE event_type_enum AS ENUM(
 
 CREATE TYPE recurrence_pattern_enum AS ENUM('daily', 'weekly', 'monthly', 'yearly');
 
-CREATE TABLE public.events (
-    id uuid primary key default uuid_generate_v4 (),
+create table
+  public.events (
+    id uuid not null default gen_random_uuid (),
     event_name text not null,
-    event_date text not null,
+    event_date date not null,
+    event_description text null,
+    event_type public.event_type_enum not null,
+    location text null,
+    organizer_id uuid not null,
+    organization_id uuid not null,
+    department_id uuid null,
+    created_at timestamp with time zone null default current_timestamp,
+    updated_at timestamp with time zone null default current_timestamp,
     start_time text not null,
     end_time text not null,
-    event_description text null,
-    event_type event_type_enum not null,
-    location text null,
-    organizer_id UUID not null,
-    organization_id UUID not null,
-    department_id uuid null,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT events_organization_id_fkey FOREIGN KEY (organization_id) REFERENCES organizations (id) ON DELETE CASCADE,
-    CONSTRAINT events_organizer_id_fkey FOREIGN KEY (organizer_id) REFERENCES users (id) ON DELETE
-    SET
-        NULL,
-        CONSTRAINT events_department_id_fkey FOREIGN KEY (department_id) REFERENCES departments (id) ON DELETE
-    SET
-        NULL
-) TABLESPACE pg_default;
+    constraint events_pkey primary key (id),
+    constraint events_department_id_fkey foreign key (department_id) references departments (id) on delete set null,
+    constraint events_organization_id_fkey foreign key (organization_id) references organizations (id) on delete cascade,
+    constraint events_organizer_id_fkey foreign key (organizer_id) references users (id) on delete set null
+  ) tablespace pg_default;
 
 CREATE POLICY events_select_policy ON public.events FOR
 SELECT
